@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  // Poppins,
+  Averia_Sans_Libre
+} from "next/font/google";
 import "./globals.css";
+import Sidebar from "@/component/ui/Sidebar";
+import Navbar from "../component/ui/Navbar"; // Import Navbar
+import LargeSidebar from "@/component/ui/LargeSidebar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+
+const averia = Averia_Sans_Libre({
   subsets: ["latin"],
+  weight: ["400", "700"], // Specify weights as needed
 });
 
 export const metadata: Metadata = {
@@ -25,9 +28,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${averia.className}  antialiased`}
       >
-        {children}
+      
+        <div className="flex h-screen">
+          <div className="w-auto">
+          <LargeSidebar />
+          </div>
+          {/* <Sidebar /> */}
+          <div className="lg:hidden ">
+
+          <Sidebar />
+          </div>
+          <div className="flex-1   overflow-y-auto h-screen">
+              <Navbar /> 
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );
