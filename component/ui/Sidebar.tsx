@@ -33,17 +33,13 @@ const Sidebar: React.FC = () => {
                 <ul className="mt-6 space-y-2">
                 <Link href={'/'}> 
                     <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
-                     <Link href={'/'}
-                     
-                     />   <IoPersonCircleOutline className="mr-2" size={20} />
+                    <IoPersonCircleOutline className="mr-2" size={20} />
                         Me
                     </li>
                     </Link>
                     <Link href={'/farmer'}> 
                     <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
-                     <Link href={'/farmer'}
-                     
-                     />   <GiBullHorns className="mr-2" size={20} />
+                      <GiBullHorns className="mr-2" size={20} />
                         Farm
                     </li>
                     </Link>

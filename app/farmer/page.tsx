@@ -2,7 +2,7 @@ import React from 'react';
 
 const FarmerPage: React.FC = () => {
     return (
-        <div>
+        <div className='text-gray-800 p-6'>
             <h1>Farmer Dashboard</h1>
             <p>Welcome to the Farmer Dashboard. Manage your farm efficiently!</p>
         </div>

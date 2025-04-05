@@ -21,7 +21,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className=" mx-auto p-6 bg-white shadow-md rounded-md">
+        <form onSubmit={handleSubmit} className=" mx-auto p-6  rounded-md">
             <h2 className="text-2xl font-bold mb-4 text-center">Financial Information</h2>
             <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">

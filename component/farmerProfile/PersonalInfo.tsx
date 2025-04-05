@@ -2,7 +2,7 @@ import React from 'react';
 
 const PersonalInfo: React.FC = () => {
     return (
-        <div className="p-6 bg-white shadow-md rounded-md">
+        <div className="p-6  rounded-md">
             <h1 className="text-2xl text-center font-bold mb-4">Personal Information</h1>
             <form
             className="space-y-4"

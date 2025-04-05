@@ -20,7 +20,7 @@ const NomineeInfo: React.FC = () => {
     };
 
     return (
-        <div className=" mx-auto p-6 bg-white shadow-md rounded-md">
+        <div className=" mx-auto p-6 rounded-md">
             <h2 className="text-2xl font-bold mb-4 text-center">Nominee Information</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

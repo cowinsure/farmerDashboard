@@ -51,7 +51,7 @@ const RootLayoutCustom: React.FC<RootLayoutProps> = ({ children }) => {
 
     return (
         <div>
-            <div className="flex h-screen">
+            <div className="flex h-screen bg-white">
                 <div className="w-auto hidden lg:block ">
                     <LargeSidebar />
                 </div>
@@ -60,7 +60,7 @@ const RootLayoutCustom: React.FC<RootLayoutProps> = ({ children }) => {
                 </div>
                 <div className="flex-1 overflow-y-auto h-screen">
                     <Navbar />
-                    <div className="bg-[#dae4e3] h-auto m-2">
+                    <div className="bg-[#dae4e3] h-auto m-2 rounded-md">
                         {children}
                     </div>
                 </div>
