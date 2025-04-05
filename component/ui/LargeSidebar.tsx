@@ -36,14 +36,14 @@ function LargeSidebar() {
                 <IoPersonCircleOutline className="" size={16} />
                     {isOpen && <span className='ml-2'>Me</span>}
                 </Link>
-                <a href="#" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
+                <Link href="/farmer" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
                     <PiFarm size={16} className="" />
                     {isOpen && <span className='ml-2' >Farm</span>}
-                </a>
-                <a href="#" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
+                </Link>
+                <Link href="#" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
                     <MdOutlineHealthAndSafety size={16} className="" />
                     {isOpen && <span className='ml-2'>Insurance</span>}
-                </a>
+                </Link>
             </div>
         </div>
     )

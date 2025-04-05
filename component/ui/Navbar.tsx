@@ -1,6 +1,9 @@
 import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
 import React from 'react';
 import { MdOutlineLogin } from "react-icons/md";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { FaBell } from "react-icons/fa";
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
 
@@ -10,7 +13,7 @@ const handleLogout = () => {
   // Implement your logout logic here
   console.log("User logged out");
   logout();
-  window.location.href = "/login" // Call the logout function from context
+  // window.location.href = "/login" // Call the logout function from context
 }
 
 
@@ -19,11 +22,19 @@ const handleLogout = () => {
       <div className="container text-center mx-auto flex justify-between items-center h-full">
    <div></div>
       <div className='h-full  flex items-center '>
+
+      <Link href="#" className="p-4 relative flex items-center">
+        <FaBell size={18}  />
+        <span className="absolute top-2 right-0 bg-white text-green-800 text rounded-full w-4 h-4 flex items-center justify-center text-xs">3</span>
+        </Link>
     
-        <a href="/profile" className="p-4">profile</a>
-        <a href="#" onClick={()=>{
+        <Link href="/profile" className="p-4">
+        <IoPersonCircleOutline size={24}  />
+        </Link>
+        
+        <div  onClick={()=>{
           handleLogout()
-        }}  className="p-4"> <MdOutlineLogin size={24}  /></a>
+        }}  className="p-4 cursor-pointer"> <MdOutlineLogin size={24}  /></div>
       
       </div>
       </div>

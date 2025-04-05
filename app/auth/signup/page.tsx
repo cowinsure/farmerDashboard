@@ -8,7 +8,7 @@ const SignupPage: React.FC = () => {
     };
 
     return (
-        <div className=" signup-page flex flex-col items-center justify-center min-h-screen ">
+        <div className=" signup-page flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-600">
             <h1 className="text-3xl font-bold mb-6">Sign Up</h1>
             <form onSubmit={handleSignup} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
             <div className="mb-4">
