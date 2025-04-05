@@ -1,0 +1,74 @@
+'use client';
+import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
+import React from 'react';
+
+const Login: React.FC = () => {
+    const { login } = useAuth();
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+
+        login('userId', 'phoneNumber', 'accessToken'); // Replace with actual values
+        // Handle login logic here
+        window.location.href = '/'; // Redirect to home page after login
+    };
+
+    return (
+        <div className="flex justify-center items-center h-screen bg-gray-100">
+            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Phone:
+                </label>
+                <input
+                type="tel"
+                id="phone"
+                name="phone"
+                pattern="[0-9]{11}"
+                required
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onInput={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                }}
+                />
+                </div>
+                <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password:
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                </div>
+                <button
+                type="submit"
+                onClick={handleSubmit}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                Login
+                </button>
+            </form>
+            <div className="mt-4 text-center">
+                <a href="/auth/otp" className="text-sm text-green-600 hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
+            <div className="mt-2 text-center">
+                <span className="text-sm text-gray-600">Dont have an account? </span>
+                <Link href="/signup" className="text-sm text-green-600 hover:underline">
+                    Sign Up
+                </Link>
+            </div>
+            </div>
+        </div>
+    );
+};
+
+export default Login;

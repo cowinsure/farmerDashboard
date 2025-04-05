@@ -8,7 +8,7 @@ function LargeSidebar() {
     const [isOpen, setIsOpen] = useState(true);
 
     return (
-        <div className={`h-screen flex flex-col items-center justify-center transition-width duration-300 ${isOpen ? 'w-[200px]' : 'w-[50px]'} bg-white`}>
+        <div className={`h-screen flex flex-col items-center justify-center transition-width duration-300 ${isOpen ? 'w-[200px]' : 'w-[50px]'} bg-[#e5ebe7] `}>
             <div className="h-12 mb-5 flex flex-row items-center justify-around w-full">
                
                {isOpen &&   <Image
@@ -31,7 +31,7 @@ function LargeSidebar() {
                 </a>
                 <a href="#" className="p-4 w-full hover:bg-gray-200 flex items-center">
                     <MdOutlineCancel size={16} className="" />
-                    {isOpen && <span className='ml-2' >Farmer</span>}
+                    {isOpen && <span className='ml-2' >Farm</span>}
                 </a>
                 <a href="#" className="p-4 w-full hover:bg-gray-200 flex items-center">
                     <MdOutlineCancel size={16} className="" />

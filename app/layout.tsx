@@ -4,9 +4,9 @@ import {
   Averia_Sans_Libre
 } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/component/ui/Sidebar";
-import Navbar from "../component/ui/Navbar"; // Import Navbar
-import LargeSidebar from "@/component/ui/LargeSidebar";
+
+import RootLayoutCustom from "@/component/RootLayer/RootLayout";
+import { AuthProvider } from "../context/AuthContext";
 
 
 
@@ -30,21 +30,14 @@ export default function RootLayout({
       <body
         className={`${averia.className}  antialiased`}
       >
+        <AuthProvider>
+          
+        <RootLayoutCustom>
+          {children}
+        </RootLayoutCustom>
+       </AuthProvider>
       
-        <div className="flex h-screen">
-          <div className="w-auto">
-          <LargeSidebar />
-          </div>
-          {/* <Sidebar /> */}
-          <div className="lg:hidden ">
-
-          <Sidebar />
-          </div>
-          <div className="flex-1   overflow-y-auto h-screen">
-              <Navbar /> 
-            {children}
-          </div>
-        </div>
+       
       </body>
     </html>
   );
