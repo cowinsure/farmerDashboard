@@ -2,6 +2,7 @@
 import FinancialInfoForm from '@/component/farmerProfile/FinancialInfo';
 import NomineeInfo from '@/component/farmerProfile/NomineeInfo';
 import PersonalInfo from '@/component/farmerProfile/PersonalInfo';
+
 import React, { useState } from 'react';
 
 const ProfilePage: React.FC = () => {
@@ -22,7 +23,7 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="p-6 text-gray-800">
-            <h1 className="text-2xl font-bold mb-6">Farmer Profile</h1>
+            <h1 className="text-2xl font-bold mb-6">User Profile</h1>
             <div className="flex gap-4 mb-6">
             <button
                 className={`px-4 py-2 border rounded transition-colors duration-200 ${

@@ -1,11 +1,12 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { MdOutlineLogin } from "react-icons/md";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaBell } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
+import ModalGeneral from '../modal/DialogGeneral';
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
   const router = useRouter()
@@ -19,7 +20,7 @@ const handleLogout = () => {
   router.replace('/auth/login') // Redirect to login page after logout
   // window.location.href = "/login" // Call the logout function from context
 }
-
+const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-30 w-auto bg-[#277a49]  h-12 text-white shadow-md">
@@ -27,7 +28,9 @@ const handleLogout = () => {
    <div></div>
       <div className='h-full  flex items-center '>
 
-      <Link href="#" className="p-4 relative flex items-center">
+      <Link href="#" onClick={()=>{
+        setIsModalOpen(true)
+      }} className="p-4 relative flex items-center">
         <FaBell size={18}  />
         <span className="absolute top-2 right-0 bg-white text-green-800 text rounded-full w-4 h-4 flex items-center justify-center text-xs">3</span>
         </Link>
@@ -42,6 +45,9 @@ const handleLogout = () => {
       
       </div>
       </div>
+      <ModalGeneral isOpen={isModalOpen} onClose={() => {setIsModalOpen(false)}}>
+        <div className='text-black mt-10 text-center'>Notifications</div>
+      </ModalGeneral>
     </nav>
   );
 };

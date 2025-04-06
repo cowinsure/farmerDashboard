@@ -9,9 +9,10 @@ const SignupPage: React.FC = () => {
     };
 
     return (
-        <div className=" signup-page flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-600">
-            <h1 className="text-3xl font-bold mb-6">Sign Up</h1>
-            <form onSubmit={handleSignup} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <div className=" flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-600">
+            <div className='max-w-md w-full bg-white p-8 rounded shadow-md'>
+            <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
+            <form onSubmit={handleSignup} className=" w-full max-w-md">
             <div className="mb-4">
                 <label htmlFor="tel" className="block text-sm font-medium text-gray-700 mb-1">Phone:</label>
                 <input
@@ -40,6 +41,9 @@ const SignupPage: React.FC = () => {
                 submit
             </button>
             </form>
+
+            </div>
+          
         </div>
     );
 };

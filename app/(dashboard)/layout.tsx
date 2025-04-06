@@ -7,6 +7,7 @@ import Sidebar from '@/component/ui/Sidebar';
 import Navbar from '@/component/ui/Navbar';
 import Loader from '@/component/helper/Loader';
 
+
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const auth = useAuth()
     const router = useRouter()
@@ -35,7 +36,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
                         </div>
                         <div className="flex-1 overflow-y-auto h-screen">
                             <Navbar />
-                            <div className="bg-[#dae4e3] h-auto m-2 rounded-md">
+                            <div className=" h-auto m-2 rounded-md">
                                 {children}
                             </div>
                         </div>
