@@ -4,15 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import logo from '../../../public/Logo-03.png'; // Importing logo
+import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
+    const router = useRouter()
     const { login } = useAuth();
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
         login('userId', 'phoneNumber', 'accessToken'); // Replace with actual values
         // Handle login logic here
-        window.location.href = '/'; // Redirect to home page after login
+        router.push('/home') // Redirect to home page after login
     };
 
     return (
@@ -81,7 +83,7 @@ const Login: React.FC = () => {
                 </div>
                 <div className="mt-2 text-center">
                     <span className="text-sm text-gray-600">Dont have an account? </span>
-                    <Link href="/signup" className="text-sm text-green-600 hover:underline">
+                    <Link href="/auth/signup" className="text-sm text-green-600 hover:underline">
                         Sign Up
                     </Link>
                 </div>

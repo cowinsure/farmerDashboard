@@ -1,11 +1,14 @@
+'use client';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import React from 'react';
 import { MdOutlineLogin } from "react-icons/md";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaBell } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
+  const router = useRouter()
 
 const handleLogout = () => {
   // Call the logout function from the AuthContext
@@ -13,6 +16,7 @@ const handleLogout = () => {
   // Implement your logout logic here
   console.log("User logged out");
   logout();
+  router.replace('/auth/login') // Redirect to login page after logout
   // window.location.href = "/login" // Call the logout function from context
 }
 

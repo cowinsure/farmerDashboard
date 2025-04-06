@@ -5,7 +5,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 
-import RootLayoutCustom from "@/component/RootLayer/RootLayout";
+// import RootLayoutCustom from "@/component/RootLayer/RootLayout";
 import { AuthProvider } from "../context/AuthContext";
 
 
@@ -32,9 +32,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           
-        <RootLayoutCustom>
+        {/* <RootLayoutCustom> */}
           {children}
-        </RootLayoutCustom>
+        {/* </RootLayoutCustom> */}
        </AuthProvider>
       
        
