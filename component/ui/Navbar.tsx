@@ -23,7 +23,7 @@ const handleLogout = () => {
 const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-30 w-auto bg-[#277a49]  h-12 text-white shadow-md">
+    <nav className="sticky top-0 z-30 w-auto bg-green-700  h-12 text-white shadow-md">
       <div className="container text-center mx-auto flex justify-between items-center h-full">
    <div></div>
       <div className='h-full  flex items-center '>

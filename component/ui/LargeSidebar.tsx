@@ -12,6 +12,8 @@ import { FaChevronRight } from "react-icons/fa";
 
 function LargeSidebar() {
     const [isOpen, setIsOpen] = useState(true);
+    const [isActiveMenu, setIsActiveMenu] = useState("Me");
+
 
     return (
         <div className={`h-screen flex flex-col items-center justify-center transition-width duration-300 ${isOpen ? 'w-[200px]' : 'w-[50px]'} bg-[#e5ebe7] `}>
@@ -32,15 +34,15 @@ function LargeSidebar() {
                 </button>
             </div>
             <div className='h-full w-full text-black flex flex-col justify-start items-start'>
-                <Link href="/profile" className="p-4   w-full hover:bg-green-800 hover:text-white flex items-center">
+                <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white" : ""}`}>
                 <IoPersonCircleOutline className="" size={16} />
                     {isOpen && <span className='ml-2'>Me</span>}
                 </Link>
-                <Link href="/farmer" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
+                <Link href="/farmer" onClick={()=>{setIsActiveMenu("Farm")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Farm"  ? "bg-green-800 text-white" : ""}`}>
                     <PiFarm size={16} className="" />
                     {isOpen && <span className='ml-2' >Farm</span>}
                 </Link>
-                <Link href="#" className="p-4 w-full hover:bg-green-800 hover:text-white flex items-center">
+                <Link href="/insurance" onClick={()=>{setIsActiveMenu("Insurance")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Insurance"  ? "bg-green-800 text-white" : ""}`}>
                     <MdOutlineHealthAndSafety size={16} className="" />
                     {isOpen && <span className='ml-2'>Insurance</span>}
                 </Link>

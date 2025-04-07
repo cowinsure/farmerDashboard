@@ -8,7 +8,10 @@ import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
     const router = useRouter()
-    const { login } = useAuth();
+    const { login,userId } = useAuth();
+
+    console.log(userId);
+    
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 

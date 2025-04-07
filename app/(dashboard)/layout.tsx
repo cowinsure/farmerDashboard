@@ -14,8 +14,8 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
     const [loading, setLoading] = useState(true)  // Track loading state
 
     useEffect(() => {
-      if (!auth?.accessToken) {
-        router.replace('/auth/login')  // Redirect to login if no token
+      if (!auth?.userId) {
+        // router.replace('/auth/login')  // Redirect to login if no token
       } else {
         setLoading(false)  // Set loading to false after auth check
       }
@@ -27,7 +27,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
     return (
         <div>
-                    <div className="flex h-screen bg-white">
+                    <div className="flex h-screen bg-[#2e5e3a]">
                         <div className="w-auto hidden lg:block ">
                             <LargeSidebar />
                         </div>

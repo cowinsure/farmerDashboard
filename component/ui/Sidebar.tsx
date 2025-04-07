@@ -31,12 +31,10 @@ const Sidebar: React.FC = () => {
               
                 </div>
                 <ul className="mt-6 space-y-2">
-                <Link href={'/'}> 
-                    <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
-                    <IoPersonCircleOutline className="mr-2" size={20} />
-                        Me
-                    </li>
-                    </Link>
+                <Link href="/profile" onClick={()=>{}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${true  ? "bg-green-800 text-white" : ""}`}>
+                <IoPersonCircleOutline className="" size={16} />
+                    {isOpen && <span className='ml-2'>Me</span>}
+                </Link>
                     <Link href={'/farmer'}> 
                     <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
                       <GiBullHorns className="mr-2" size={20} />

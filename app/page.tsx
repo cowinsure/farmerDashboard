@@ -13,11 +13,11 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (auth?.accessToken) {
+    if (auth?.userId) {
       router.push('/home')
     } else {
-      router.push('auth/login')
+      // router.push('auth/login')
     }
-  }, [auth])
+  }, [auth, router])
   return null
 }

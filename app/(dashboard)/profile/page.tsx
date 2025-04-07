@@ -23,12 +23,12 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="p-6 text-gray-800">
-            <h1 className="text-2xl font-bold mb-6">User Profile</h1>
+            <h1 className="text-2xl font-bold mb-6 text-white">User Profile</h1>
             <div className="flex gap-4 mb-6">
             <button
                 className={`px-4 py-2 border rounded transition-colors duration-200 ${
                 activeTab === 'personalInfo'
-                    ? 'bg-green-500 text-white border-green-500 hover:bg-green-600'
+                    ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
                     : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
                 }`}
                 onClick={() => setActiveTab('personalInfo')}
@@ -38,7 +38,7 @@ const ProfilePage: React.FC = () => {
             <button
                 className={`px-4 py-2 border rounded transition-colors duration-200 ${
                 activeTab === 'financialInfo'
-                    ? 'bg-green-500 text-white border-green-500 hover:bg-green-600'
+                    ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
                     : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
                 }`}
                 onClick={() => setActiveTab('financialInfo')}
@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
             <button
                 className={`px-4 py-2 border rounded transition-colors duration-200 ${
                 activeTab === 'nomineeInfo'
-                    ? 'bg-green-500 text-white border-green-500 hover:bg-green-600'
+                    ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
                     : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
                 }`}
                 onClick={() => setActiveTab('nomineeInfo')}
