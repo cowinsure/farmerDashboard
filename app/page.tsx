@@ -16,7 +16,7 @@ export default function Home() {
     if (auth?.userId) {
       router.push('/home')
     } else {
-      // router.push('auth/login')
+      router.push('auth/login')
     }
   }, [auth, router])
   return null
