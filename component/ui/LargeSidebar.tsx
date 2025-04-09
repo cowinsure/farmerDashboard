@@ -34,7 +34,7 @@ function LargeSidebar() {
                 </button>
             </div>
             <div className='h-full w-full text-black flex flex-col justify-start items-start'>
-                <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white" : ""}`}>
+                <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white " : ""}`}>
                 <IoPersonCircleOutline className="" size={16} />
                     {isOpen && <span className='ml-2'>Me</span>}
                 </Link>

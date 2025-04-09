@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 // import Image from 'next/image';
 import ModalGeneral from '@/component/modal/DialogGeneral';
 import { CiSquarePlus } from "react-icons/ci";
+import Link from 'next/link';
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 
@@ -22,13 +23,13 @@ const FarmerPage: React.FC = () => {
                     className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
 
                         }`}
-                    onClick={() => { setIsModalOpen(true) }}
+                    // onClick={() => { setIsModalOpen(true) }}
 
                 >
-                    <div className='flex flex-row items-center justify-center'>
+                    <Link href="/farmer/add_cow" className='flex flex-row items-center justify-center'>
                         <CiSquarePlus size={24} className='mr-2' />
                         <span>Add Cow</span>
-                    </div>
+                    </Link>
                 </button>
             </div>
             <div className="overflow-auto max-h-[400px]  text-gray-600  rounded-lg shadow-md ">
@@ -139,7 +140,7 @@ const FarmerPage: React.FC = () => {
             </ModalGeneral>
 
             <ModalGeneral isOpen={isCowDetails} onClose={() => {setIsCowDetails(false)}}>
-        <div className='text-black mt-10 text-center'>Cow Details</div>
+        <div className='text-black mt-10 text-center w-screen'>Cow Details</div>
       </ModalGeneral>
 
         </>
