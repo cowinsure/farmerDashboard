@@ -1,12 +1,14 @@
 'use client'
 
+import StepFive from '@/component/cowRegistration/StepFive'
+import StepFour from '@/component/cowRegistration/StepFour'
 import StepOne from '@/component/cowRegistration/StepOne'
 import StepThree from '@/component/cowRegistration/StepThree'
 import StepTwo from '@/component/cowRegistration/StepTwo'
 import { useState } from 'react'
 
 
-const steps = ['Personal Info', 'Account Details', 'Confirmation']
+const steps = ['Personal Info', 'Cow Details', 'Cow Image', "Attachments"]
 
 export default function StepForm() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -18,14 +20,18 @@ export default function StepForm() {
       case 1:
         return <StepTwo />
       case 2:
-        return <StepThree />
+        return <StepFour />
+      case 3:
+        return <StepFive />
+   
       default:
+
         return null
     }
   }
 
   return (
-    <div className=" mx-auto p-6 bg-white rounded shadow-md">
+    <div className=" mx-auto p-6 bg-white text-gray-700 rounded shadow-md">
       {/* Step bar */}
       <div className="flex justify-between mb-8">
         {steps.map((step, index) => (
@@ -58,9 +64,9 @@ export default function StepForm() {
         <button
           onClick={() => setCurrentStep((s) => s + 1)}
           className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-        //   disabled={currentStep === steps.length - 1}
+          disabled={currentStep === steps.length + 1}
         >
-         {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
+          {currentStep === steps.length  ? 'Submit' : 'Next'}
         </button>
       </div>
     </div>
