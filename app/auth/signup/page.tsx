@@ -1,7 +1,10 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const SignupPage: React.FC = () => {
+        const router = useRouter()
+    
     const handleSignup = (event: React.FormEvent) => {
         event.preventDefault();
         // Add signup logic here
@@ -33,7 +36,8 @@ const SignupPage: React.FC = () => {
                 onClick={() => {
                     console.log('clicked');
                     // Add navigation logic here, e.g., using a router
-                    window.location.href = '/otp'; // Navigate to OTP page
+                    // window.location.href = 'auth/otp';
+                    router.push('/auth/otp') // Navigate to OTP page
                 }}
                 type="submit"
                 className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"

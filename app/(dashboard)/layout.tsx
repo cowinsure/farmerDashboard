@@ -22,12 +22,12 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
     }, [auth, router])  // Run effect when auth or router changes
   
     if (loading) {
-      return <Loader/>  // Or show a loading spinner
+      return <Loader/>  // Or show a loading spinner bg-[#2e5e3a]
     }
 
     return (
         <div>
-                    <div className="flex h-screen bg-[#2e5e3a]">
+                    <div className="flex h-screen  bg-white">
                         <div className="w-auto hidden lg:block ">
                             <LargeSidebar />
                         </div>
