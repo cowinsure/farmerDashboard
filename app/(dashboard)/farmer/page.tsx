@@ -23,7 +23,7 @@ const FarmerPage: React.FC = () => {
                     className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
 
                         }`}
-                    // onClick={() => { setIsModalOpen(true) }}
+                // onClick={() => { setIsModalOpen(true) }}
 
                 >
                     <Link href="/farmer/add_cow" className='flex flex-row items-center justify-center'>
@@ -53,12 +53,12 @@ const FarmerPage: React.FC = () => {
                     </thead>
                     <tbody>
                         <tr className='bg-green-100 text-center'>
-                            
+
                             <td className="border border-gray-100 p-2 ">image</td>
                             <td className="border border-gray-100 p-2 ">2 years</td>
                             <td className="border border-gray-100 p-2">Brown</td>
                             <td className="border border-gray-100 p-2">Stud Bulls</td>
-                           
+
                             <td className="border border-gray-100 p-2">yes</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">April 5 2025</td>
@@ -67,16 +67,16 @@ const FarmerPage: React.FC = () => {
                             <td className="border border-gray-100 p-2">Death Coverage</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">Agent jhon</td>
-                            <td className="border border-gray-100 p-2" onClick={()=>{setIsCowDetails(true)}}>view</td>
-                            
+                            <td className="border border-gray-100 p-2" onClick={() => { setIsCowDetails(true) }}>view</td>
+
                         </tr>
                         <tr className='bg-green-100 text-center'>
-                            
+
                             <td className="border border-gray-100 p-2 ">image</td>
                             <td className="border border-gray-100 p-2 ">2 years</td>
                             <td className="border border-gray-100 p-2">Brown</td>
                             <td className="border border-gray-100 p-2">Stud Bulls</td>
-                           
+
                             <td className="border border-gray-100 p-2">yes</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">April 5 2025</td>
@@ -85,18 +85,18 @@ const FarmerPage: React.FC = () => {
                             <td className="border border-gray-100 p-2">Death Coverage</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">Agent jhon</td>
-                            <td className="border border-gray-100 p-2" onClick={()=>{setIsCowDetails(true)}}>
+                            <td className="border border-gray-100 p-2" onClick={() => { setIsCowDetails(true) }}>
                                 <button>view</button></td>
 
-                            
+
                         </tr>
                         <tr className='bg-green-100 text-center'>
-                            
+
                             <td className="border border-gray-100 p-2 ">image</td>
                             <td className="border border-gray-100 p-2 ">2 years</td>
                             <td className="border border-gray-100 p-2">Brown</td>
                             <td className="border border-gray-100 p-2">Stud Bulls</td>
-                           
+
                             <td className="border border-gray-100 p-2">yes</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">April 5 2025</td>
@@ -105,19 +105,19 @@ const FarmerPage: React.FC = () => {
                             <td className="border border-gray-100 p-2">Death Coverage</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">Agent jhon</td>
-                            <td className="border border-gray-100 p-2" onClick={()=>{setIsCowDetails(true)}}>
+                            <td className="border border-gray-100 p-2" onClick={() => { setIsCowDetails(true) }}>
                                 <button>view</button></td>
 
-                            
+
                         </tr>
 
                         <tr className='bg-green-100 text-center'>
-                            
+
                             <td className="border border-gray-100 p-2 ">image</td>
                             <td className="border border-gray-100 p-2 ">2 years</td>
                             <td className="border border-gray-100 p-2">Brown</td>
                             <td className="border border-gray-100 p-2">Stud Bulls</td>
-                           
+
                             <td className="border border-gray-100 p-2">yes</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">April 5 2025</td>
@@ -126,12 +126,12 @@ const FarmerPage: React.FC = () => {
                             <td className="border border-gray-100 p-2">Death Coverage</td>
                             <td className="border border-gray-100 p-2">1,02,735 BDT</td>
                             <td className="border border-gray-100 p-2">Agent jhon</td>
-                            <td className="border border-gray-100 p-2" onClick={()=>{setIsCowDetails(true)}}>
+                            <td className="border border-gray-100 p-2" onClick={() => { setIsCowDetails(true) }}>
                                 <button>view</button></td>
 
-                            
+
                         </tr>
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -139,9 +139,9 @@ const FarmerPage: React.FC = () => {
                 <div className='text-black mt-10 text-center'>Add Cow</div>
             </ModalGeneral>
 
-            <ModalGeneral isOpen={isCowDetails} onClose={() => {setIsCowDetails(false)}}>
-        <div className='text-black mt-10 text-center w-screen'>Cow Details</div>
-      </ModalGeneral>
+            <ModalGeneral isOpen={isCowDetails} onClose={() => { setIsCowDetails(false) }}>
+                <div className='text-black mt-10 text-center w-screen'>Cow Details</div>
+            </ModalGeneral>
 
         </>
 

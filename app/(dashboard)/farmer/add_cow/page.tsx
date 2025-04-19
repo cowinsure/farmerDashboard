@@ -3,7 +3,6 @@
 import StepFive from '@/component/cowRegistration/StepFive'
 import StepFour from '@/component/cowRegistration/StepFour'
 import StepOne from '@/component/cowRegistration/StepOne'
-import StepThree from '@/component/cowRegistration/StepThree'
 import StepTwo from '@/component/cowRegistration/StepTwo'
 import { useState } from 'react'
 
