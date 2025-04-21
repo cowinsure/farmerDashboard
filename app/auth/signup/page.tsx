@@ -31,7 +31,18 @@ const SignupPage: React.FC = () => {
                 }}
                 />
             </div>
-           
+        <div className="mb-4">
+            <label htmlFor="accountType" className="block text-sm font-medium text-gray-700 mb-1">Account Type:</label>
+            <select
+                id="accountType"
+                name="accountType"
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+                <option value="individual">Individual</option>
+                <option value="enterprise">Enterprise</option>
+            </select>
+        </div>
             <button
                 onClick={() => {
                     console.log('clicked');
