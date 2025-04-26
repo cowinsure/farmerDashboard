@@ -1,6 +1,7 @@
 'use client'
 import FinancialInfoForm from '@/component/farmerProfile/FinancialInfo';
 import NomineeInfo from '@/component/farmerProfile/NomineeInfo';
+import OrganizationInfo from '@/component/farmerProfile/OrganizationInfo';
 import PersonalInfo from '@/component/farmerProfile/PersonalInfo';
 
 import React, { useState } from 'react';
@@ -10,6 +11,8 @@ const ProfilePage: React.FC = () => {
 
     const renderTabContent = () => {
         switch (activeTab) {
+            case 'organizationInfo':
+                return <OrganizationInfo />;
             case 'personalInfo':
                 return <PersonalInfo />;
             case 'financialInfo':
@@ -24,37 +27,20 @@ const ProfilePage: React.FC = () => {
     return (
         <div className="p-6 text-gray-800">
             <h1 className="text-2xl font-bold mb-6 text-white">User Profile</h1>
-            <div className="flex gap-4 mb-6">
-            <button
-                className={`px-4 py-2 border rounded transition-colors duration-200 ${
-                activeTab === 'personalInfo'
+            <div className="flex flex-wrap gap-4 mb-6">
+            {['organizationInfo', 'personalInfo', 'financialInfo', 'nomineeInfo'].map((tab) => (
+                <button
+                key={tab}
+                className={`flex-1 px-4 py-2 border rounded transition-colors duration-200 ${
+                    activeTab === tab
                     ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
                     : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
                 }`}
-                onClick={() => setActiveTab('personalInfo')}
-            >
-                Personal Info
-            </button>
-            <button
-                className={`px-4 py-2 border rounded transition-colors duration-200 ${
-                activeTab === 'financialInfo'
-                    ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-                }`}
-                onClick={() => setActiveTab('financialInfo')}
-            >
-                Financial Info
-            </button>
-            <button
-                className={`px-4 py-2 border rounded transition-colors duration-200 ${
-                activeTab === 'nomineeInfo'
-                    ? 'bg-green-700 text-white border-green-500 hover:bg-green-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-                }`}
-                onClick={() => setActiveTab('nomineeInfo')}
-            >
-                Nominee Info
-            </button>
+                onClick={() => setActiveTab(tab)}
+                >
+                {tab.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                </button>
+            ))}
             </div>
             <div className="p-4 rounded bg-white shadow">{renderTabContent()}</div>
         </div>

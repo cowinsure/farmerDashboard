@@ -1,19 +1,55 @@
 'use client';
+import { useRouter } from "next/navigation"; // Updated import
 import React, { useState } from "react";
 
 const SetPasswordPage = () => {
+    const router = useRouter(); // Updated useRouter
+
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
-        // Handle password submission logic here
-        alert("Password set successfully!");
-        window.location.href = "/auth/login"; // Redirect to login page after setting password
+
+        try {
+            const mobileNumber = localStorage.getItem("mobile_number"); // Retrieve mobile number from localStorage
+            if (!mobileNumber) {
+                alert("Mobile number not found. Please try again.");
+                return;
+            }
+
+            const requestBody = {
+                mobile_number: mobileNumber,
+                password,
+            };
+
+            const response = await fetch("http://127.0.0.1:8000/api/v1/register/set-password/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.statusCode === "200") {
+                    alert(data.data.message); // "User registered successfully."
+                    router.push("/auth/login"); // Redirect to login page
+                } else {
+                    alert("Failed to set password. Please try again.");
+                }
+            } else {
+                alert("Failed to set password. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error during password submission:", error);
+            alert("An error occurred. Please try again.");
+        }
     };
 
     return (
