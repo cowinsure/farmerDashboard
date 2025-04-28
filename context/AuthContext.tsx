@@ -1,4 +1,6 @@
 'use client';
+import { createBaseRequest } from "../component/Model/createBaseRequest";
+
 import React from "react";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
@@ -37,8 +39,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Function to log in the user
-  const login = (userId: string, phoneNumber: string, accessToken: string) => {
+  const login =async (userId: string, phoneNumber: string, accessToken: string) => {
     setIsLoading(true)
+    try {
+      const baseRequest = await createBaseRequest();
+        console.log(baseRequest.location.latitude, baseRequest.location.longitude);
+        
+      // const finalPayload = {
+      //   ...baseRequest,
+      //   ...customPayload,
+      // };
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Failed to make API call. Please enable location permissions and try again.");
+    }
     setUserId(userId);
     setPhoneNumber(phoneNumber);
     setAccessToken(accessToken);

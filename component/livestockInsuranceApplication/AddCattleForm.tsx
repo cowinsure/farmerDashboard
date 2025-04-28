@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MdCancel } from "react-icons/md";
 import { FaCamera } from "react-icons/fa";
 const AddCattleForm: React.FC = () => {
-    const [capturedCows, setCapturedCows] = useState<string[]>(["cow1" , "cow2", "cow3"]);
+    const [capturedCows, setCapturedCows] = useState<string[]>(["cow1", "cow2", "cow3"]);
 
     const handleCaptureImage = () => {
         const newCow = `Cow ${capturedCows.length + 1}`;
@@ -85,110 +85,110 @@ const AddCattleForm: React.FC = () => {
                         </div>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        
-                        <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">muzzel Vedio</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
-                        </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">left side</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">muzzel Vedio</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">right side</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">left side</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">Special Mark</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">right side</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">owner & cattle</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">Special Mark</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">challan paper</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">owner & cattle</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">vet certificate</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">challan paper</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
-                        </div>
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
-                        <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">chairman certificate</label>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">vet certificate</label>
 
-                        <div className="mt-1 relative flex items-center">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                            />
-                            <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
+                        <div>
+                            <label htmlFor="deworming" className="block text-sm  font-medium text-gray-700">chairman certificate</label>
+
+                            <div className="mt-1 relative flex items-center">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="environment"
+                                    className="block w-full p-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                />
+                                <FaCamera className="absolute right-2 text-gray-500" size={20} />
+                            </div>
                         </div>
                         <div>
                             <label htmlFor="moneyInput" className="block text-sm font-medium text-gray-700">sum insured</label>
@@ -199,8 +199,8 @@ const AddCattleForm: React.FC = () => {
                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                             />
                         </div>
-                      
-                       
+
+
                     </div>
                     <div className="flex justify-center mt-4">
                         <button
@@ -213,8 +213,8 @@ const AddCattleForm: React.FC = () => {
 
                 </div>
             </div>
-            <div> 
-                 <h2 className="text-lg font-semibold mb-2 text-center m-10">List of cattle</h2>
+            <div>
+                <h2 className="text-lg font-semibold mb-2 text-center m-10">List of cattle</h2>
                 <div className="max-h-96  overflow-y-auto">
                     <ul className="list-disc">
                         {capturedCows.map((cow, index) => (
@@ -240,7 +240,7 @@ const AddCattleForm: React.FC = () => {
                         ))}
                     </ul>
                 </div>
-                
+
             </div>
         </div>
     );

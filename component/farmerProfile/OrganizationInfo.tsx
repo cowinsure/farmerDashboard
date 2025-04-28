@@ -1,16 +1,28 @@
 import React from 'react';
 
 const OrganizationInfo: React.FC = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); 
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        
+        const organizationData = {
+            organizationLogo: data.organizationLogo,
+            organizationName: data["Orgaization name"],
+            establishedDate: data.dob,
+            tin: data.tin,
+            bin: data.bin,
+        };
+
+        console.log(organizationData);
+    }
     return (
         <div className="p-6  rounded-md">
             <h1 className="text-2xl text-center font-bold mb-4">Organizational Information</h1>
             <form
             className="space-y-4"
             onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const data = Object.fromEntries(formData.entries());
-                console.log(data);
+                handleSubmit(e);
             }}
             >
                 <div className="flex flex-col">
