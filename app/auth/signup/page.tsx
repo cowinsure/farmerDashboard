@@ -5,10 +5,7 @@ import React, { useState } from 'react';
 const SignupPage: React.FC = () => {
     
     const router = useRouter();
-    const [phone, setPhone] = useState(() => {
-        // Initialize state with value from localStorage if it exists
-        return localStorage.getItem('mobile_number') || '';
-    });
+    const [phone, setPhone] = useState('');
 
     React.useEffect(() => {
         // Save phone to localStorage whenever it changes
@@ -20,6 +17,8 @@ const SignupPage: React.FC = () => {
     const handleSignup = async (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
+        console.log(phone);
+        
     
         // Map account type to role_id
         const role_id = accountType === 'individual' ? 1 : 2;
@@ -33,21 +32,27 @@ const SignupPage: React.FC = () => {
         localStorage.setItem('role_id', role_id.toString());
     
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register/step1/`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register/step1/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
           });
+
+            const responseData = await response.json(); // Parse the response body once
+            console.log(responseData);
+          
     
-          if (response.ok) {
+            if (response.ok) {
             console.log('Signup successful');
             router.push('/auth/otp'); // Navigate to OTP page
-          } else {
+            } else if (response.status === 404) {
+            alert('Signup failed: The requested resource was not found.');
+            } else {
+            alert(`Signup failed: ${responseData.data.message || 'Unknown error'}`); // Use parsed response data
             console.error('Signup failed');
-            // Handle error response
-          }
+            }
         } catch (error) {
           console.error('Error during signup:', error);
         } finally {

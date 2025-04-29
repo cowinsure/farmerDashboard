@@ -19,12 +19,23 @@ const RegisterPage: React.FC = () => {
 
     const handleFileSelect = (file: File) => {
         if (file && file.type.startsWith('video/')) {
+            console.log('Selected file:', file);
+    
             setVideoFile(file);
-            const fileURL = URL.createObjectURL(file);
+            const fileURL = URL.createObjectURL(file); // Create a blob URL for the video file
             if (previewVideoRef.current) {
-                previewVideoRef.current.src = fileURL;
+                previewVideoRef.current.src = fileURL; // Set the video source
+                previewVideoRef.current.onloadeddata = () => {
+                    console.log('Video loaded successfully');
+                };
+                previewVideoRef.current.onerror = () => {
+                    console.error('Error loading video');
+                    alert('The selected video could not be loaded. Please try another file.');
+                };
                 previewVideoRef.current.load(); // Ensure the video is loaded
             }
+        } else {
+            alert('Invalid file type. Please select a valid video file.');
         }
     };
 

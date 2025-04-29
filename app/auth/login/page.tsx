@@ -6,18 +6,53 @@ import React from 'react';
 import logo from '../../../public/Logo-03.png'; // Importing logo
 import { useRouter } from 'next/navigation';
 
+
 const Login: React.FC = () => {
     const router = useRouter()
     const { login,userId } = useAuth();
 
     console.log(userId);
     
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        login('userId', 'phoneNumber', 'accessToken'); // Replace with actual values
-        // Handle login logic here
-        router.push('/home') // Redirect to home page after login
+        const phoneInput = (document.getElementById('phone') as HTMLInputElement).value;
+        const passwordInput = (document.getElementById('password') as HTMLInputElement).value;
+
+        if (!/^[0-9]{11}$/.test(phoneInput)) {
+            alert('Please enter a valid 11-digit phone number.');
+            return;
+        }
+
+        if (passwordInput.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mobile_number: phoneInput,
+                    password: passwordInput,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data = await response.json();
+            const { userId, accessToken } = data;
+            login(userId, phoneInput, accessToken); // Update login with actual values
+            router.push('/home'); // Redirect to home page after login
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Login failed. Please check your credentials and try again.');
+        }
     };
 
     return (

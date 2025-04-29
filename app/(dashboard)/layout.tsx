@@ -15,6 +15,8 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
     useEffect(() => {
       if (!auth?.userId) {
+        console.log('No userId found, redirecting to login...');
+        setLoading(false)  // Set loading to false before redirecting
         // router.replace('/auth/login')  // Redirect to login if no token
       } else {
         setLoading(false)  // Set loading to false after auth check

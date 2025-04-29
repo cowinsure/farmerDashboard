@@ -1,167 +1,104 @@
 'use client'
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import UploadVideo from "../helper/UploadVedio";
+import Image from "next/image";
+import { useCowRegistration } from "@/context/CowRegistrationContext";
+
+// Define an interface for the response data
+interface ResponseData {
+  animal_name: string;
+  registration_id: string;
+  geo_location: string;
+  date: string;
+  no_of_frames: number;
+  image_url: string;
+  message: string;
+}
 
 export default function StepOne() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [isCameraActive, setIsCameraActive] = useState(false);
+   const {data, updateStep, validateStep, reset } = useCowRegistration();
+  const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const startCamera = async () => {
-    if (typeof navigator !== "undefined" && navigator.mediaDevices?.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          setIsCameraActive(true);
-        }
-        console.log("Camera started");
-      } catch (error) {
-        console.error("Error accessing the camera: ", error);
-        alert("Camera access is required to record a video.");
+  const handleVideoUpload = async (file: File) => {
+    console.log("Video file captured:", file);
+
+    const formData = new FormData();
+    formData.append("video", file); // Append the video file to the form data
+
+    try {
+      setIsUploading(true);
+      const response = await fetch("http://127.0.0.1:5000/v2/register2", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload video");
       }
-    } else {
-      console.error("Camera not supported or navigator not available");
-      alert("Camera is not supported in this environment.");
+
+      const data: ResponseData = await response.json(); // Use the interface for type safety
+      console.log("API Response:", data);
+      setResponseData(data);
+      updateStep({
+        CowID: data.registration_id,
+      }) // Save the response data to state
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      alert("Something went wrong." +error );
+    } finally {
+      setIsUploading(false);
     }
   };
-  
-
-  const startRecording = () => {
-    if (!videoRef.current || !videoRef.current.srcObject) {
-      alert("Camera is not active. Please start the camera first.");
-      return;
-    }
-
-    const stream = videoRef.current.srcObject as MediaStream;
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = mediaRecorder;
-
-    const chunks: Blob[] = [];
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        chunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      setRecordedChunks(chunks);
-      console.log("Recording stopped");
-    };
-
-    mediaRecorder.start();
-    setIsRecording(true);
-
-    // Automatically stop recording after 3 seconds
-    setTimeout(() => {
-      stopRecording();
-    }, 3000);
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
-    }
-    setIsRecording(false);
-  };
-
-  const resetRecording = () => {
-    stopRecording();
-    setRecordedChunks([]);
-    setIsCameraActive(false);
-    if (videoRef.current) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-    }
-  };
-
-  const downloadVideo = () => {
-    if (recordedChunks.length > 0) {
-      const blob = new Blob(recordedChunks, { type: "video/webm" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = "recorded-video.webm";
-      document.body.appendChild(a);
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  };
-
-  useEffect(() => {
-    startCamera(); // Automatically start the camera when the component mounts
-    return () => {
-      resetRecording(); // Clean up the camera when the component unmounts
-    };
-  }, []);
 
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row gap-2">
         <div className="lg:w-1/2 w-full flex flex-col justify-center items-center">
-          <video
-            id="video"
-            ref={videoRef}
-            className="h-[50vh] w-full border-2 border-green-500 rounded mb-4"
-            autoPlay
-            muted
-          ></video>
-          {!isCameraActive && (
-            <button
-              onClick={startCamera}
-              className="bg-green-500 text-white px-4 py-2 rounded mb-4"
-            >
-              Start Camera
-            </button>
-          )}
-          {isCameraActive && !isRecording && (
-            <button
-              onClick={startRecording}
-              className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-            >
-              Start Recording
-            </button>
-          )}
-          {isRecording && (
-            <button
-              onClick={stopRecording}
-              className="bg-red-500 text-white px-4 py-2 rounded mb-4"
-            >
-              Stop Recording
-            </button>
-          )}
-          {recordedChunks.length > 0 && (
-            <div className="flex gap-4">
-              <button
-                onClick={downloadVideo}
-                className="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                Download Video
-              </button>
-              <button
-                onClick={resetRecording}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-              >
-                Reset
-              </button>
-            </div>
-          )}
+          <UploadVideo
+            onVideoCapture={(file) => {
+              setSelectedFile(file); // Save the selected file to state
+            }}
+          />
+          
+          
+          <button onClick={()=>{
+              if (selectedFile) {
+                handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+              } else {
+                alert("Please select a video file before uploading.");
+              }
+
+          }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
+            {isUploading ? "Uploading..." : "Register Cow"}
+          </button>
         </div>
-        <div className="lg:w-1/2 w-full text-start flex flex-col justify-start items-center">
+        <div className=" lg:w-1/2 w-full text-start flex flex-col justify-start items-center">
           <div className="bg-green-700 text-white p-4 rounded-lg shadow-md">
             <p className="text-center text-3xl mb-4">Guideline for using Muzzle Tech</p>
             <ul className="list-disc text-2xl pl-5 mt-2">
               <li>Take a 3-second video slowly.</li>
               <li>Move the camera steadily without shaking.</li>
-              <li>Ensure the cows muzzle is placed inside the box on the screen.</li>
+              <li>Ensure the cow's muzzle is placed inside the box on the screen.</li>
               <li>Make sure there is adequate lighting for better detection.</li>
               <li>Keep the background clear of distractions.</li>
             </ul>
           </div>
+          {responseData && (
+            <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-2">Response Data:</h3>
+              <p><strong>Animal Name:</strong> {responseData.animal_name}</p>
+              <p><strong>Registration ID:</strong> {responseData.registration_id}</p>
+              <p><strong>Geo Location:</strong> {responseData.geo_location}</p>
+              <p><strong>Date:</strong> {responseData.date}</p>
+              <p><strong>No. of Frames:</strong> {responseData.no_of_frames}</p>
+                <p><strong>Image:</strong></p>
+                {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
+              <p><strong>Message:</strong> {responseData.message}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

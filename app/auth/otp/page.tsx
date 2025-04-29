@@ -93,7 +93,7 @@ const OtpPage: React.FC = () => {
           otp,
         };
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register/verify-otp/`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register/verify-otp/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const OtpPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen text-black bg-gray-100">
       <div className="p-5 max-w-md w-full bg-white shadow-md rounded text-center">
         <h1 className="text-2xl font-bold mb-4">Enter OTP</h1>
         <p className="text-gray-600 mb-6">We have sent a 6-digit OTP to your registered mobile number.</p>

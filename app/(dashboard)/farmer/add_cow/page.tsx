@@ -7,7 +7,7 @@ import StepTwo from '@/component/cowRegistration/StepTwo'
 import { useState } from 'react'
 
 
-const steps = ['Personal Info', 'Cow Details', 'Cow Image', "Attachments"]
+const steps = ['Muzzel Detection', 'Cow Details', 'Cow Image', "Attachments"]
 
 export default function StepForm() {
   const [currentStep, setCurrentStep] = useState(0)
