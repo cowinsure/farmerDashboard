@@ -4,6 +4,7 @@ import logo from '../../public/Logo-03.png'; // Importing logo
 import Image from 'next/image';
 
 import { IoPersonCircleOutline } from "react-icons/io5";
+import { IoHomeOutline } from "react-icons/io5";
 import Link from 'next/link';
 import { PiFarm } from "react-icons/pi";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
@@ -12,7 +13,7 @@ import { FaChevronRight } from "react-icons/fa";
 
 function LargeSidebar() {
     const [isOpen, setIsOpen] = useState(true);
-    const [isActiveMenu, setIsActiveMenu] = useState("Me");
+    const [isActiveMenu, setIsActiveMenu] = useState("Home");
 
 
     return (
@@ -34,6 +35,10 @@ function LargeSidebar() {
                 </button>
             </div>
             <div className='h-full w-full text-black flex flex-col justify-start items-start'>
+            <Link href="/home" onClick={()=>{setIsActiveMenu("Home")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Home"  ? "bg-green-800 text-white " : ""}`}>
+                <IoHomeOutline className="" size={16} />
+                    {isOpen && <span className='ml-2'>Home</span>}
+                </Link>
                 <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white " : ""}`}>
                 <IoPersonCircleOutline className="" size={16} />
                     {isOpen && <span className='ml-2'>Me</span>}

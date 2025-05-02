@@ -1,18 +1,16 @@
 'use client'
 import FinancialInfoForm from '@/component/farmerProfile/FinancialInfo';
 import NomineeInfo from '@/component/farmerProfile/NomineeInfo';
-import OrganizationInfo from '@/component/farmerProfile/OrganizationInfo';
 import PersonalInfo from '@/component/farmerProfile/PersonalInfo';
 
 import React, { useState } from 'react';
 
-const ProfilePage: React.FC = () => {
+const AddFarmerPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState('personalInfo');
 
     const renderTabContent = () => {
         switch (activeTab) {
-            case 'organizationInfo':
-                return <OrganizationInfo />;
+    
             case 'personalInfo':
                 return <PersonalInfo />;
             case 'financialInfo':
@@ -26,9 +24,9 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="p-6 text-gray-800">
-            <h1 className="text-2xl font-bold mb-6 text-green-700">User Profile</h1>
+            <h1 className="text-2xl font-bold mb-6 text-green-800">Farmer Profile</h1>
             <div className="flex flex-wrap gap-4 mb-6">
-            {['organizationInfo', 'personalInfo', 'financialInfo', 'nomineeInfo'].map((tab) => (
+            {[ 'personalInfo', 'financialInfo', 'nomineeInfo'].map((tab) => (
                 <button
                 key={tab}
                 className={`flex-1 px-4 py-2 border rounded transition-colors duration-200 ${
@@ -47,4 +45,4 @@ const ProfilePage: React.FC = () => {
     );
 };
 
-export default ProfilePage;
+export default AddFarmerPage;
