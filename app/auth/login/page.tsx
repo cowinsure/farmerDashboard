@@ -9,9 +9,9 @@ import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
     const router = useRouter()
-    const { login,userId } = useAuth();
+    const { login} = useAuth();
 
-    console.log(userId);
+  
     
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -46,7 +46,9 @@ const Login: React.FC = () => {
             }
 
             const data = await response.json();
-            const { userId, accessToken } = data;
+
+            console.log(data.data, 'login response data');
+            const { role: userId, access_token: accessToken } = data.data;
             login(userId, phoneInput, accessToken); // Update login with actual values
             router.push('/home'); // Redirect to home page after login
         } catch (error) {

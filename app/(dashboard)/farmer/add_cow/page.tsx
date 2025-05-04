@@ -1,13 +1,12 @@
 'use client'
 
-import StepFive from '@/component/cowRegistration/StepFive'
 import StepFour from '@/component/cowRegistration/StepFour'
 import StepOne from '@/component/cowRegistration/StepOne'
 import StepTwo from '@/component/cowRegistration/StepTwo'
 import { useState } from 'react'
 
 
-const steps = ['Muzzel Detection', 'Cow Details', 'Cow Image', "Attachments"]
+const steps = ['Muzzel Detection', 'Cow Details',  "Attachments"]
 
 export default function StepForm() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -20,8 +19,7 @@ export default function StepForm() {
         return <StepTwo />
       case 2:
         return <StepFour />
-      case 3:
-        return <StepFive />
+ 
    
       default:
 
@@ -49,7 +47,7 @@ export default function StepForm() {
       </div>
 
       {/* Step content */}
-      <div className="mb-6">{renderStep()}</div>
+      <div className="mb-6 overflow-y-auto max-h-96">{renderStep()}</div>
 
       {/* Navigation buttons */}
       <div className="flex justify-between">
@@ -60,13 +58,20 @@ export default function StepForm() {
         >
           Back
         </button>
-        <button
+        {currentStep === steps.length -1 ? <button
+          onClick={() =>{} }
+          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+          disabled={currentStep === steps.length + 1}
+        >
+          Submit
+        </button>: <button
           onClick={() => setCurrentStep((s) => s + 1)}
           className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
           disabled={currentStep === steps.length + 1}
         >
-          {currentStep === steps.length  ? 'Submit' : 'Next'}
-        </button>
+          {currentStep === steps.length -1 ? 'Submit' : 'Next'}
+        </button>   }
+      
       </div>
     </div>
   )

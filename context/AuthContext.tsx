@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+
       const [isLoading, setIsLoading] = useState<boolean>(false);
   
 
@@ -30,6 +31,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUserId = localStorage.getItem("userId");
     const storedPhoneNumber = localStorage.getItem("phoneNumber");
     const storedAccessToken = localStorage.getItem("accessToken");
+
+    console.log(storedUserId, storedPhoneNumber, storedAccessToken, 'stored data');
+    
 
     if (storedUserId && storedPhoneNumber && storedAccessToken) {
       setUserId(storedUserId);

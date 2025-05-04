@@ -7,6 +7,16 @@ type Location = {
 };
 
 type CowRegistrationData = {
+  sex: string;
+  height: "",
+  hasDisease: boolean,
+  diseaseName: "",
+  isPregnant:boolean,
+  pregnancyStage: "",
+  dateOfLastCalving: "",
+  milkYield: "",
+  dateOfBirth: string;
+  age: string
   farmerID: string;
   CowID: string;
   CowAge: string;
@@ -35,7 +45,7 @@ type CowRegistrationContextType = {
 
 const defaultData: CowRegistrationData = {
   farmerID: "",
-  CowID: "",
+  CowID: "12345",
   CowAge: "",
   liveWeight: "",
   cowTypeID: "",
@@ -54,6 +64,16 @@ const defaultData: CowRegistrationData = {
     lat: "",
     long: "",
   },
+  dateOfBirth: "",
+  age: "",
+  sex: "",
+  height: "",
+  hasDisease: false,
+  diseaseName: "",
+  isPregnant:false,
+  pregnancyStage: "",
+  dateOfLastCalving: "",
+  milkYield: "",
 };
 
 const CowRegistrationContext = createContext<CowRegistrationContextType | undefined>(undefined);
@@ -61,6 +81,8 @@ const CowRegistrationContext = createContext<CowRegistrationContextType | undefi
 export const CowRegistrationProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<CowRegistrationData>(defaultData);
   console.log(data, "data from context");
+
+
   
 
   const updateStep = (stepData: Partial<CowRegistrationData>) => {

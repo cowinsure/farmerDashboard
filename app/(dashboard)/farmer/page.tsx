@@ -5,19 +5,21 @@ import Image from 'next/image';
 import ModalGeneral from '@/component/modal/DialogGeneral';
 import { CiSquarePlus } from "react-icons/ci";
 import Link from 'next/link';
-import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogHeader } from '@/component/ui/dialog';
+// import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
+// import { DialogHeader } from '@/component/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 
 const FarmerPage: React.FC = () => {
+     const { userId } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCowDetails, setIsCowDetails] = useState(false);
 
 
-    const [isClaimForm, setIsClaimForm] = useState(false)
+    // const [isClaimForm, setIsClaimForm] = useState(false)
     const [selectedCow, setSelectedCow] = useState<{
       id: number;
       image: string;
@@ -93,18 +95,21 @@ const FarmerPage: React.FC = () => {
             <div className='flex text-black my-5 mx-5 gap-2.5'>
 
 
-                <button
-                    className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
 
-                        }`}
-                // onClick={() => { setIsModalOpen(true) }}
+          
 
-                >
-                    <Link href="/farmer/add_farmer" className='flex flex-row items-center justify-center'>
-                        <CiSquarePlus size={24} className='mr-2' />
-                        <span>Add Farmer</span>
-                    </Link>
-                </button>
+                {userId && userId === "Farmer" && (
+                    <button
+                        className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
+
+                            }`}
+                    >
+                        <Link href="/farmer/add_farmer" className='flex flex-row items-center justify-center'>
+                            <CiSquarePlus size={24} className='mr-2' />
+                            <span>Add Farmer</span>
+                        </Link>
+                    </button>
+                )}
 
                 <button
                     className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'

@@ -412,7 +412,7 @@ export default function PhotoCaptureModal({
     return (
       <Drawer open={open} onOpenChange={handleOpenChange}>
         <DrawerTrigger asChild>
-          <button className="border-2 ">{triggerText}</button>
+          <button className="border-2 border-green-500  p-2 rounded-md">{triggerText}</button>
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>

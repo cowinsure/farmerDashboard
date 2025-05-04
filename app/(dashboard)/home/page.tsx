@@ -10,7 +10,8 @@ import { ArrowUpRight, Users, Activity, Weight } from "lucide-react"
 import { MilkIcon as Cow } from "lucide-react"
 
 export default function DashboardPage() {
-  const [selectedCow, setSelectedCow] = useState("all")
+  type CowKey = "all" | "cow-1" | "cow-2" | "cow-3";
+  const [selectedCow, setSelectedCow] = useState<CowKey>("all")
   const [timeRange, setTimeRange] = useState("year")
 
   // Sample data for farmer registrations over time
@@ -275,7 +276,7 @@ export default function DashboardPage() {
                     <CardTitle>Cattle Weight Tracking</CardTitle>
                     <CardDescription>Average weight progression over time</CardDescription>
                   </div>
-                  <Select value={selectedCow} onValueChange={setSelectedCow}>
+                  <Select value={selectedCow} onValueChange={(value) => setSelectedCow(value as CowKey)}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select cow" />
                     </SelectTrigger>
@@ -416,7 +417,7 @@ export default function DashboardPage() {
                     <CardTitle>Individual Cow Weight Tracking</CardTitle>
                     <CardDescription>Weight progression for selected cow</CardDescription>
                   </div>
-                  <Select value={selectedCow} onValueChange={setSelectedCow}>
+                  <Select value={selectedCow} onValueChange={(value) => setSelectedCow(value as CowKey)}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select cow" />
                     </SelectTrigger>

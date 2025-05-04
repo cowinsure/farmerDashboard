@@ -1,8 +1,9 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UploadVideo from "../helper/UploadVedio";
 import Image from "next/image";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
+import { randomUUID } from "crypto";
 
 // Define an interface for the response data
 interface ResponseData {
@@ -52,6 +53,11 @@ export default function StepOne() {
     }
   };
 
+  useEffect(() => {
+    updateStep({
+      CowID: "cow" + Date.now(),
+    });
+  }, []); // Add an empty dependency array to ensure it runs only once
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>

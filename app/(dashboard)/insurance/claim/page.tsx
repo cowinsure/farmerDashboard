@@ -123,7 +123,7 @@ export default function CattleManagementPage() {
             </tr>
           </thead>
           <tbody>
-            {cattleData.map((cow, index) => (
+            {cattleData.map((cow) => (
               <tr key={cow.id} className="bg-green-100 text-center">
                 <td className="border border-gray-100 p-2">
                   <Image src={cow.image || "/placeholder.svg"} alt="Cow" width={50} height={50} className="mx-auto" />
