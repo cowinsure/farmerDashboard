@@ -4,13 +4,17 @@ import React, { useState } from "react";
 
 
 interface FormData {
+  cattleType:string
+  last_vaccination_date: string;
+  last_deworming_date: string;
   dateOfBirth: string;
-  age: string;
+  age_in_months: string;
   sex: string;
   colour: string;
-  weight: string;
+  weight_kg: string;
   height:string;
   hasDisease: boolean;
+  vaccination_status: boolean;
   diseaseName: string;
   isPregnant: boolean;
   pregnancyStage: string;
@@ -25,10 +29,13 @@ export default function StepTwo() {
 
     const [formData, setFormData] = useState<FormData>({
       dateOfBirth: "",
-      age: "",
+      last_vaccination_date: "",
+      last_deworming_date: "",
+      vaccination_status: false,
+      age_in_months: "",
       sex: "",
       colour: "",
-      weight: "",
+      weight_kg: "",
       height: "",
       hasDisease: false,
       diseaseName: "",
@@ -36,6 +43,7 @@ export default function StepTwo() {
       pregnancyStage: "",
       dateOfLastCalving: "",
       milkYield: "",
+      cattleType: "",
     });
 
     console.log(formData, "form data from step two");
@@ -55,7 +63,7 @@ export default function StepTwo() {
     return (
         <div>
             <h2 className="text-xl font-semibold mb-4">Cow Details</h2>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block mb-2" htmlFor="dateOfBirth">Date of Birth</label>
               <input
                 type="date"
@@ -66,42 +74,64 @@ export default function StepTwo() {
                 placeholder="Date of Birth"
                 className="w-full p-2 border rounded"
               />
-            </div>
+            </div> */}
             <input
-              type="text"
-              name="age"
-              value={formData.age}
-              onChange={handleInputChange}
-              placeholder="Age"
-              className="w-full p-2 border rounded mb-4"
+                type="number"
+                name="age_in_months"
+                value={formData.age_in_months}
+                onChange={handleInputChange}
+                placeholder="Age in Months"
+                className="w-full p-2 border rounded mb-4"
             />
             <select
-                name="sex"
-                value={formData.sex}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded mb-4"
-                defaultValue=""
+              name="sex"
+              value={formData.sex}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded mb-4"
+              defaultValue=""
             >
-                <option value="" disabled>
-                    Select Sex
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+              <option value="" disabled>
+                Select Sex
+              </option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            <select
+              name="breed"
+              value={formData.cattleType}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded mb-4"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Select Cattle Type
+              </option>
+              <option value="studbull">Stud Bull</option>
+              <option value="deshi">Deshi</option>
+              <option value="indian">Indian</option>
+            </select>
+        
+              <select
+              name="color"
+              value={formData.cattleType}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded mb-4"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Select Cattle Color
+              </option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="brown">Brown</option>
+                <option value="spotted">Spotted</option>
             </select>
             <input
                 type="text"
-                name="colour"
-                value={formData.colour}
+                name="weight_kg"
+                value={formData.weight_kg}
                 onChange={handleInputChange}
-                placeholder="Colour"
-                className="w-full p-2 border rounded mb-4"
-            />
-            <input
-                type="text"
-                name="weight"
-                value={formData.weight}
-                onChange={handleInputChange}
-                placeholder="Weight"
+                placeholder="weight kg"
                 className="w-full p-2 border rounded mb-4"
             />
             <input
@@ -113,10 +143,66 @@ export default function StepTwo() {
                 className="w-full p-2 border rounded mb-4"
             />
             <div className="mb-4">
+                <label className="block mb-2">Vaccination Status</label>
+                <select
+                    name="vaccination_status"
+                    value={String(formData.hasDisease) }
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded"
+                    defaultValue=""
+                >
+                    <option value="" disabled>
+                        Select
+                    </option>
+                    <option value="vaccinated">vaccinated</option>
+                    <option value="not Vaccinated">Not Vaccinated</option>
+                </select>
+            </div>
+             <div className="mb-4">
+              <label className="block mb-2" htmlFor="dateOfBirth">Last Vaccinated Date</label>
+              <input
+                type="date"
+                id="last_vaccination_date"
+                name="last_vaccination_date"
+                value={formData.last_vaccination_date}
+                onChange={handleInputChange}
+                placeholder="Date of Birth"
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div className="mb-4">
+                <label className="block mb-2">deworming_status</label>
+                <select
+                    name="deworming_status"
+                    value={String(formData.hasDisease) }
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded"
+                    defaultValue=""
+                >
+                    <option value="" disabled>
+                        Select
+                    </option>
+                    <option value="dewormed">dewormed</option>
+                    <option value="not dewormed">Not dewormed</option>
+                </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2" htmlFor="dateOfBirth">Last Dewormed Date</label>
+              <input
+                type="date"
+                id="last_deworming_date"
+                name="last_deworming_date"
+                value={formData.last_vaccination_date}
+                onChange={handleInputChange}
+                placeholder="Last Dewormed Date"
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div className="mb-4">
                 <label className="block mb-2">Has Disease?</label>
                 <select
                     name="hasDisease"
-                    value={formData.hasDisease}
+                    value={String(formData.hasDisease) }
                     onChange={handleInputChange}
                     className="w-full p-2 border rounded"
                     defaultValue=""
@@ -142,7 +228,7 @@ export default function StepTwo() {
               <label className="block mb-2" htmlFor="isPregnant">Is Pregnant?</label>
               <select
                 name="isPregnant"
-                value={formData.isPregnant}
+                value={String(formData.isPregnant)}
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
                 defaultValue=""
@@ -154,7 +240,7 @@ export default function StepTwo() {
                 <option value="false">No</option>
               </select>
             </div>
-            {formData.isPregnant === "true" && (
+            {formData.isPregnant && (
               <>
                 <input
                   type="text"

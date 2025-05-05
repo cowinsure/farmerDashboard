@@ -7,6 +7,7 @@ type Location = {
 };
 
 type CowRegistrationData = {
+  asset_type: string;
   sex: string;
   height: "",
   hasDisease: boolean,
@@ -44,6 +45,7 @@ type CowRegistrationContextType = {
 };
 
 const defaultData: CowRegistrationData = {
+  asset_type:"1",
   farmerID: "",
   CowID: "12345",
   CowAge: "",

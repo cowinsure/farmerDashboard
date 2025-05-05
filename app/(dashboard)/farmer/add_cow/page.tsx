@@ -3,13 +3,50 @@
 import StepFour from '@/component/cowRegistration/StepFour'
 import StepOne from '@/component/cowRegistration/StepOne'
 import StepTwo from '@/component/cowRegistration/StepTwo'
+import { useCowRegistration } from '@/context/CowRegistrationContext'
 import { useState } from 'react'
 
 
 const steps = ['Muzzel Detection', 'Cow Details',  "Attachments"]
 
 export default function StepForm() {
+
   const [currentStep, setCurrentStep] = useState(0)
+     const {data, updateStep, validateStep, reset } = useCowRegistration();
+    
+
+
+    const handleSubmit = async () => {
+      console.log(data, "data from add cow page ");
+      const formData = new FormData();
+
+      // Assuming `data` is an object with key-value pairs
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key]);
+      });
+
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch('http://localhost:8000/api/v1/asset/assets/create/', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit data');
+        }
+
+        const result = await response.json();
+        console.log('Submission successful:', result);
+      } catch (error) {
+        console.error('Error submitting data:', error);
+      }
+    };
+     
+  
 
   const renderStep = () => {
     switch (currentStep) {
@@ -47,7 +84,7 @@ export default function StepForm() {
       </div>
 
       {/* Step content */}
-      <div className="mb-6 overflow-y-auto max-h-96">{renderStep()}</div>
+      <div className="mb-6 overflow-y-auto max-h-auto">{renderStep()}</div>
 
       {/* Navigation buttons */}
       <div className="flex justify-between">
@@ -58,10 +95,11 @@ export default function StepForm() {
         >
           Back
         </button>
-        {currentStep === steps.length -1 ? <button
-          onClick={() =>{} }
+        {currentStep === steps.length -1 ?
+         <button
+          onClick={() =>{handleSubmit()} }
           className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-          disabled={currentStep === steps.length + 1}
+        
         >
           Submit
         </button>: <button

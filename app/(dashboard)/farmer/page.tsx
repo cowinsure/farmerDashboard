@@ -89,6 +89,7 @@ const FarmerPage: React.FC = () => {
         setIsCowDetails(true);
     };
 
+console.log(userId, "userId from context");
 
     return (
         <>
@@ -98,7 +99,7 @@ const FarmerPage: React.FC = () => {
 
           
 
-                {userId && userId === "Farmer" && (
+                {userId && userId === "Enterprise" && (
                     <button
                         className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
 
