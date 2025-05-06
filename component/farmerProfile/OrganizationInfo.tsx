@@ -1,20 +1,82 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
+import PhotoCaptureModal from '../helper/PhotoCaptureModal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { log } from 'console';
 
 const OrganizationInfo: React.FC = () => {
+
+
+    const [profileImage, setprofileImage] = useState<File | null>(null);
+
+    
+    
+    
+          const handlePhotoCapture = (file: File, property: string, setImage: React.Dispatch<React.SetStateAction<File | null>>) => {
+                setImage(file);
+                // updateStep({
+                //     [property]: file,
+                // });
+                console.log("Photo captured:", file);
+            };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
+        console.log(profileImage, 'profileImage');
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        
-        const organizationData = {
-            organizationLogo: data.organizationLogo,
-            organizationName: data["Orgaization name"],
-            establishedDate: data.dob,
-            tin: data.tin,
-            bin: data.bin,
-        };
+        console.log(data);
 
-        console.log(organizationData);
+        const multipartFormData = new FormData();
+        if (profileImage) {
+            multipartFormData.append("logo", profileImage as Blob);
+            console.log("Logo file details:", {
+                name: profileImage.name,
+                type: profileImage.type,
+                size: profileImage.size,
+            });
+        }
+
+        for (const [key, value] of Object.entries(data)) {
+            multipartFormData.append(key, value as string);
+        }
+
+        for (const [key, value] of multipartFormData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("Access Token:", accessToken);
+
+        fetch("http://127.0.0.1:8000/api/v1/auth/organization-info/", {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: multipartFormData,
+        })
+        .then((response) => {
+            console.log("Response received:", response);
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers.get("Content-Type"));
+            
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("Successfully submitted:", data);
+            // Show success toast
+            toast.success("Form submitted successfully!");
+        })
+        .catch((error) => {
+            console.error("Error submitting form:", error );
+            // Show error toast
+            toast.error("Failed to submit the form. Please try again.");
+        });
+      
+
     }
     return (
         <div className="p-6  rounded-md">
@@ -25,44 +87,33 @@ const OrganizationInfo: React.FC = () => {
                 handleSubmit(e);
             }}
             >
-                <div className="flex flex-col">
-                    <label htmlFor="organizationLogo" className="mb-1 text-sm font-medium text-gray-700">Organization Logo:</label>
-                    <input
-                        type="file"
-                        id="organizationLogo"
-                        name="organizationLogo"
-                        accept="image/*"
-                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (event) => {
-                                    const preview = document.getElementById("logoPreview") as HTMLImageElement;
-                                    if (preview) {
-                                        preview.src = event.target?.result as string;
-                                    }
-                                };
-                                reader.readAsDataURL(file);
-                            } else {
-                                const preview = document.getElementById("logoPreview") as HTMLImageElement;
-                                if (preview) {
-                                    preview.src = "https://via.placeholder.com/150"; // Placeholder image
-                                }
-                            }
-                        }}
-                    />
-                    <img id="logoPreview" alt="Organization Logo Preview" className="mt-4 max-h-40 object-contain" />
-                </div>
+                  <div className="flex lg:flex-col flex-col gap-3 items-start w-auto">
+                                             <PhotoCaptureModal
+                                                 onPhotoCapture={(file) => handlePhotoCapture(file, "logo", setprofileImage)}
+                                                 triggerText="Capture profile Image"
+                                                 title="Capture profile Image"
+                                             />
+                                             {profileImage && (
+                                                 <div className="mt-4">
+                                                     <h3 className="text-center text-sm font-medium w-auto mb-4">profile Image</h3>
+                                                <img src={URL.createObjectURL(profileImage)}
+                                                 alt="Chairman Certificate"
+                                                 width={128}
+                                                 height={128}
+                                                 className="w-32 h-32 object-cover border rounded-3xl"
+                                             />
+                                                 </div>
+                                             )}
+                                         </div>
           
             <div className="flex flex-col">
-                <label htmlFor="Orgaization name" className="mb-1 text-sm font-medium text-gray-700">Orgaization name:</label>
-                <input type="text" id="Orgaization name" name="Orgaization name" className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                <label htmlFor="name" className="mb-1 text-sm font-medium text-gray-700">Orgaization name:</label>
+                <input type="text" id="name" name="name" className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
             </div>
            
             <div className="flex flex-col">
-                <label htmlFor="dob" className="mb-1 text-sm font-medium text-gray-700">Established Date:</label>
-                <input type="date" id="dob" name="dob" className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                <label htmlFor="established" className="mb-1 text-sm font-medium text-gray-700">Established Date:</label>
+                <input type="date" id="established" name="established" className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
             </div>
 
             

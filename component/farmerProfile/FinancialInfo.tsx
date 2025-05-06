@@ -2,22 +2,56 @@ import React, { useState } from 'react';
 
 interface FinancialInfoFormProps {
     onSubmit: (data: {
-        bankName: string;
-        branchName: string;
-        accountName: string;
-        accountNumber: string;
+        bank_name: string;
+        branch_name: string;
+        account_name: string;
+        account_number: string;
     }) => void;
 }
 
 const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
-    const [bankName, setBankName] = useState('');
-    const [branchName, setBranchName] = useState('');
-    const [accountName, setAccountName] = useState('');
-    const [accountNumber, setAccountNumber] = useState('');
+    const [bank_name, setBankName] = useState('');
+    const [branch_name, setbranch_name] = useState('');
+    const [account_name, setaccount_name] = useState('');
+    const [account_number, setaccount_number] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ bankName, branchName, accountName, accountNumber });
+        onSubmit({ bank_name, branch_name, account_name, account_number });
+        const financialData = {
+            bank_name,
+            branch_name,
+            account_name,
+            account_number,
+        };
+
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (!accessToken) {
+            alert('Access token is missing. Please log in again.');
+            return;
+        }
+
+        fetch('http://localhost:8000/api/v1/auth/financial-info/', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(financialData),
+        })
+            .then((response) => {
+            console.log('Response received:', response);
+            if (response.ok) {
+                alert('Financial information submitted successfully!');
+            } else {
+                alert('Failed to submit financial information. Please try again.');
+            }
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+            });
     };
 
     return (
@@ -29,7 +63,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    value={bankName}
+                    value={bank_name}
                     onChange={(e) => setBankName(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
@@ -40,8 +74,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    value={branchName}
-                    onChange={(e) => setBranchName(e.target.value)}
+                    value={branch_name}
+                    onChange={(e) => setbranch_name(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
             </div>
@@ -51,8 +85,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    value={accountName}
-                    onChange={(e) => setAccountName(e.target.value)}
+                    value={account_name}
+                    onChange={(e) => setaccount_name(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
             </div>
@@ -62,8 +96,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    value={accountNumber}
-                    onChange={(e) => setAccountNumber(e.target.value)}
+                    value={account_number}
+                    onChange={(e) => setaccount_number(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
             </div>

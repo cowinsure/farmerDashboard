@@ -16,11 +16,31 @@ const NomineeInfo: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('Form Data:', formData);
+        const authToken = localStorage.getItem('accessToken');
+        fetch('http://localhost:8000/api/v1/auth/nominee-info/', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((response) => {
+            if (response.ok) {
+                alert('Nominee information submitted successfully!');
+            } else {
+                alert('Failed to submit nominee information. Please try again.');
+            }
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+            });
         // Add form submission logic here
     };
 
     return (
-        <div className=" mx-auto p-6 rounded-md">
+        <div className="mx-auto p-6 rounded-md">
             <h2 className="text-2xl font-bold mb-4 text-center">Nominee Information</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

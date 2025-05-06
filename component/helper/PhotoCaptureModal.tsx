@@ -8,6 +8,7 @@ import { useMediaQuery } from "../../hook/use-media-query"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
+import { FaCamera } from "react-icons/fa"
 
 interface PhotoCaptureModalProps {
   onPhotoCapture?: (file: File) => void
@@ -412,7 +413,9 @@ export default function PhotoCaptureModal({
     return (
       <Drawer open={open} onOpenChange={handleOpenChange}>
         <DrawerTrigger asChild>
-          <button className="border-2 border-green-500  p-2 rounded-md">{triggerText}</button>
+          <button className="border-2 border-green-500  p-2 rounded-md w-auto">
+             {triggerText}</button>
+             
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
@@ -428,7 +431,7 @@ export default function PhotoCaptureModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         
-        <button className="border-2 border-green-500 w-1/4 p-2 rounded-2xl">{triggerText}</button>
+        <button className="border-1 border-green-500 text-start  p-2 rounded-md w-auto">{triggerText}</button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
