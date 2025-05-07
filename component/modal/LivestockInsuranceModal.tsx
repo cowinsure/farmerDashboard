@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import AddCattleForm from "../livestockInsuranceApplication/AddCattleForm";
 import InsuranceCompany from "../livestockInsuranceApplication/InsuranceCompany";
 import Confirmation from "../livestockInsuranceApplication/Confirmation";
+import Image from 'next/image';
+import logo from '../../public/Logo-03.png'; // Importing logo
+
 
 interface ModalProps {
   isOpen: boolean;
@@ -57,7 +60,19 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
         >
           &times;
         </button>
-        <h2 className="text-2xl text-gray-800 font-semibold text-center  mb-8 mt-10">Livestock Insurance</h2>
+      <div className="flex justify-center items-center mt-4 ">
+      <Image
+          src={logo}
+          alt="Logo"
+          width={200}
+          height={200}
+          className="h-auto"
+          priority
+        />
+      </div>
+       
+        
+        <h2 className="text-2xl text-gray-800 font-semibold text-center  mb-8 mt-5">Livestock Insurance</h2>
            {/* Step bar */}
       <div className="flex justify-between mb-8 mt-20">
         {steps.map((step, index) => (

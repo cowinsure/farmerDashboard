@@ -5,9 +5,14 @@ import PhotoCaptureModal from '../helper/PhotoCaptureModal';
 
 const PersonalInfo: React.FC = () => {
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
+        setState(e.target.value);
+    };
+
     const [nidFront, setnidFront] = useState<File | null>(null);
     const [nidBack, setnidBack] = useState<File | null>(null);
     const [profileImage, setprofileImage] = useState<File | null>(null);
+    const [firstName, setFirstName] = useState<string>('');
 
 
       const handlePhotoCapture = (file: File, property: string, setImage: React.Dispatch<React.SetStateAction<File | null>>) => {
@@ -92,7 +97,14 @@ const PersonalInfo: React.FC = () => {
            
             <div className="flex flex-col">
                 <label htmlFor="first_name" className="mb-1 text-sm font-medium text-gray-700">First Name:</label>
-                <input type="text" id="first_name" name="first_name" className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    onChange={(e) => handleInputChange(e, setFirstName)}
+                    value={firstName}
+                />
             </div>
              <div className="flex flex-col">
                 <label htmlFor="last_name" className="mb-1 text-sm font-medium text-gray-700">Last Name:</label>

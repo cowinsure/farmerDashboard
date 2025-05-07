@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
-
+import Image from 'next/image';
+import logo from '../../../public/Logo-03.png';
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../component/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../component/ui/tabs"
@@ -8,11 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { AreaChart, BarChart, ChartContainer, LineChart, PieChart } from "../../../component/ui/chart"
 import { ArrowUpRight, Users, Activity, Weight } from "lucide-react"
 import { MilkIcon as Cow } from "lucide-react"
+import LivestockInsuranceModal from '@/component/modal/LivestockInsuranceModal';
+import ModalGeneral from '@/component/modal/DialogGeneral';
 
 export default function DashboardPage() {
   type CowKey = "all" | "cow-1" | "cow-2" | "cow-3";
   const [selectedCow, setSelectedCow] = useState<CowKey>("all")
   const [timeRange, setTimeRange] = useState("year")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isGeneralModalOpen, setIsGeneralModalOpen] = useState(false)
 
   // Sample data for farmer registrations over time
   const farmerRegistrationData = [
@@ -123,6 +128,29 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
+         <div className="my-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="bg-[#228C45] shadow-md rounded-lg p-4 flex text-white flex-col justify-center">
+                    <h2 className="text-lg font-semibold">Livestock insurance</h2>
+                    <p className="">Check out our insurance services for cattle</p>
+                    <button onClick={()=>{setIsModalOpen(true)}} className='bg-[#016630] w-40 text-white p-2 mt-5 rounded-2xl self-center cursor-pointer hover:bg-green-600'>
+                        Apply
+                    </button>
+                </div>
+                <div className="bg-[#228C45] shadow-md rounded-lg p-4 flex text-white flex-col justify-center">
+                    <h2 className="text-lg font-semibold">Health insurance</h2>
+                    <p className="">Check out our insurance services for Health</p>
+                    <button onClick={()=>{setIsGeneralModalOpen(true)}} className='bg-[#016630] w-40 text-white p-2 mt-5 rounded-2xl self-center cursor-pointer hover:bg-green-600'>
+                        Apply
+                    </button>
+                </div>
+                <div className="bg-[#228C45] shadow-md rounded-lg p-4 flex text-white flex-col justify-center">
+                    <h2 className="text-lg font-semibold">Life insurance</h2>
+                    <p className="">Check out our insurance services for Life</p>
+                    <button  onClick={()=>{setIsGeneralModalOpen(true)}} className='bg-[#016630] w-40 text-white p-2 mt-5 rounded-2xl self-center cursor-pointer hover:bg-green-600'>
+                        Apply
+                    </button>
+                </div>
+            </div>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border border-green-300 bg-green-100">
@@ -501,6 +529,21 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
       </main>
+      <LivestockInsuranceModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); } } />
+      <ModalGeneral isOpen={isGeneralModalOpen} onClose={() => {setIsGeneralModalOpen(false)}}>
+        <div className='text-black  text-center flex flex-col items-center p-5'>
+        <Image
+                    src={logo}
+                    alt="Logo"
+                    width={200}
+                    height={200}
+                    className="h-auto "
+                    priority
+                    
+                />
+          Stay tuned! Exciting new features are coming soon.
+        </div>
+      </ModalGeneral>
     </div>
   )
 }

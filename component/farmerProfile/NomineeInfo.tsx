@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-const NomineeInfo: React.FC = () => {
+interface NomineeInfoProps {
+    isShowSubmit?: boolean;
+}
+
+const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     const [formData, setFormData] = useState({
         nomineeName: '',
         phone: '',
@@ -20,21 +24,21 @@ const NomineeInfo: React.FC = () => {
         fetch('http://localhost:8000/api/v1/auth/nominee-info/', {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
             },
             body: JSON.stringify(formData),
         })
             .then((response) => {
-            if (response.ok) {
-                alert('Nominee information submitted successfully!');
-            } else {
-                alert('Failed to submit nominee information. Please try again.');
-            }
+                if (response.ok) {
+                    alert('Nominee information submitted successfully!');
+                } else {
+                    alert('Failed to submit nominee information. Please try again.');
+                }
             })
             .catch((error) => {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again later.');
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
             });
         // Add form submission logic here
     };
@@ -105,12 +109,16 @@ const NomineeInfo: React.FC = () => {
                         <option value="other">Other</option>
                     </select>
                 </div>
-                <button
-                    type="submit"
-                    className="w-full bg-green-500 text-white py-2 px-4 rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                >
-                    Submit
-                </button>
+                {isShowSubmit && (
+                    <button
+                        type="submit"
+                        className="w-full bg-green-500 text-white py-2 px-4 rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    >
+                        Submit
+                    </button>
+
+                )}
+
             </form>
         </div>
     );

@@ -7,9 +7,10 @@ interface FinancialInfoFormProps {
         account_name: string;
         account_number: string;
     }) => void;
+    isShowSubmit?: boolean;
 }
 
-const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
+const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit , isShowSubmit=true }) => {
     const [bank_name, setBankName] = useState('');
     const [branch_name, setbranch_name] = useState('');
     const [account_name, setaccount_name] = useState('');
@@ -101,12 +102,14 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit }) => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 />
             </div>
+            {isShowSubmit && (
+                
             <button
                 type="submit"
                 className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
                 Submit
-            </button>
+            </button>)}
         </form>
     );
 };
