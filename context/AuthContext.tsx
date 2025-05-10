@@ -79,7 +79,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true)
     try {
       const baseRequest = await createBaseRequest();
-        console.log(baseRequest.location.latitude, baseRequest.location.longitude);
+        if (baseRequest.location) {
+          console.log(baseRequest.location.latitude, baseRequest.location.longitude);
+        } else {
+          console.warn("baseRequest.location is null");
+        }
         
       // const finalPayload = {
       //   ...baseRequest,

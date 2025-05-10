@@ -12,7 +12,7 @@ const steps = ['Muzzel Detection', 'Cow Details',  "Attachments"]
 export default function StepForm() {
 
   const [currentStep, setCurrentStep] = useState(0)
-     const {data, updateStep, validateStep, reset } = useCowRegistration();
+     const {data } = useCowRegistration();
     
 
 
@@ -21,8 +21,8 @@ export default function StepForm() {
       const formData = new FormData();
 
       // Assuming `data` is an object with key-value pairs
-      Object.keys(data).forEach((key) => {
-        formData.append(key, data[key]);
+      Object.keys(data).forEach((key:string) => {
+        formData.append(key, data[key as keyof typeof data] as string);
       });
 
       try {

@@ -8,6 +8,6 @@ export interface Location {
   export interface BaseRequestModel {
     userId: string;
     phoneNumber: string;
-    location: Location;
+    location: Location | null;
   }
   

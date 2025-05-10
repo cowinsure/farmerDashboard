@@ -47,7 +47,7 @@ export function ChartContainer({
   }, [config])
 
   return (
-    <ChartContext.Provider value={{ colors: config }}>
+    <ChartContext.Provider value={{ colors: Object.fromEntries(Object.entries(config).map(([key, value]) => [key, value.color])) }}>
       <div className={className} style={style}>
         {children}
       </div>
@@ -55,7 +55,7 @@ export function ChartContainer({
   )
 }
 
-export function ChartTooltip({ children, className, ...props }: React.ComponentProps<typeof Tooltip>) {
+export function ChartTooltip({  ...props }: React.ComponentProps<typeof Tooltip>) {
   return (
     <Tooltip
       content={({ active, payload, label }) => {
@@ -79,9 +79,7 @@ export function ChartTooltip({ children, className, ...props }: React.ComponentP
         )
       }}
       {...props}
-    >
-      {children}
-    </Tooltip>
+    />
   )
 }
 
@@ -89,19 +87,19 @@ export function ChartTooltipContent({
   active,
   payload,
   label,
-  className,
+
   indicator = "line",
   ...props
 }: React.ComponentProps<typeof Tooltip> & {
   active?: boolean
-  payload?: any[]
+  payload?: unknown[]
   label?: string
   indicator?: "line" | "dot" | "dashed"
 }) {
   if (!active || !payload?.length) return null
 
   return (
-    <div className="rounded-lg border bg-background p-2 shadow-sm" {...props}>
+    <div className="rounded-lg border bg-background p-2 shadow-sm" {...(props as React.HTMLAttributes<HTMLDivElement>)}>
       <div className="grid grid-flow-col gap-2">
         <div className="font-medium">{label}</div>
       </div>
@@ -128,7 +126,7 @@ export function ChartTooltipContent({
 }
 
 interface ChartProps {
-  data: any[]
+  data: unknown[]
   index: string
   categories: string[]
   colors: string[]
@@ -240,7 +238,23 @@ export const PieChart: React.FC<ChartProps> = ({
   className,
 }) => {
   const RADIAN = Math.PI / 180
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    name,
+  }: {
+    cx: number
+    cy: number
+    midAngle: number
+    innerRadius: number
+    outerRadius: number
+    percent: number
+    name: string
+  }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5
     const x = cx + radius * Math.cos(-midAngle * RADIAN)
     const y = cy + radius * Math.sin(-midAngle * RADIAN)

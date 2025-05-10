@@ -1,8 +1,8 @@
 'use client'
 
-import StepFour from '@/component/cowRegistration/StepFour'
-import StepOne from '@/component/cowRegistration/StepOne'
-import StepTwo from '@/component/cowRegistration/StepTwo'
+// import StepFour from '@/component/cowRegistration/StepFour'
+// import StepOne from '@/component/cowRegistration/StepOne'
+// import StepTwo from '@/component/cowRegistration/StepTwo'
 import FinancialInfoForm from '@/component/farmerProfile/FinancialInfo'
 import NomineeInfo from '@/component/farmerProfile/NomineeInfo'
 import PersonalInfo from '@/component/farmerProfile/PersonalInfo'
@@ -15,7 +15,7 @@ const steps = ['Personal Info', 'Financial Info',  "Nominee Info"]
 export default function StepForm() {
 
   const [currentStep, setCurrentStep] = useState(0)
-     const {data, updateStep, validateStep, reset } = useCowRegistration();
+     const {data,} = useCowRegistration();
     
 
 
@@ -25,7 +25,7 @@ export default function StepForm() {
 
       // Assuming `data` is an object with key-value pairs
       Object.keys(data).forEach((key) => {
-        formData.append(key, data[key]);
+        formData.append(key,data[key as keyof typeof data] as string);
       });
 
       try {

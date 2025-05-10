@@ -1,29 +1,31 @@
 "use client"
 
-import { SetStateAction, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Eye, FileText } from "lucide-react"
 
+interface Cattle {
+  id: number;
+  image: string;
+  age: string;
+  color: string;
+  cattleType: string;
+  vaccinated: string;
+  purchaseAmount: string;
+  purchaseDate: string;
+  purchaseFrom: string;
+  insurance: string;
+  scopeOfCoverage: string;
+  sumInsured: string;
+  createdBy: string;
+}
+
 export default function CattleManagementPage() {
   const [isCowDetails, setIsCowDetails] = useState(false)
   const [isClaimForm, setIsClaimForm] = useState(false)
-  const [selectedCow, setSelectedCow] = useState<{
-    id: number;
-    image: string;
-    age: string;
-    color: string;
-    cattleType: string;
-    vaccinated: string;
-    purchaseAmount: string;
-    purchaseDate: string;
-    purchaseFrom: string;
-    insurance: string;
-    scopeOfCoverage: string;
-    sumInsured: string;
-    createdBy: string;
-  } | null>(null)
+  const [selectedCow, setSelectedCow] = useState<Cattle | null>(null)
 
   const cattleData = [
     {
@@ -88,12 +90,12 @@ export default function CattleManagementPage() {
     },
   ]
 
-  const handleViewDetails = (cow: SetStateAction<null>) => {
+  const handleViewDetails = (cow: Cattle ) => {
     setSelectedCow(cow)
     setIsCowDetails(true)
   }
 
-  const handleClaim = (cow: SetStateAction<null>) => {
+  const handleClaim = (cow:Cattle ) => {
     setSelectedCow(cow)
     setIsClaimForm(true)
   }
