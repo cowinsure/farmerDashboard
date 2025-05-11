@@ -1,12 +1,18 @@
+'use client'
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface PersonalInfo {
+    userType: 'Farmer' | 'Other'; // Adjusted to use a union type for userType
     first_name: string;
     last_name: string;
     nid: string;
     date_of_birth: string;
-    gender: string;
+    gender: 'Male' | 'Female' | 'Other'; // Adjusted to use a union type for gender
     tin: string;
+    profile_image?: File | null; // Adjusted to match camelCase naming convention
+    nid_front?: File | null; // Adjusted to match camelCase naming convention
+    nid_back?: File | null;
+    phone:string // Adjusted to match camelCase naming convention
 }
 
 interface FinancialInfo {
@@ -23,26 +29,29 @@ interface NomineeInfo {
     nid: string;
 }
 
-interface OrganizationInfo {
-    name: string;
-    established: string;
-    tin: string;
-    bin: string;
-}
+// interface OrganizationInfo {
+//     name: string;
+//     established: string;
+//     tin: string;
+//     bin: string;
+// }
 
 interface FarmerRegistrationData {
-    mobile_number: string;
+   
     password: string;
     role: number;
     personal_info?: PersonalInfo;
     financial_info?: FinancialInfo;
     nominee_info?: NomineeInfo;
-    organization_info?: OrganizationInfo;
+    // organization_info?: OrganizationInfo;
 }
 
 interface FarmerRegistrationContextProps {
     data: FarmerRegistrationData;
     updateData: (newData: Partial<FarmerRegistrationData>) => void;
+    updatePersonalInfo: (newPersonalInfo: Partial<PersonalInfo>) => void;
+    updateFinancialInfo: (newFinancialInfo: Partial<FinancialInfo>) => void;
+    updateNomineeInfo: (newNomineeInfo: Partial<NomineeInfo>) => void;
     clearData: () => void; // Added clearData function
 }
 
@@ -50,9 +59,9 @@ const FarmerRegistrationContext = createContext<FarmerRegistrationContextProps |
 
 export const FarmerRegistrationProvider = ({ children }: { children: ReactNode }) => {
     const [data, setData] = useState<FarmerRegistrationData>({
-        mobile_number: '',
+      
         password: '',
-        role: 0,
+        role: 1,
     });
 
     const updateData = (newData: Partial<FarmerRegistrationData>) => {
@@ -64,14 +73,30 @@ export const FarmerRegistrationProvider = ({ children }: { children: ReactNode }
 
     const clearData = () => {
         setData({
-            mobile_number: '',
+          
             password: '',
             role: 0,
         });
     };
 
     return (
-        <FarmerRegistrationContext.Provider value={{ data, updateData, clearData }}>
+        <FarmerRegistrationContext.Provider value={{ data, updateData, clearData,
+            updateFinancialInfo(newFinancialInfo) {
+            setData((prevData) => ({
+                ...prevData,
+                ...newFinancialInfo,
+            }));
+        }, updateNomineeInfo(newNomineeInfo) {
+            setData((prevData) => ({
+                ...prevData,
+                ...newNomineeInfo,
+            }));
+        },updatePersonalInfo(newPersonalInfo) {
+            setData((prevData) => ({
+                ...prevData,
+                ...newPersonalInfo,
+            }));
+        }, }}>
             {children}
         </FarmerRegistrationContext.Provider>
     );

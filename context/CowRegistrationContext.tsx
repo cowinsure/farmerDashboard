@@ -26,13 +26,14 @@ type CowRegistrationData = {
   colorID: string;
   Vacinated: boolean;
   IsDeworming: boolean;
-  leftSideImageUrl: string;
-  rightSideImageUrl: string;
-  specialMarkImageUrl: string;
-  ownerWithCowImageUrl: string;
-  challanPaperImageUrl: string;
-  vetCertificateImageUrl: string;
-  chairmanCertificateImageUrl: string;
+  sideImage ?: File | null;
+  cowVedioFile ?: File | null;
+  rightSide?: File | null;
+  birthmarkImage?: File | null;
+  ownerAndCowImage?: File | null;
+  challanImage?: File | null;
+  vetCertificate?: File | null;
+  chairmanCertificate?: File | null;
   purchaseamount: string;
   location: Location;
 };
@@ -47,20 +48,22 @@ type CowRegistrationContextType = {
 const defaultData: CowRegistrationData = {
   asset_type:"1",
   farmerID: "",
-  CowID: "12345",
+  CowID: "",
   CowAge: "",
   liveWeight: "",
   cowTypeID: "",
   colorID: "",
   Vacinated: false,
   IsDeworming: false,
-  leftSideImageUrl: "",
-  rightSideImageUrl: "",
-  specialMarkImageUrl: "",
-  ownerWithCowImageUrl: "",
-  challanPaperImageUrl: "",
-  vetCertificateImageUrl: "",
-  chairmanCertificateImageUrl: "",
+
+  sideImage: null,
+  cowVedioFile: null,
+  rightSide:null,
+  birthmarkImage:null,
+  ownerAndCowImage: null,
+  challanImage: null,
+  vetCertificate: null,
+  chairmanCertificate:null,
   purchaseamount: "",
   location: {
     lat: "",

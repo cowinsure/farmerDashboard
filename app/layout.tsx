@@ -8,6 +8,7 @@ import "./globals.css";
 // import RootLayoutCustom from "@/component/RootLayer/RootLayout";
 import { AuthProvider } from "../context/AuthContext";
 import { CowRegistrationProvider } from "@/context/CowRegistrationContext";
+import { FarmerRegistrationProvider } from "@/context/FarmerRegistrationContext";
 
 
 
@@ -32,10 +33,12 @@ export default function RootLayout({
         className={`${averia.className}  antialiased`}
       >
         <AuthProvider>
-          <CowRegistrationProvider>
+          <FarmerRegistrationProvider>          <CowRegistrationProvider>
         {/* <RootLayoutCustom> */}
           {children}
           </CowRegistrationProvider>
+          </FarmerRegistrationProvider>
+
         {/* </RootLayoutCustom> */}
        </AuthProvider>
       

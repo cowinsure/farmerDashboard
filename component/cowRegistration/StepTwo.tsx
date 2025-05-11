@@ -1,6 +1,8 @@
+'use client'
+
 import { useCowRegistration } from "@/context/CowRegistrationContext";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 interface FormData {
@@ -59,6 +61,16 @@ export default function StepTwo() {
             [name]: value,
         });
     };
+
+        // Fetch data from the API on component mount
+        useEffect(() => {
+            if (data) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    ...data, // Merge context data into local state
+                }));
+            }
+        }, [data]);
 
     return (
         <div>

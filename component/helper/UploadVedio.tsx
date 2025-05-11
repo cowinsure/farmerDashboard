@@ -4,8 +4,11 @@ import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
 import { Upload, Camera, ArrowLeft, RotateCcw, Square, RefreshCw } from "lucide-react"
+import { useCowRegistration } from "@/context/CowRegistrationContext";
 
 export default function UploadVideo({ onVideoCapture }: { onVideoCapture?: (file: File) => void }) {
+    const {data, updateStep, validateStep, reset } = useCowRegistration();
+ 
   const [dragActive, setDragActive] = useState(false)
   const [cameraMode, setCameraMode] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
@@ -64,8 +67,28 @@ export default function UploadVideo({ onVideoCapture }: { onVideoCapture?: (file
 
     if (onVideoCapture) {
       onVideoCapture(file)
+      // console.log("vedioref");
+          
+      updateStep({
+        cowVedioFile: file,
+      });
     }
   }
+  useEffect(() => {
+    if (data?.cowVedioFile) {
+      setSelectedFile(data.cowVedioFile);
+
+      // Create a video URL and set it to the recordedVideo state
+      const videoUrl = URL.createObjectURL(data.cowVedioFile);
+      setRecordedVideo(videoUrl);
+
+      // Clean up the object URL when the component unmounts
+      return () => {
+        URL.revokeObjectURL(videoUrl);
+      };
+    }
+  }, [data]);
+
 
   // Reset video and go back to upload state
   const resetVideo = () => {

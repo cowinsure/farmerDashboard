@@ -3,11 +3,12 @@
 // import StepFour from '@/component/cowRegistration/StepFour'
 // import StepOne from '@/component/cowRegistration/StepOne'
 // import StepTwo from '@/component/cowRegistration/StepTwo'
-import FinancialInfoForm from '@/component/farmerProfile/FinancialInfo'
-import NomineeInfo from '@/component/farmerProfile/NomineeInfo'
-import PersonalInfo from '@/component/farmerProfile/PersonalInfo'
-import { useCowRegistration } from '@/context/CowRegistrationContext'
-import { useState } from 'react'
+
+import FinancialInfoByOrganization from '@/component/FarmerRegByOrganization/FinancialInfo'
+import NomineeInfoByOrganizaton from '@/component/FarmerRegByOrganization/NomineeInfo'
+import PersonalInfoFarmer from '@/component/FarmerRegByOrganization/PersonalInfo'
+import { useFarmerRegistration } from '@/context/FarmerRegistrationContext'
+import { useEffect, useState } from 'react'
 
 
 const steps = ['Personal Info', 'Financial Info',  "Nominee Info"]
@@ -15,8 +16,11 @@ const steps = ['Personal Info', 'Financial Info',  "Nominee Info"]
 export default function StepForm() {
 
   const [currentStep, setCurrentStep] = useState(0)
-     const {data,} = useCowRegistration();
+     const {data,clearData} = useFarmerRegistration();
     
+     useEffect(()=>{
+      clearData()
+     },[])
 
 
     const handleSubmit = async () => {
@@ -54,11 +58,11 @@ export default function StepForm() {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <PersonalInfo />
+        return <PersonalInfoFarmer />
       case 1:
-        return <FinancialInfoForm isShowSubmit ={false} onSubmit={(data) => console.log(data)} />;
+        return <FinancialInfoByOrganization/>
       case 2:
-        return <NomineeInfo isShowSubmit={false} />;
+        return <NomineeInfoByOrganizaton />;
  
    
       default:

@@ -29,8 +29,11 @@ const Login: React.FC = () => {
             return;
         }
 
+        console.log(phoneInput, passwordInput);
+        
+
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login/`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

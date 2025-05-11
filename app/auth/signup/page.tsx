@@ -11,7 +11,7 @@ const SignupPage: React.FC = () => {
         // Save phone to localStorage whenever it changes
         localStorage.setItem('mobile_number', phone);
     }, [phone]);
-    const [accountType, setAccountType] = useState('individual');
+    // const [accountType, setAccountType] = useState('individual');
     const [loading, setLoading] = useState(false);
     
     const handleSignup = async (event: React.FormEvent) => {
@@ -21,7 +21,7 @@ const SignupPage: React.FC = () => {
         
     
         // Map account type to role_id
-        const role_id = accountType === 'individual' ? 1 : 2;
+        const role_id = 1 ;
     
         const requestBody = {
           mobile_number: phone,
@@ -82,7 +82,7 @@ const SignupPage: React.FC = () => {
                 // }}
                 />
             </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
             <label htmlFor="accountType" className="block text-sm font-medium text-gray-700 mb-1">Account Type:</label>
             <select
                 id="accountType"
@@ -95,7 +95,7 @@ const SignupPage: React.FC = () => {
                 <option value="individual">Individual</option>
                 <option value="enterprise">Enterprise</option>
             </select>
-        </div>
+        </div> */}
             {/* <button
                 onClick={() => {
                     console.log('clicked');

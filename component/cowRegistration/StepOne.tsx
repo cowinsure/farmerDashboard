@@ -23,6 +23,7 @@ export default function StepOne() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleVideoUpload = async (file: File) => {
+
     console.log("Video file captured:", file);
 
     const formData = new FormData();
@@ -30,34 +31,55 @@ export default function StepOne() {
 
     try {
       setIsUploading(true);
-      const response = await fetch("http://127.0.0.1:5000/v2/register2", {
-        method: "POST",
-        body: formData,
+      const response = await fetch("https://flying-intensely-loon.ngrok-free.app/register", {
+      method: "POST",
+      body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload video");
+      if (response.status === 400) {
+      const data = await response.json();
+      console.error("Error 400:", data.message);
+      alert(`Error: ${data.message}`);
+      return;
       }
 
+      if (response.status === 401) {
+      const data = await response.json();
+      console.error("Error 401:", data.msg);
+      alert(`Error: ${data.msg}`);
+      return;
+      }
+
+      if (response.status === 201) {
       const data: ResponseData = await response.json(); // Use the interface for type safety
       console.log("API Response:", data);
       setResponseData(data);
       updateStep({
         CowID: data.registration_id,
-      }) // Save the response data to state
+      }); // Save the response data to state
+      alert(data.message);
+      return;
+      }
+
+      if (!response.ok) {
+      throw new Error("Failed to upload video");
+      }
     } catch (error) {
       console.error("Error uploading video:", error);
-      alert("Something went wrong." +error );
+      alert("Something went wrong: " + error);
     } finally {
       setIsUploading(false);
     }
   };
 
+
+
   useEffect(() => {
-    updateStep({
-      CowID: "cow" + Date.now(),
-    });
-  }, []); // Add an empty dependency array to ensure it runs only once
+      if (data?.cowVedioFile) {
+        setSelectedFile(data.cowVedioFile);
+      }
+  }, [data]);
+   // Add an empty dependency array to ensure it runs only once
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>
@@ -65,6 +87,9 @@ export default function StepOne() {
         <div className="lg:w-1/2 w-full flex flex-col justify-center items-center">
           <UploadVideo
             onVideoCapture={(file) => {
+                updateStep({
+                  cowVedioFile: file,
+                });
               setSelectedFile(file); // Save the selected file to state
             }}
           />
