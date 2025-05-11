@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import image from '../../../public/WhatsApp Image 2025-04-07 at 12.32.06 PM.jpeg';
 import Image from 'next/image';
 import ModalGeneral from '@/component/modal/DialogGeneral';
@@ -12,29 +12,111 @@ import { Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
+interface Asset {
+    id: number;
+    owner: string;
+    asset_type: string;
+    breed: string;
+    color: string;
+    age_in_months: number;
+    weight_kg: string;
+    height: string;
+    vaccination_status: string;
+    last_vaccination_date: string;
+    deworming_status: string;
+    last_deworming_date: string;
+    is_active: boolean;
+    remarks: string;
+    gender: string;
+    purchase_date: "",
+    purchase_from: "",
+    purchase_amount: "",
+    reference_id: string;
+    created_at: string;
+    updated_at: string;
+    muzzle_video: string;
+    left_side_image: string;
+    right_side_image: string;
+    challan_paper: string;
+    vet_certificate: string;
+    chairman_certificate: string;
+    special_mark: string;
+    image_with_owner: string;
+}
 
 const FarmerPage: React.FC = () => {
      const { userId } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCowDetails, setIsCowDetails] = useState(false);
-
+    const [assetList, setAssetList] = useState<any[]>([]);
 
     // const [isClaimForm, setIsClaimForm] = useState(false)
     const [selectedCow, setSelectedCow] = useState<{
       id: number;
-      image: string;
-      age: string;
+      owner: string;
+      asset_type: string;
+      breed: string;
       color: string;
-      cattleType: string;
-      vaccinated: string;
-      purchaseAmount: string;
-      purchaseDate: string;
-      purchaseFrom: string;
-      insurance: string;
-      scopeOfCoverage: string;
-      sumInsured: string;
-      createdBy: string;
-    } | null>(null)
+      age_in_months: number;
+      weight_kg: string;
+      height: string;
+      vaccination_status: string;
+      last_vaccination_date: string;
+      deworming_status: string;
+      last_deworming_date: string;
+      is_active: boolean;
+      remarks: string;
+      gender: string;
+      purchase_date: "",
+      purchase_from: "",
+      purchase_amount: "",
+      reference_id: string;
+      created_at: string;
+      updated_at: string;
+      muzzle_video: string;
+      left_side_image: string;
+      right_side_image: string;
+      challan_paper: string;
+      vet_certificate: string;
+      chairman_certificate: string;
+      special_mark: string;
+      image_with_owner: string;
+    } | null>(null);
+
+     // Fetch asset list from the API
+     useEffect(() => {
+        const fetchAssetList = async () => {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                console.error('Access token is missing. Please log in again.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/asset-list/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    console.log('Asset list fetched successfully:', result.data.results);
+                    setAssetList(result.data.results); // Update the asset list state
+                } else {
+                    console.error('Failed to fetch asset list:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching asset list:', error);
+            }
+        };
+
+        fetchAssetList();
+    }, []);
+
 
     const sampleData = [
         {
@@ -84,7 +166,7 @@ const FarmerPage: React.FC = () => {
         },
     ];
 
-    const handleViewDetails = (cow: typeof sampleData[0]) => {
+    const handleViewDetails = (cow: Asset) => {
         setSelectedCow(cow);
         setIsCowDetails(true);
     };
@@ -129,54 +211,50 @@ console.log(userId, "userId from context");
                 <table className="w-full  ">
                     <thead>
                         <tr className='text-white bg-green-700 sticky top-0 z-10'>
-                            <th className="p-2">Cow Image</th>
-                            <th className="p-2">Age</th>
+                        <th className="p-2">Cow Image</th>
+                            <th className="p-2">Asset Type</th>
+                            <th className="p-2">Breed</th>
                             <th className="p-2">Color</th>
-                            <th className="p-2">Cattle Type</th>
-                            <th className="p-2">Vaccinated</th>
-                            <th className="p-2">Purchase Amount</th>
-                            <th className="p-2">Purchase Date</th>
-                            <th className="p-2">Purchase From</th>
-                            <th className="p-2">Insurance</th>
-                            <th className="p-2">Scope of Coverage</th>
-                            <th className="p-2">Sum Insured</th>
-                            <th className="p-2">Created By</th>
+                            <th className="p-2">Age (Months)</th>
+                            <th className="p-2">Weight (kg)</th>
+                            <th className="p-2">Height</th>
+                            <th className="p-2">Vaccination Status</th>
+                            <th className="p-2">Deworming Status</th>
+                            <th className="p-2">Gender</th>
                             <th className="p-2">View</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {sampleData.map((cow) => (
-                            <tr key={cow.id} className='bg-green-100 text-center'>
+                    {assetList.map((asset) => (
+                            <tr key={asset.id} className="bg-green-100 text-center">
                                 <td className="border border-gray-100 p-2">
                                     <Image
-                                        src={cow.image || "/placeholder.svg"}
+                                        src={asset.left_side_image || '/placeholder.svg'}
                                         alt="Cow"
                                         width={50}
                                         height={50}
                                         className="rounded-md"
                                     />
                                 </td>
-                                <td className="border border-gray-100 p-2">{cow.age}</td>
-                                <td className="border border-gray-100 p-2">{cow.color}</td>
-                                <td className="border border-gray-100 p-2">{cow.cattleType}</td>
-                                <td className="border border-gray-100 p-2">{cow.vaccinated}</td>
-                                <td className="border border-gray-100 p-2">{cow.purchaseAmount}</td>
-                                <td className="border border-gray-100 p-2">{cow.purchaseDate}</td>
-                                <td className="border border-gray-100 p-2">{cow.purchaseFrom}</td>
-                                <td className="border border-gray-100 p-2">{cow.insurance}</td>
-                                <td className="border border-gray-100 p-2">{cow.scopeOfCoverage}</td>
-                                <td className="border border-gray-100 p-2">{cow.sumInsured}</td>
-                                <td className="border border-gray-100 p-2">{cow.createdBy}</td>
+                                <td className="border border-gray-100 p-2">{asset.asset_type}</td>
+                                <td className="border border-gray-100 p-2">{asset.breed}</td>
+                                <td className="border border-gray-100 p-2">{asset.color}</td>
+                                <td className="border border-gray-100 p-2">{asset.age_in_months}</td>
+                                <td className="border border-gray-100 p-2">{asset.weight_kg}</td>
+                                <td className="border border-gray-100 p-2">{asset.height}</td>
+                                <td className="border border-gray-100 p-2">{asset.vaccination_status}</td>
+                                <td className="border border-gray-100 p-2">{asset.deworming_status}</td>
+                                <td className="border border-gray-100 p-2">{asset.gender}</td>
                                 <td className="border border-gray-100 p-2">
-                                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleViewDetails(cow)}
-                    className="text-green-700 hover:text-green-900 hover:bg-green-200"
-                  >
-                    <Eye size={16} className="mr-1" />
-                    View
-                  </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleViewDetails(asset)}
+                                        className="text-green-700 hover:text-green-900 hover:bg-green-200"
+                                    >
+                                        <Eye size={16} className="mr-1" />
+                                        View
+                                    </Button>
                                 </td>
                             </tr>
                         ))}
@@ -192,7 +270,7 @@ console.log(userId, "userId from context");
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div className="flex justify-center">
                 <Image
-                  src={selectedCow.image || "/placeholder.svg"}
+                  src={selectedCow.image_with_owner || "/placeholder.svg"}
                   alt="Cow"
                   width={200}
                   height={200}
@@ -202,37 +280,34 @@ console.log(userId, "userId from context");
               <div className="space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   <p className="font-semibold">Age:</p>
-                  <p>{selectedCow?.age}</p>
+                  <p>{selectedCow?.age_in_months}</p>
 
                   <p className="font-semibold">Color:</p>
                   <p>{selectedCow?.color}</p>
 
                   <p className="font-semibold">Cattle Type:</p>
-                  <p>{selectedCow?.cattleType}</p>
+                  <p>{selectedCow?.breed}</p>
 
                   <p className="font-semibold">Vaccinated:</p>
-                  <p>{selectedCow?.vaccinated}</p>
+                  <p>{selectedCow?.vaccination_status}</p>
 
                   <p className="font-semibold">Purchase Amount:</p>
-                  <p>{selectedCow?.purchaseAmount}</p>
+                  <p>{selectedCow?.purchase_amount}</p>
 
                   <p className="font-semibold">Purchase Date:</p>
-                  <p>{selectedCow?.purchaseDate}</p>
+                  <p>{selectedCow?.purchase_date}</p>
 
                   <p className="font-semibold">Purchase From:</p>
-                  <p>{selectedCow?.purchaseFrom}</p>
+                  <p>{selectedCow?.purchase_from}</p>
 
-                  <p className="font-semibold">Insurance:</p>
-                  <p>{selectedCow?.insurance}</p>
+              
 
-                  <p className="font-semibold">Scope of Coverage:</p>
-                  <p>{selectedCow?.scopeOfCoverage}</p>
+               
 
-                  <p className="font-semibold">Sum Insured:</p>
-                  <p>{selectedCow?.sumInsured}</p>
+        
 
-                  <p className="font-semibold">Created By:</p>
-                  <p>{selectedCow?.createdBy}</p>
+                  <p className="font-semibold">Owner:</p>
+                  <p>{selectedCow?.owner}</p>
                 </div>
               </div>
             </div>)}

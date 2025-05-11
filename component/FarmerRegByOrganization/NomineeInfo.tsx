@@ -1,9 +1,7 @@
 'use client'
-import { useRouter } from 'next/navigation';
+
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import ModalGeneral from '../modal/DialogGeneral';
-import logo from '../../public/Logo-03.png';
+
 import { useFarmerRegistration } from '@/context/FarmerRegistrationContext';
 
 
@@ -13,6 +11,7 @@ interface NomineeInfo {
     phone: string;
     email: string;
     nid: string;
+    relationship: string;
 }
 
 const NomineeInfoByOrganizaton: React.FC = () => {
@@ -22,7 +21,7 @@ const NomineeInfoByOrganizaton: React.FC = () => {
         nominee_name: '',
         phone: '',
         nid: '',
-        // relationship: '',
+        relationship: '',
         email:''
     });
 
@@ -115,7 +114,7 @@ const NomineeInfoByOrganizaton: React.FC = () => {
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                     />
                 </div>
-                {/* <div>
+                <div>
                     <label htmlFor="relationship" className="block text-sm font-medium text-gray-700">
                         Relationship:
                     </label>
@@ -134,7 +133,7 @@ const NomineeInfoByOrganizaton: React.FC = () => {
                         <option value="sibling">Sibling</option>
                         <option value="other">Other</option>
                     </select>
-                </div> */}
+                </div>
           
 
             </form>

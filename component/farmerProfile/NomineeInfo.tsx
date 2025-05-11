@@ -16,7 +16,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
         nominee_name: '',
         phone: '',
         nid: '',
-        // relationship: '',
+        relationship: '',
         email:''
     });
 
@@ -42,7 +42,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
 
             setIsLoading(true); // Show loading spinner
             try {
-                const response = await fetch('http://localhost:8000/api/v1/auth/user/nominee-info/', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user/nominee-info/`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
@@ -57,11 +57,14 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
                         phone: data.phone || '',
                         nid: data.nid || '',
                         email: data.email || '',
+                        relationship:data.relationship || ''
                     });
                     setSuccessMessage("Nominee information fetched successfully!");
                 } else if (response.status === 400) {
-                    setErrorMessage(result.data.message);
-                } else if (response.status === 401) {
+                    // setErrorMessage(result.data.message);
+                }  else if (response.status === 404) {
+                    // setErrorMessage(result.data.message);
+                }else if (response.status === 401) {
                     setSessionExpired(true);
                     console.log("Unauthorized");
                 } else {
@@ -175,7 +178,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                     />
                 </div>
-                {/* <div>
+                <div>
                     <label htmlFor="relationship" className="block text-sm font-medium text-gray-700">
                         Relationship:
                     </label>
@@ -194,7 +197,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
                         <option value="sibling">Sibling</option>
                         <option value="other">Other</option>
                     </select>
-                </div> */}
+                </div>
                 {isShowSubmit && (
                     <button
                         type="submit"

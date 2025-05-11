@@ -2,9 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import PhotoCaptureModal from '../helper/PhotoCaptureModal';
-import ModalGeneral from '../modal/DialogGeneral';
-import logo from '../../public/Logo-03.png';
-import { unauthorized, useRouter } from 'next/navigation';
+
 import { useFarmerRegistration } from '@/context/FarmerRegistrationContext';
 
 interface PersonalInfo {

@@ -1,8 +1,6 @@
-import { useRouter } from 'next/navigation';
+
 import React, { useEffect, useState } from 'react';
-import ModalGeneral from '../modal/DialogGeneral';
-import logo from '../../public/Logo-03.png';
-import Image from 'next/image';
+
 import { useFarmerRegistration } from '@/context/FarmerRegistrationContext';
 
 
@@ -16,10 +14,7 @@ interface FinancialInfo {
 }
 
 const FinancialInfoByOrganization: React.FC = () => {
-    const [bank_name, setBankName] = useState('');
-    const [branch_name, setbranch_name] = useState('');
-    const [account_name, setaccount_name] = useState('');
-    const [account_number, setaccount_number] = useState('');
+
 
   const {data, clearData, updateFinancialInfo} = useFarmerRegistration();
     

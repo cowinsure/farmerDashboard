@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const [isLoading, setIsLoading] = useState<boolean>(false);
   
 
-  // Load auth data from localStorage (or cookies) on initial render
+  // // Load auth data from localStorage (or cookies) on initial render
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedPhoneNumber = localStorage.getItem("phoneNumber");

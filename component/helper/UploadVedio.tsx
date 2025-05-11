@@ -70,16 +70,16 @@ export default function UploadVideo({ onVideoCapture }: { onVideoCapture?: (file
       // console.log("vedioref");
           
       updateStep({
-        cowVedioFile: file,
+        muzzle_video: file,
       });
     }
   }
   useEffect(() => {
-    if (data?.cowVedioFile) {
-      setSelectedFile(data.cowVedioFile);
+    if (data?.muzzle_video) {
+      setSelectedFile(data.muzzle_video);
 
       // Create a video URL and set it to the recordedVideo state
-      const videoUrl = URL.createObjectURL(data.cowVedioFile);
+      const videoUrl = URL.createObjectURL(data.muzzle_video);
       setRecordedVideo(videoUrl);
 
       // Clean up the object URL when the component unmounts

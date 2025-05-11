@@ -26,13 +26,15 @@ const SignupPage: React.FC = () => {
         const requestBody = {
           mobile_number: phone,
           role_id,
+          "latitude": 0,
+          "longitude": 0
         };
 
         // Save role_id to localStorage
         localStorage.setItem('role_id', role_id.toString());
     
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register/step1/`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/register/step1/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

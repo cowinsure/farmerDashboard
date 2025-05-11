@@ -6,13 +6,14 @@ const StepFour: React.FC = () => {
     const { data, updateStep, validateStep, reset } = useCowRegistration();
 
     const [images, setImages] = useState({
-        sideImage: null as File | null,
-        rightSide: null as File | null,
-        ownerAndCowImage: null as File | null,
-        birthmarkImage: null as File | null,
-        challanImage: null as File | null,
-        chairmanCertificate: null as File | null,
-        vetCertificate: null as File | null,
+        special_mark: null as File | null,
+       
+        left_side_image: null as File | null,
+        right_side_image: null as File | null,
+        challan_paper: null as File | null,
+        vet_certificate: null as File | null,
+        chairman_certificate: null as File | null,
+        image_with_owner: null as File | null,
     });
 
     const updateImage = (key: keyof typeof images, file: File | null) => {
@@ -24,13 +25,13 @@ const StepFour: React.FC = () => {
     React.useEffect(() => {
         if (data) {
             setImages({
-                sideImage: data.sideImage || null,
-                rightSide: data.rightSide || null,
-                ownerAndCowImage: data.ownerAndCowImage || null,
-                birthmarkImage: data.birthmarkImage || null,
-                challanImage: data.challanImage || null,
-                chairmanCertificate: data.chairmanCertificate || null,
-                vetCertificate: data.vetCertificate || null,
+                left_side_image: data.left_side_image || null,
+                right_side_image: data.right_side_image || null,
+                image_with_owner: data.image_with_owner || null,
+                special_mark: data.special_mark || null,
+                challan_paper: data.challan_paper || null,
+                chairman_certificate: data.chairman_certificate || null,
+                vet_certificate: data.vet_certificate || null,
             });
         }
     }, [data]);
@@ -55,15 +56,15 @@ const StepFour: React.FC = () => {
 
             <div className="flex lg:flex-row flex-col gap-1 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage("rightSide", file)}
+                        onPhotoCapture={(file) => updateImage("right_side_image", file)}
                         triggerText="Capture right side Image"
                         title="Take Side Image"
                     />
-                    {images.rightSide && (
+                    {images.right_side_image && (
                         <div className="mt-2 mb-4">
                             <h3 className="text-center text-sm font-medium">Right Side Image</h3>
                             <img
-                                src={getPreviewUrl(images.rightSide)!}
+                                src={getPreviewUrl(images.right_side_image)!}
                                 alt="Side Image"
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -73,15 +74,15 @@ const StepFour: React.FC = () => {
                 {/* Side Image */}
                 <div className="flex lg:flex-row flex-col gap-1 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage( "sideImage",file)}
+                        onPhotoCapture={(file) => updateImage( "left_side_image",file)}
                         triggerText="Capture left Side Image"
-                        title="Take Side Image"
+                        title="Take Left Side Image"
                     />
-                    {images.sideImage && (
+                    {images.left_side_image && (
                         <div className="mt-2 mb-4">
                             <h3 className="text-center text-sm font-medium">Left Side Image</h3>
                             <img
-                                src={getPreviewUrl(images.sideImage)!}
+                                src={getPreviewUrl(images.left_side_image)!}
                                 alt="Side Image"
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -92,15 +93,15 @@ const StepFour: React.FC = () => {
                 {/* Owner and Cow Image */}
                 <div className="flex lg:flex-row flex-col gap-3 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage( "ownerAndCowImage", file)}
+                        onPhotoCapture={(file) => updateImage( "image_with_owner", file)}
                         triggerText="Capture Owner & Cow Image"
                         title="Take Owner & Cow Image"
                     />
-                    {images.ownerAndCowImage && (
+                    {images.image_with_owner && (
                         <div className="mt-4">
                             <h3 className="text-center text-sm font-medium">Owner & Cow Image</h3>
                             <img
-                                src={getPreviewUrl(images.ownerAndCowImage)!}
+                                src={getPreviewUrl(images.image_with_owner)!}
                                 alt="Owner and Cow Image"
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -111,15 +112,15 @@ const StepFour: React.FC = () => {
                 {/* Birthmark Image */}
                 <div className="flex lg:flex-row flex-col gap-3 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage("birthmarkImage", file)}
+                        onPhotoCapture={(file) => updateImage("special_mark", file)}
                         triggerText="Capture Birthmark Image"
                         title="Take Birthmark Image"
                     />
-                    {images.birthmarkImage && (
+                    {images.special_mark && (
                         <div className="mt-4">
                             <h3 className="text-center text-sm font-medium">Birthmark Image</h3>
                             <img
-                                src={getPreviewUrl(images.birthmarkImage)!}
+                                src={getPreviewUrl(images.special_mark)!}
                                 alt="Birthmark Image"
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -130,15 +131,15 @@ const StepFour: React.FC = () => {
                 {/* Challan Image */}
                 <div className="flex lg:flex-row flex-col gap-3 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage( "challanImage", file)}
+                        onPhotoCapture={(file) => updateImage( "challan_paper", file)}
                         triggerText="Capture Challan Image"
-                        title="Take Challan Image"
+                        title="Take Challan Paper Image"
                     />
-                    {images.challanImage && (
+                    {images.challan_paper && (
                         <div className="mt-4">
                             <h3 className="text-center text-sm font-medium">Challan Image</h3>
                             <img
-                                src={getPreviewUrl(images.challanImage)!}
+                                src={getPreviewUrl(images.challan_paper)!}
                                 alt="Challan Image"
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -149,15 +150,32 @@ const StepFour: React.FC = () => {
                 {/* Chairman Certificate Image */}
                 <div className="flex lg:flex-row flex-col gap-3 items-center">
                     <PhotoCaptureModal
-                        onPhotoCapture={(file) => updateImage("chairmanCertificate", file)}
+                        onPhotoCapture={(file) => updateImage("chairman_certificate", file)}
                         triggerText="Capture Chairman Certificate"
                         title="Take Chairman Certificate Image"
                     />
-                    {images.chairmanCertificate && (
+                    {images.chairman_certificate && (
                         <div className="mt-4">
                             <h3 className="text-center text-sm font-medium">Chairman Certificate</h3>
                             <img
-                                src={getPreviewUrl(images.chairmanCertificate)!}
+                                src={getPreviewUrl(images.chairman_certificate)!}
+                                alt="Chairman Certificate"
+                                className="w-32 h-32 object-cover border rounded"
+                            />
+                        </div>
+                    )}
+                </div>
+                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                    <PhotoCaptureModal
+                        onPhotoCapture={(file) => updateImage("vet_certificate", file)}
+                        triggerText="Capture Chairman Certificate"
+                        title="Take Chairman Certificate Image"
+                    />
+                    {images.vet_certificate && (
+                        <div className="mt-4">
+                            <h3 className="text-center text-sm font-medium">Chairman Certificate</h3>
+                            <img
+                                src={getPreviewUrl(images.vet_certificate)!}
                                 alt="Chairman Certificate"
                                 className="w-32 h-32 object-cover border rounded"
                             />

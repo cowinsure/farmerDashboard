@@ -40,7 +40,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit , isShow
 
             setIsLoading(true); // Show loading spinner
             try {
-                const response = await fetch('http://localhost:8000/api/v1/auth/user/financial-info/', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user/financial-info/`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
@@ -56,7 +56,9 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit , isShow
                     setaccount_number(data.account_number || '');
                     setSuccessMessage("Financial information fetched successfully!");
                 } else if (response.status === 400) {
-                    setErrorMessage(result.data.message);
+                    // setErrorMessage(result.data.message);
+                } else if (response.status === 404) {
+                    // setErrorMessage(result.data.message);
                 } else if (response.status === 401) {
                     setSessionExpired(true);
                     console.log("Unauthorized");

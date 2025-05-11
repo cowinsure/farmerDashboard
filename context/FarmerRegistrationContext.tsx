@@ -27,6 +27,7 @@ interface NomineeInfo {
     phone: string;
     email: string;
     nid: string;
+    relationship: string;
 }
 
 // interface OrganizationInfo {

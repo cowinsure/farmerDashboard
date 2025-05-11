@@ -1,8 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import PhotoCaptureModal from '../helper/PhotoCaptureModal';
 import ModalGeneral from '../modal/DialogGeneral';
+import Image from 'next/image';
 import logo from '../../public/Logo-03.png';
 import { unauthorized, useRouter } from 'next/navigation';
 
@@ -39,6 +39,11 @@ const PersonalInfo: React.FC = () => {
         date_of_birth: '',
         gender: 'Male',
         tin: '',
+        thana: '',
+        upazila: '',
+        zilla: '',
+        union: '',
+        village: '',
     });
     // Fetch data from the API on component mount
     useEffect(() => {
@@ -70,20 +75,25 @@ const PersonalInfo: React.FC = () => {
                         date_of_birth: data.date_of_birth || '',
                         gender: data.gender || 'Male',
                         tin: data.tin || '',
+                        thana: data.thana || '',
+                       
+                        zilla: data.zilla || '',
+                        village: data.village || '',
+                        union: data.union || '',
                     }));
 
                     // Save URLs in new states
-                    if (data.nid_front) {
-                        setNidFrontUrl(data.nid_front);
+                    if (data.nid_front_image_url) {
+                        setNidFrontUrl(data.nid_front_image_url);
                     }
-                    if (data.nid_back) {
-                        setNidBackUrl(data.nid_back);
+                    if (data.nid_back_image_url) {
+                        setNidBackUrl(data.nid_back_image_url);
                     }
                     if (data.profile_image_url) {
                         setProfileImageUrl(data.profile_image_url);
                     }
                 } else {
-                    setErrorMessage(result.statusMessage || 'Failed to fetch data');
+                    // setErrorMessage(result.statusMessage || 'Failed to fetch data');
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -133,6 +143,11 @@ const PersonalInfo: React.FC = () => {
         multipartFormData.append("date_of_birth", formData.date_of_birth);
         multipartFormData.append("gender", formData.gender);
         multipartFormData.append("tin", formData.tin);
+        multipartFormData.append("thana", formData.thana);
+        multipartFormData.append("zilla", formData.zilla);
+    
+        multipartFormData.append("village", formData.village);
+        multipartFormData.append("union", formData.union);
 
         for (const [key, value] of Object.entries(data)) {
             multipartFormData.append(key, value as string);
@@ -273,14 +288,14 @@ const PersonalInfo: React.FC = () => {
                     )}
 
                     {nidFrontUrl && (
-                        <div className="mt-4">
+                        <div className="mt-4 ">
                             <h3 className="text-center text-sm font-medium w-auto">NID Front</h3>
                             <Image
                                 src={nidFrontUrl}
                                 alt="NID Front"
                                 width={128}
                                 height={128}
-                                unoptimized
+                                
                                 className="w-32 h-32 object-cover border rounded"
                             />
                         </div>
@@ -299,8 +314,8 @@ const PersonalInfo: React.FC = () => {
                             <h3 className="text-center text-sm font-medium w-auto">Capture NID Front</h3>
                             <Image src={URL.createObjectURL(nidBack)}
                                 alt="Chairman Certificate"
-                                width={128}
-                                height={128}
+                                width={1080}
+                                height={1080}
 
                                 className="w-32 h-32 object-cover border rounded"
                             />
@@ -312,9 +327,9 @@ const PersonalInfo: React.FC = () => {
                             <Image
                                 src={nidBackUrl}
                                 alt="NID Front"
-                                width={128}
-                                height={128}
-                                unoptimized
+                                width={1080}
+                                height={1080}
+                                priority
                                 className="w-32 h-32 object-cover border rounded"
                             />
                         </div>
@@ -341,6 +356,46 @@ const PersonalInfo: React.FC = () => {
                         <option value="other">Other</option>
                     </select>
                 </div>
+                <div className="flex flex-col">
+                    <label htmlFor="zilla" className="mb-1 text-sm font-medium text-gray-700">Zila:</label>
+                    <input
+                        value={formData.zilla}
+                        onChange={handleInputChange}
+                        type="text"
+                        id="zilla"
+                        name="zilla"
+                        className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                    />
+                </div>
+               
+                <div className="flex flex-col">
+                    <label htmlFor="thana" className="mb-1 text-sm font-medium text-gray-700">Thana:</label>
+                    <input
+                        value={formData.thana}
+                        onChange={handleInputChange}
+                        type="text"
+                        id="thana"
+                        name="thana"
+                        className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="union" className="mb-1 text-sm font-medium text-gray-700">Union:</label>
+                    <input
+                        value={formData.union}
+                        onChange={handleInputChange}
+                        type="text" id="union" name="union" className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="village" className="mb-1 text-sm font-medium text-gray-700">Village:</label>
+                    <input
+                        value={formData.village}
+                        onChange={handleInputChange}
+                        type="text" id="village" name="village" className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                </div>
+
                 <div className="flex flex-col">
                     <label htmlFor="tin" className="mb-1 text-sm font-medium text-gray-700">TIN:</label>
                     <input

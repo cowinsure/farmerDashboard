@@ -7,35 +7,40 @@ type Location = {
 };
 
 type CowRegistrationData = {
+  owner: string;
   asset_type: string;
-  sex: string;
-  height: "",
-  hasDisease: boolean,
-  diseaseName: "",
-  isPregnant:boolean,
-  pregnancyStage: "",
-  dateOfLastCalving: "",
-  milkYield: "",
-  dateOfBirth: string;
-  age: string
-  farmerID: string;
-  CowID: string;
-  CowAge: string;
-  liveWeight: string;
-  cowTypeID: string;
-  colorID: string;
-  Vacinated: boolean;
-  IsDeworming: boolean;
-  sideImage ?: File | null;
-  cowVedioFile ?: File | null;
-  rightSide?: File | null;
-  birthmarkImage?: File | null;
-  ownerAndCowImage?: File | null;
-  challanImage?: File | null;
-  vetCertificate?: File | null;
-  chairmanCertificate?: File | null;
-  purchaseamount: string;
-  location: Location;
+  breed: string;
+  color: string;
+  age_in_months: string;
+  weight_kg: string;
+  height: string;
+  vaccination_status: string;
+  last_vaccination_date: string;
+  deworming_status: string;
+  last_deworming_date: string;
+  health_issues: string;
+  pregnancy_status: string;
+  remarks: string;
+  last_date_of_calving: string;
+  purchase_date: string;
+  purchase_from: string;
+  purchase_amount: string;
+  // purchase_bill?: File | null;
+  // created_by: string;
+  // updated_by: string;
+  // created_at: string;
+  // updated_at: string;
+  is_active: boolean;
+  reference_id: string;
+  special_mark?: File | null;
+  muzzle_video?: File | null;
+  left_side_image?: File | null;
+  right_side_image?: File | null;
+  challan_paper?: File | null;
+  vet_certificate?: File | null;
+  chairman_certificate?: File | null;
+  image_with_owner?: File | null;
+  // location: Location;
 };
 
 type CowRegistrationContextType = {
@@ -46,39 +51,38 @@ type CowRegistrationContextType = {
 };
 
 const defaultData: CowRegistrationData = {
-  asset_type:"1",
-  farmerID: "",
-  CowID: "",
-  CowAge: "",
-  liveWeight: "",
-  cowTypeID: "",
-  colorID: "",
-  Vacinated: false,
-  IsDeworming: false,
-
-  sideImage: null,
-  cowVedioFile: null,
-  rightSide:null,
-  birthmarkImage:null,
-  ownerAndCowImage: null,
-  challanImage: null,
-  vetCertificate: null,
-  chairmanCertificate:null,
-  purchaseamount: "",
-  location: {
-    lat: "",
-    long: "",
-  },
-  dateOfBirth: "",
-  age: "",
-  sex: "",
+  owner: "",
+  asset_type: "",
+  breed: "",
+  color: "",
+  age_in_months: "",
+  weight_kg: "",
   height: "",
-  hasDisease: false,
-  diseaseName: "",
-  isPregnant:false,
-  pregnancyStage: "",
-  dateOfLastCalving: "",
-  milkYield: "",
+  vaccination_status: "",
+  last_vaccination_date: "",
+  deworming_status: "",
+  last_deworming_date: "",
+  special_mark: null,
+  health_issues: "",
+  pregnancy_status: "",
+  last_date_of_calving: "",
+  purchase_date: "",
+  purchase_from: "",
+  purchase_amount: "",
+  // created_by: "",
+  // updated_by: "",
+  // created_at: "",
+  // updated_at: "",
+  is_active: true,
+  remarks: "",
+  reference_id: Math.random().toExponential(), // Generate a random reference ID
+  muzzle_video: null,
+  left_side_image: null,
+  right_side_image: null,
+  challan_paper: null,
+  vet_certificate: null,
+  chairman_certificate: null,
+  image_with_owner: null,
 };
 
 const CowRegistrationContext = createContext<CowRegistrationContextType | undefined>(undefined);
@@ -94,18 +98,15 @@ export const CowRegistrationProvider = ({ children }: { children: ReactNode }) =
     setData(prev => ({
       ...prev,
       ...stepData,
-      location: {
-        ...prev.location,
-        ...stepData.location,
-      },
+   
     }));
   };
 
   const validateStep = (stepFields: (keyof CowRegistrationData)[]) => {
     return stepFields.every(field => {
-      if (field === "location") {
-        return data.location.lat !== "" && data.location.long !== "";
-      }
+      // if (field === "location") {
+      //   return data.location.lat !== "" && data.location.long !== "";
+      // }
       const value = data[field];
       return typeof value === "boolean" || (typeof value === "string" && value.trim() !== "");
     });

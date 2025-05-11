@@ -27,7 +27,7 @@ const SetPasswordPage = () => {
                 password,
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register/set-password/`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/register/set-password/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

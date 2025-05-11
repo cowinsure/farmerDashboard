@@ -31,7 +31,7 @@ export default function StepOne() {
 
     try {
       setIsUploading(true);
-      const response = await fetch("https://flying-intensely-loon.ngrok-free.app/register", {
+      const response = await fetch("http://13.232.177.191:5000/register", {
       method: "POST",
       body: formData,
       });
@@ -55,7 +55,7 @@ export default function StepOne() {
       console.log("API Response:", data);
       setResponseData(data);
       updateStep({
-        CowID: data.registration_id,
+        reference_id: data.registration_id,
       }); // Save the response data to state
       alert(data.message);
       return;
@@ -75,8 +75,8 @@ export default function StepOne() {
 
 
   useEffect(() => {
-      if (data?.cowVedioFile) {
-        setSelectedFile(data.cowVedioFile);
+      if (data?.muzzle_video) {
+        setSelectedFile(data.muzzle_video);
       }
   }, [data]);
    // Add an empty dependency array to ensure it runs only once
@@ -88,7 +88,7 @@ export default function StepOne() {
           <UploadVideo
             onVideoCapture={(file) => {
                 updateStep({
-                  cowVedioFile: file,
+                  muzzle_video: file,
                 });
               setSelectedFile(file); // Save the selected file to state
             }}
