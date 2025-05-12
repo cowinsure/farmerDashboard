@@ -54,7 +54,7 @@ const StepFour: React.FC = () => {
             <div className="flex flex-col gap-4 justify-start w-auto">
 
 
-            <div className="flex lg:flex-row flex-col gap-1 items-center">
+            <div className="flex lg:flex-col flex-col gap-1 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage("right_side_image", file)}
                         triggerText="Capture right side Image"
@@ -72,7 +72,7 @@ const StepFour: React.FC = () => {
                     )}
                 </div>
                 {/* Side Image */}
-                <div className="flex lg:flex-row flex-col gap-1 items-center">
+                <div className="flex lg:flex-col flex-col gap-1 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage( "left_side_image",file)}
                         triggerText="Capture left Side Image"
@@ -91,7 +91,7 @@ const StepFour: React.FC = () => {
                 </div>
 
                 {/* Owner and Cow Image */}
-                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                <div className="flex lg:flex-col flex-col gap-3 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage( "image_with_owner", file)}
                         triggerText="Capture Owner & Cow Image"
@@ -110,7 +110,7 @@ const StepFour: React.FC = () => {
                 </div>
 
                 {/* Birthmark Image */}
-                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                <div className="flex lg:flex-col flex-col gap-3 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage("special_mark", file)}
                         triggerText="Capture Birthmark Image"
@@ -129,7 +129,7 @@ const StepFour: React.FC = () => {
                 </div>
 
                 {/* Challan Image */}
-                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                <div className="flex lg:flex-col flex-col gap-3 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage( "challan_paper", file)}
                         triggerText="Capture Challan Image"
@@ -148,7 +148,7 @@ const StepFour: React.FC = () => {
                 </div>
 
                 {/* Chairman Certificate Image */}
-                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                <div className="flex lg:flex-col flex-col gap-3 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage("chairman_certificate", file)}
                         triggerText="Capture Chairman Certificate"
@@ -165,18 +165,18 @@ const StepFour: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <div className="flex lg:flex-row flex-col gap-3 items-center">
+                <div className="flex lg:flex-col flex-col gap-3 items-start">
                     <PhotoCaptureModal
                         onPhotoCapture={(file) => updateImage("vet_certificate", file)}
-                        triggerText="Capture Chairman Certificate"
-                        title="Take Chairman Certificate Image"
+                        triggerText="Capture Vet Certificate"
+                        title="Capture Vet Certificate Image"
                     />
                     {images.vet_certificate && (
                         <div className="mt-4">
-                            <h3 className="text-center text-sm font-medium">Chairman Certificate</h3>
+                            <h3 className="text-center text-sm font-medium">Vet Certificate</h3>
                             <img
                                 src={getPreviewUrl(images.vet_certificate)!}
-                                alt="Chairman Certificate"
+                                alt="Vet Certificate"
                                 className="w-32 h-32 object-cover border rounded"
                             />
                         </div>

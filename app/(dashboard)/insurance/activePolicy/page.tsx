@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Eye, FileText } from "lucide-react"
+import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
+import StepFive from "@/component/cowRegistration/StepFive"
 
 interface Cattle {
   id: number;
@@ -39,6 +41,8 @@ export default function InsuranceActivePolicy() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+  
 
 
  // Fetch insurance data from the API
@@ -51,7 +55,7 @@ export default function InsuranceActivePolicy() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/insurance-list/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -186,12 +190,12 @@ export default function InsuranceActivePolicy() {
 
       {/* Claim Form Dialog */}
       <Dialog open={isClaimForm} onOpenChange={setIsClaimForm}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="">
           <DialogHeader>
             <DialogTitle className="text-green-700">Submit Insurance Claim</DialogTitle>
           </DialogHeader>
           {selectedCow && (
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-4 max-h-[500px] lg:h-auto overflow-y-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="font-semibold mb-1">Cattle ID:</p>
@@ -210,6 +214,27 @@ export default function InsuranceActivePolicy() {
                   <p className="p-2 bg-gray-100 rounded">{selectedCow.sum_insured}</p>
                 </div>
               </div>
+
+               <div className="flex lg:flex-row flex-col gap-1 items-center">
+                                  <PhotoCaptureModal
+                                      onPhotoCapture={(file) =>{}
+                                        //  updateImage( "left_side_image",file)
+                                    
+                                        }
+                                      triggerText="Muzzel Verification"
+                                      title="Muzzel Verification"
+                                  />
+                                  {/* {images.left_side_image && (
+                                      <div className="mt-2 mb-4">
+                                          <h3 className="text-center text-sm font-medium">Left Side Image</h3>
+                                          <img
+                                              src={getPreviewUrl(images.left_side_image)!}
+                                              alt="Side Image"
+                                              className="w-32 h-32 object-cover border rounded"
+                                          />
+                                      </div>
+                                  )} */}
+                              </div>
 
               <div className="space-y-4 mt-6">
                 <div>
@@ -239,14 +264,15 @@ export default function InsuranceActivePolicy() {
                 <div>
                   <label className="block text-sm font-medium mb-1">Supporting Documents</label>
                   <div className="border border-dashed border-gray-300 rounded-md p-4 text-center">
-                    <p className="text-sm text-gray-500">Drag and drop files here or click to upload</p>
+                    {/* <p className="text-sm text-gray-500">Drag and drop files here or click to upload</p>
                     <input type="file" className="hidden" id="file-upload" multiple />
                     <label
                       htmlFor="file-upload"
                       className="mt-2 inline-block px-4 py-2 bg-green-700 text-white rounded-md cursor-pointer hover:bg-green-800"
                     >
                       Upload Files
-                    </label>
+                    </label> */}
+                    <StepFive/>
                   </div>
                 </div>
 

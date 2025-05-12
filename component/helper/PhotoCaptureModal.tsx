@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState, useRef, useEffect } from "react"
 import { Upload, Camera, RotateCcw, RefreshCw } from "lucide-react"
@@ -431,7 +431,7 @@ export default function PhotoCaptureModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         
-        <button className="border-1 border-green-500 text-start  p-2 rounded-md w-auto">{triggerText}</button>
+        <button className="border-1 border-green-500 text-start  p-2 rounded-md w-full">{triggerText}</button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

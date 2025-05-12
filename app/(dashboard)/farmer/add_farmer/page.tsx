@@ -34,7 +34,7 @@ export default function StepForm() {
 
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await fetch('http://localhost:8000/api/v1/asset/assets/create/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/asset/assets/create/`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,

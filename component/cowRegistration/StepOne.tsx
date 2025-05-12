@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import UploadVideo from "../helper/UploadVedio";
 import Image from "next/image";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
-import { randomUUID } from "crypto";
+
+import ModalGeneral from "../modal/DialogGeneral";
+
+import logo from '../../public/Logo-03.png';
+import { useRouter } from 'next/navigation';
 
 // Define an interface for the response data
 interface ResponseData {
@@ -17,12 +21,15 @@ interface ResponseData {
 }
 
 export default function StepOne() {
+  const router = useRouter()
+  const [isModalOpen, setModalOpen] = useState(false);
   const { data, updateStep, validateStep, reset } = useCowRegistration();
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleVideoUpload = async (file: File) => {
+    setModalOpen(false)
 
     console.log("Video file captured:", file);
 
@@ -54,6 +61,7 @@ export default function StepOne() {
         const data: ResponseData = await response.json(); // Use the interface for type safety
         console.log("API Response:", data);
         setResponseData(data);
+        setModalOpen(true)
         updateStep({
           reference_id: data.registration_id,
         }); // Save the response data to state
@@ -109,7 +117,7 @@ export default function StepOne() {
         <div className=" lg:w-1/2 w-full text-start flex flex-col justify-start items-center">
           <div className="bg-green-700 text-white p-4 rounded-lg shadow-md">
             <p className="text-center text-3xl mb-4">Guideline for using Muzzle Tech</p>
-            <ul className="list-disc text-2xl pl-5 mt-2">
+            <ul className="list-disc text-md pl-5 mt-2">
               <li>Take a 3-second video slowly.</li>
               <li>Move the camera steadily without shaking.</li>
               <li>Ensure the cow's muzzle is placed inside the box on the screen.</li>
@@ -117,19 +125,43 @@ export default function StepOne() {
               <li>Keep the background clear of distractions.</li>
             </ul>
           </div>
-          {responseData && (
-            <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold mb-2">Response Data:</h3>
-              <p><strong>Animal Name:</strong> {responseData.animal_name}</p>
-              <p><strong>Registration ID:</strong> {responseData.registration_id}</p>
-              <p><strong>Geo Location:</strong> {responseData.geo_location}</p>
-              <p><strong>Date:</strong> {responseData.date}</p>
-              <p><strong>No. of Frames:</strong> {responseData.no_of_frames}</p>
-              <p><strong>Image:</strong></p>
-              {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
-              <p><strong>Message:</strong> {responseData.message}</p>
+      
+
+
+          <ModalGeneral isOpen={isModalOpen} onClose={() => { setModalOpen(false) }}>
+            <div className='text-black  text-center flex flex-col items-center p-5'>
+              <Image
+                src={logo}
+                alt="Logo"
+                width={200}
+                height={200}
+                className="h-auto "
+                priority
+
+              />
+              <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-red-700">
+                <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold mb-2">Registration Result</h3>
+                  <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
+                  <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
+                  {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
+                  <p><strong>Date:</strong> {responseData?.date}</p>
+                  {/* <p><strong>No. of Frames:</strong> {responseData?.no_of_frames}</p> */}
+                  {/* <p><strong>Image:</strong></p> */}
+                  {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
+                  <p><strong>Message:</strong> {responseData?.message}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setModalOpen(false) // Clear error message
+                  }}
+                  className="mt-2 py-2 px-4 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
+                >
+                  Close
+                </button>
+              </div>
             </div>
-          )}
+          </ModalGeneral>
         </div>
       </div>
     </div>

@@ -101,7 +101,7 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/v1/assets-type/", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/assets-type/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -135,7 +135,7 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/v1/breeds/", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/breeds/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function StepTwo() {
         }
 
         try {
-          const response = await fetch("http://localhost:8000/api/v1/colors/", {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/colors/`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -206,7 +206,7 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/v1/vaccination-status/", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vaccination-status/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -240,7 +240,7 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/v1/deworming-status/", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/deworming-status/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -50,7 +50,7 @@ const PersonalInfo: React.FC = () => {
         const fetchData = async () => {
             const authToken = localStorage.getItem('accessToken');
             try {
-                const response = await fetch('http://localhost:8000/api/v1/auth/user/personal-info/', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user/personal-info/`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,

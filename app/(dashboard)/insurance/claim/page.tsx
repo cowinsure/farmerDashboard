@@ -114,7 +114,7 @@ export default function CattleManagementPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/insurance-list/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -302,14 +302,14 @@ export default function CattleManagementPage() {
                 <div>
                   <label className="block text-sm font-medium mb-1">Supporting Documents</label>
                   <div className="border border-dashed border-gray-300 rounded-md p-4 text-center">
-                    <p className="text-sm text-gray-500">Drag and drop files here or click to upload</p>
+                    {/* <p className="text-sm text-gray-500">Drag and drop files here or click to upload</p>
                     <input type="file" className="hidden" id="file-upload" multiple />
                     <label
                       htmlFor="file-upload"
                       className="mt-2 inline-block px-4 py-2 bg-green-700 text-white rounded-md cursor-pointer hover:bg-green-800"
                     >
                       Upload Files
-                    </label>
+                    </label> */}
                   </div>
                 </div>
 
