@@ -9,6 +9,7 @@ import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import { CowRegistrationProvider } from "@/context/CowRegistrationContext";
 import { FarmerRegistrationProvider } from "@/context/FarmerRegistrationContext";
+import { InsuranceApplicationProvider } from "@/context/InsuranceApplicationContext";
 
 
 
@@ -33,16 +34,19 @@ export default function RootLayout({
         className={`${averia.className}  antialiased`}
       >
         <AuthProvider>
-          <FarmerRegistrationProvider>          <CowRegistrationProvider>
-        {/* <RootLayoutCustom> */}
-          {children}
+        <InsuranceApplicationProvider>
+          <FarmerRegistrationProvider>         
+             <CowRegistrationProvider>
+            {/* <RootLayoutCustom> */}
+            {children}
           </CowRegistrationProvider>
           </FarmerRegistrationProvider>
+          </InsuranceApplicationProvider>
 
-        {/* </RootLayoutCustom> */}
-       </AuthProvider>
-      
-       
+          {/* </RootLayoutCustom> */}
+        </AuthProvider>
+
+
       </body>
     </html>
   );

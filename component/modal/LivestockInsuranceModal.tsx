@@ -6,6 +6,9 @@ import InsuranceCompany from "../livestockInsuranceApplication/InsuranceCompany"
 import Confirmation from "../livestockInsuranceApplication/Confirmation";
 import Image from 'next/image';
 import logo from '../../public/Logo-03.png'; // Importing logo
+import { useInsuranceApplication } from "@/context/InsuranceApplicationContext";
+import { useRouter } from "next/navigation";
+import ModalGeneral from "./DialogGeneral";
 
 
 interface ModalProps {
@@ -16,7 +19,72 @@ interface ModalProps {
 
 const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
   const [currentStep, setCurrentStep] = useState(0);
-  if (!isOpen) return null;
+      const { insuranceApplication, updateInsuranceApplication , clearInsuranceApplication} = useInsuranceApplication()
+     const router = useRouter()
+     const [sessionExpired, setSessionExpired] = useState(false);
+     const [errorMessage, setErrorMessage] = useState('');
+     const [isLoading, setIsLoading] = useState(false);
+     const [successMessage, setSuccessMessage] = useState<string | null>('');
+      console.log(insuranceApplication);
+      
+ 
+ 
+      if (!isOpen) return null;
+
+      const handleSubmit = async () => {
+        setIsLoading(true); // Show loading spinner
+        setSuccessMessage(''); // Reset success message
+        setErrorMessage(''); // Reset error message
+      
+        const payload = [
+          {
+            asset: insuranceApplication.asset,
+            insurance_number: insuranceApplication.insurance_number,
+            sum_insured: insuranceApplication.sum_insured,
+            insurance_start_date: insuranceApplication.insurance_start_date,
+            insurance_end_date: insuranceApplication.insurance_end_date,
+            insurance_provider: insuranceApplication.insurance_provider,
+          },
+        ];
+      
+        try {
+          const accessToken = localStorage.getItem('accessToken');
+          if (!accessToken) {
+            console.error('Access token is missing. Please log in again.');
+            setErrorMessage('Access token is missing. Please log in again.');
+            return;
+          }
+      
+          const response = await fetch('http://localhost:8000/api/v1/insurance-apply/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(payload),
+          });
+      
+          const result = await response.json();
+      
+          if (response.ok) {
+            setSuccessMessage("Insurance  Applied successfully! check your insurance in Active policy");
+            clearInsuranceApplication(); // Clear the context after successful submission
+            onClose(); // Close the modal
+          } else if (response.status === 400) {
+            setErrorMessage(result.data.message || "Invalid input. Please check your data.");
+          } else if (response.status === 401) {
+            setSessionExpired(true);
+            console.log("Unauthorized access. Session expired.");
+          } else {
+            throw new Error(result.message || "Failed to submit form");
+          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          alert(`Something went wrong. Please try again.\nError: ${error}`);
+        } finally {
+          setIsLoading(false); // Hide loading spinner
+        }
+      };
 
   const steps = [
     "Insurance Company",
@@ -104,7 +172,20 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
           >
             Prev
           </button>
+
+          {currentStep === steps.length -1 ? 
+          
           <button
+          onClick={() =>{
+            handleSubmit()
+          } }
+          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+        
+        >
+          Submit
+        </button>:
+        
+        <button
             onClick={handleNext}
             disabled={currentStep === steps.length - 1}
             className={`px-4 py-2 rounded-lg ${
@@ -115,10 +196,109 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
           >
             Next
           </button>
+        
+        }
+
+          
         </div>
         </div>
        
       </div>
+
+                  {/* Loading Spinner */}
+                  {isLoading && (
+                <div className="mt-4 text-center">
+                    <p className="text-green-500 font-medium">Submitting, please wait...</p>
+                </div>
+            )}
+
+       
+
+
+            <ModalGeneral isOpen={sessionExpired} onClose={() => { setSessionExpired(false) }}>
+                <div className='text-black  text-center flex flex-col items-center p-5'>
+                    <Image
+                        src={logo}
+                        alt="Logo"
+                        width={200}
+                        height={200}
+                        className="h-auto "
+                        priority
+
+                    />
+                    <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-red-700">
+                        <p>Your session has expired. Please log in again.</p>
+                        <button
+                            onClick={() => {
+                                localStorage.removeItem('accessToken'); // Clear token
+                                router.push('/auth/login'); // Redirect to login page
+                            }}
+                            className="mt-2 py-2 px-4 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
+                        >
+                            Login Again
+                        </button>
+                    </div>
+                </div>
+            </ModalGeneral>
+
+            <ModalGeneral isOpen={errorMessage != ''} onClose={() => { setErrorMessage("") }}>
+                <div className='text-black  text-center flex flex-col items-center p-5'>
+                    <Image
+                        src={logo}
+                        alt="Logo"
+                        width={200}
+                        height={200}
+                        className="h-auto "
+                        priority
+
+                    />
+                    <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-red-700">
+                        <p>{errorMessage}</p>
+                        <button
+                            onClick={() => {
+                                setErrorMessage("");
+                                clearInsuranceApplication()
+                                setCurrentStep(0)
+                                onClose() // Clear error message
+                            }}
+                            className="mt-2 py-2 px-4 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </ModalGeneral>
+            
+            <ModalGeneral isOpen={successMessage != ''} onClose={() => { setSuccessMessage("") }}>
+                <div className='text-black  text-center flex flex-col items-center p-5'>
+                    <Image
+                        src={logo}
+                        alt="Logo"
+                        width={200}
+                        height={200}
+                        className="h-auto "
+                        priority
+
+                    />
+                       {/* Success Message Dialog */}
+            {successMessage && (
+                <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
+                    <p>{successMessage}</p>
+                    <button
+                            onClick={() => {
+                              setSuccessMessage("");
+                              clearInsuranceApplication()
+                              setCurrentStep(0)
+                              onClose() // Clear error message
+                            }}
+                            className="mt-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+                        >
+                            ok
+                        </button>
+                </div>
+            )}
+                </div>
+            </ModalGeneral>
     </div>
   );
 };

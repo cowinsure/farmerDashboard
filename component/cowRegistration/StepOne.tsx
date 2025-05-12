@@ -17,7 +17,7 @@ interface ResponseData {
 }
 
 export default function StepOne() {
-   const {data, updateStep, validateStep, reset } = useCowRegistration();
+  const { data, updateStep, validateStep, reset } = useCowRegistration();
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -32,37 +32,37 @@ export default function StepOne() {
     try {
       setIsUploading(true);
       const response = await fetch("http://13.232.177.191:5000/register", {
-      method: "POST",
-      body: formData,
+        method: "POST",
+        body: formData,
       });
 
       if (response.status === 400) {
-      const data = await response.json();
-      console.error("Error 400:", data.message);
-      alert(`Error: ${data.message}`);
-      return;
+        const data = await response.json();
+        console.error("Error 400:", data.message);
+        alert(`Error: ${data.message}`);
+        return;
       }
 
       if (response.status === 401) {
-      const data = await response.json();
-      console.error("Error 401:", data.msg);
-      alert(`Error: ${data.msg}`);
-      return;
+        const data = await response.json();
+        console.error("Error 401:", data.msg);
+        alert(`Error: ${data.msg}`);
+        return;
       }
 
       if (response.status === 201) {
-      const data: ResponseData = await response.json(); // Use the interface for type safety
-      console.log("API Response:", data);
-      setResponseData(data);
-      updateStep({
-        reference_id: data.registration_id,
-      }); // Save the response data to state
-      alert(data.message);
-      return;
+        const data: ResponseData = await response.json(); // Use the interface for type safety
+        console.log("API Response:", data);
+        setResponseData(data);
+        updateStep({
+          reference_id: data.registration_id,
+        }); // Save the response data to state
+        alert(data.message);
+        return;
       }
 
       if (!response.ok) {
-      throw new Error("Failed to upload video");
+        throw new Error("Failed to upload video");
       }
     } catch (error) {
       console.error("Error uploading video:", error);
@@ -75,11 +75,11 @@ export default function StepOne() {
 
 
   useEffect(() => {
-      if (data?.muzzle_video) {
-        setSelectedFile(data.muzzle_video);
-      }
+    if (data?.muzzle_video) {
+      setSelectedFile(data.muzzle_video);
+    }
   }, [data]);
-   // Add an empty dependency array to ensure it runs only once
+  // Add an empty dependency array to ensure it runs only once
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>
@@ -87,20 +87,20 @@ export default function StepOne() {
         <div className="lg:w-1/2 w-full flex flex-col justify-center items-center">
           <UploadVideo
             onVideoCapture={(file) => {
-                updateStep({
-                  muzzle_video: file,
-                });
+              updateStep({
+                muzzle_video: file,
+              });
               setSelectedFile(file); // Save the selected file to state
             }}
           />
-          
-          
-          <button onClick={()=>{
-              if (selectedFile) {
-                handleVideoUpload(selectedFile); // Call the upload function when the video is captured
-              } else {
-                alert("Please select a video file before uploading.");
-              }
+
+
+          <button onClick={() => {
+            if (selectedFile) {
+              handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+            } else {
+              alert("Please select a video file before uploading.");
+            }
 
           }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
             {isUploading ? "Uploading..." : "Register Cow"}
@@ -125,8 +125,8 @@ export default function StepOne() {
               <p><strong>Geo Location:</strong> {responseData.geo_location}</p>
               <p><strong>Date:</strong> {responseData.date}</p>
               <p><strong>No. of Frames:</strong> {responseData.no_of_frames}</p>
-                <p><strong>Image:</strong></p>
-                {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
+              <p><strong>Image:</strong></p>
+              {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
               <p><strong>Message:</strong> {responseData.message}</p>
             </div>
           )}

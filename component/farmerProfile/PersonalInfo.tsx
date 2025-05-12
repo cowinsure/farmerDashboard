@@ -220,7 +220,7 @@ const PersonalInfo: React.FC = () => {
                     )}
                     {profileImageUrl && (
                         <div className="mt-4">
-                            <h3 className="text-center text-sm font-medium w-auto">NID Front</h3>
+                            <h3 className="text-center text-sm font-medium w-auto">Profile Image</h3>
                             <Image
                                 src={profileImageUrl}
                                 alt="NID Front"

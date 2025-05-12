@@ -14,7 +14,8 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
     const [loading, setLoading] = useState(true)  // Track loading state
 
     useEffect(() => {
-      if (!auth?.userId) {
+      const userid =    localStorage.getItem("userId");
+      if (!userid) {
         console.log('No userId found, redirecting to login...');
         setLoading(false)
         router.push('/auth/login')  // Set loading to false before redirecting

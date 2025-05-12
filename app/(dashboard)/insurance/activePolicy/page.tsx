@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Eye, FileText } from "lucide-react"
@@ -35,74 +34,12 @@ interface InsuranceData {
   claim_status: string;
 }
 
-export default function CattleManagementPage() {
+export default function InsuranceActivePolicy() {
   const [insuranceData, setInsuranceData] = useState<InsuranceData[]>([]);
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
 
-  const cattleData = [
-    {
-      id: 1,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 2,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 3,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 4,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-  ]
 
  // Fetch insurance data from the API
  useEffect(() => {
@@ -150,7 +87,7 @@ export default function CattleManagementPage() {
 
   return (
     <div className=" mx-auto py-8 px-4">
-      <h1 className="text-2xl font-bold mb-6 text-green-700">Claim Management Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-6 text-green-700">Active Policy Management Dashboard</h1>
 
       <div className="overflow-auto max-h-[600px] text-gray-600 rounded-lg shadow-md">
         <table className="w-full">
@@ -265,8 +202,8 @@ export default function CattleManagementPage() {
                   <p className="p-2 bg-gray-100 rounded">{selectedCow.asset}</p>
                 </div>
                 <div>
-                  <p className="font-semibold mb-1">Insurance Status:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.insurance_provider}</p>
+                  <p className="font-semibold mb-1">Insurance status:</p>
+                  <p className="p-2 bg-gray-100 rounded">{selectedCow.claim_status}</p>
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Sum Insured:</p>
