@@ -16,7 +16,7 @@ interface FinancialInfo {
 const FinancialInfoByOrganization: React.FC = () => {
 
 
-  const {data, clearData, updateFinancialInfo} = useFarmerRegistration();
+  const {data, updateFinancialInfo} = useFarmerRegistration();
     
      // Fetch financial info on component mount
 const [financialInfo, setFinancialInfo] = useState<FinancialInfo>({

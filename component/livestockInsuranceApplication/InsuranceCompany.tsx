@@ -1,20 +1,7 @@
 'use client'
 import Image from 'next/image';
-
-
-
-const insuranceData = [
-    {
-        name: "Phoenix Insurance Company Limited",
-        scopeOfCover: ["Death Coverage"],
-        periodOfInsurance: ["12 month", "6 month"],
-    },
-    {
-        name: "Sena Kalyan Insurance Company Limited",
-        scopeOfCover: ["Death Coverage"],
-        periodOfInsurance: ["12 month", "6 month"],
-    },
-];
+import { useInsuranceApplication } from '@/context/InsuranceApplicationContext';
+import { useEffect, useState } from 'react';
 
 interface Premium {
     id: number;
@@ -33,29 +20,27 @@ interface InsuranceType {
     periods: Period[];
 }
 
-interface InsuranceCompany {
+interface InsuranceCategory {
     id: number;
     name: string;
-    logo: string;
     insurance_types: InsuranceType[];
 }
 
-
-
-
-import { useInsuranceApplication } from '@/context/InsuranceApplicationContext';
-import { useEffect, useState } from 'react';
+interface InsuranceCompanyData {
+    id: number;
+    name: string;
+    logo: string;
+    insurance_categories: InsuranceCategory[];
+}
 
 const InsuranceCompany: React.FC = () => {
-    const { updateInsuranceApplication, clearInsuranceApplication } = useInsuranceApplication()
+    const { updateInsuranceApplication } = useInsuranceApplication()
 
-    const [insuranceCompanies, setInsuranceCompanies] = useState<InsuranceCompany[]>([]); // State to store insurance companies
+    const [insuranceCompanies, setInsuranceCompanies] = useState<InsuranceCompanyData[]>([]);
     const [selectedCompany, setSelectedCompany] = useState<number | null>(null);
     const [selectedInsuranceType, setSelectedInsuranceType] = useState<number | null>(null);
     const [selectedPeriod, setSelectedPeriod] = useState<number | null>(null);
-    
 
-    // Fetch insurance companies from the API
     useEffect(() => {
         const fetchInsuranceCompanies = async () => {
             const accessToken = localStorage.getItem('accessToken');
@@ -77,7 +62,7 @@ const InsuranceCompany: React.FC = () => {
 
                 if (response.ok) {
                     console.log('Insurance companies fetched successfully:', result.data);
-                    setInsuranceCompanies(result.data); // Update the state with API data
+                    setInsuranceCompanies(result.data);
                 } else {
                     console.error('Failed to fetch insurance companies:', result);
                 }
@@ -92,24 +77,30 @@ const InsuranceCompany: React.FC = () => {
     const handleCompanySelection = (companyId: number) => {
         const selectedCompanyData = insuranceCompanies.find((company) => company.id === companyId);
         setSelectedCompany(companyId);
+        setSelectedInsuranceType(null);
+        setSelectedPeriod(null);
 
-        // Update the context with the selected company name
-        if (selectedCompanyData) {
+        if (selectedCompanyData && selectedCompanyData.insurance_categories.length > 0) {
+            const category = selectedCompanyData.insurance_categories[0]; // Get the first category
             updateInsuranceApplication({
-                insurance_provider: companyId,
+                insurance_provider: companyId.toString(),
                 insuranc_company: selectedCompanyData.name,
+                insurance_product:category.id.toString()
+                 // Add category ID to context
             });
         }
     };
 
     const handleInsuranceTypeSelection = (typeId: number) => {
-        const selectedType = insuranceCompanies
-            .find((company) => company.id === selectedCompany)
-            ?.insurance_types.find((type) => type.id === typeId);
+        const selectedCompanyData = insuranceCompanies.find((company) => company.id === selectedCompany);
+        if (!selectedCompanyData) return;
+
+        const category = selectedCompanyData.insurance_categories[0];
+        const selectedType = category?.insurance_types.find((type) => type.id === typeId);
 
         setSelectedInsuranceType(typeId);
+        setSelectedPeriod(null);
 
-        // Update the context with the selected insurance type name
         if (selectedType) {
             updateInsuranceApplication({
                 scope_of_cover: selectedType.name,
@@ -118,21 +109,22 @@ const InsuranceCompany: React.FC = () => {
     };
 
     const handlePeriodSelection = (periodId: number) => {
-        const selectedPeriodData = insuranceCompanies
-            .find((company) => company.id === selectedCompany)
-            ?.insurance_types.find((type) => type.id === selectedInsuranceType)
+        const selectedCompanyData = insuranceCompanies.find((company) => company.id === selectedCompany);
+        if (!selectedCompanyData) return;
+
+        const category = selectedCompanyData.insurance_categories[0];
+        const selectedPeriodData = category?.insurance_types
+            .find((type) => type.id === selectedInsuranceType)
             ?.periods.find((period) => period.id === periodId);
 
         setSelectedPeriod(periodId);
 
-        // Update the context with the selected period name
         if (selectedPeriodData) {
             updateInsuranceApplication({
                 insurance_duration: selectedPeriodData.name,
             });
         }
     };
-    console.log(selectedCompany);
 
     return (
         <div className="flex flex-col gap-4">
@@ -166,42 +158,51 @@ const InsuranceCompany: React.FC = () => {
                             onChange={() => handleCompanySelection(company.id)}
                         />
                     </div>
-                    <div className="mt-4">
-                        <strong className="block text-gray-700">Insurance Types:</strong>
-                        <select
-                            className="w-full border border-gray-300 bg-white rounded-md p-2 text-gray-600"
-                            value={selectedInsuranceType || ''}
-                            onChange={(e) => handleInsuranceTypeSelection(Number(e.target.value))}
-                        >
-                            <option value="" disabled>
-                                Select Insurance Type
-                            </option>
-                            {company.insurance_types.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mt-4">
-                        <strong className="block text-gray-700">Periods:</strong>
-                        <select
-                            className="w-full border border-gray-300 bg-white rounded-md p-2 text-gray-600"
-                            value={selectedPeriod || ''}
-                            onChange={(e) => handlePeriodSelection(Number(e.target.value))}
-                        >
-                            <option value="" disabled>
-                                Select Period
-                            </option>
-                            {company.insurance_types
-                                .find((type) => type.id === selectedInsuranceType)
-                                ?.periods.map((period) => (
-                                    <option key={period.id} value={period.id}>
-                                        {period.name}
+
+                    {selectedCompany === company.id && company.insurance_categories[0] && (
+                        <>
+                            <div className="mt-4">
+                                <strong className="block text-gray-700">Insurance Types:</strong>
+                                <select
+                                    className="w-full border border-gray-300 bg-white rounded-md p-2 text-gray-600"
+                                    value={selectedInsuranceType || ''}
+                                    onChange={(e) => handleInsuranceTypeSelection(Number(e.target.value))}
+                                >
+                                    <option value="" disabled>
+                                        Select Insurance Type
                                     </option>
-                                ))}
-                        </select>
-                    </div>
+                                    {company.insurance_categories[0].insurance_types.map((type) => (
+                                        <option key={type.id} value={type.id}>
+                                            {type.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {selectedInsuranceType && (
+                                <div className="mt-4">
+                                    <strong className="block text-gray-700">Periods:</strong>
+                                    <select
+                                        className="w-full border border-gray-300 bg-white rounded-md p-2 text-gray-600"
+                                        value={selectedPeriod || ''}
+                                        onChange={(e) => handlePeriodSelection(Number(e.target.value))}
+                                    >
+                                        <option value="" disabled>
+                                            Select Period
+                                        </option>
+                                        {company.insurance_categories[0]
+                                            .insurance_types
+                                            .find((type) => type.id === selectedInsuranceType)
+                                            ?.periods.map((period) => (
+                                                <option key={period.id} value={period.id}>
+                                                    {period.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             ))}
         </div>

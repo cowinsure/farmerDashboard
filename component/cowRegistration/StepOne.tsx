@@ -38,7 +38,7 @@ export default function StepOne() {
 
     try {
       setIsUploading(true);
-      const response = await fetch("http://13.232.177.191:5000/register", {
+      const response = await fetch("https://ai.insurecow.com/register", {
         method: "POST",
         body: formData,
       });

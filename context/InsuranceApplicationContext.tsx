@@ -7,10 +7,11 @@ interface InsuranceApplication {
     sum_insured: number;
     insurance_start_date: string;
     insurance_end_date: string;
-    insurance_provider: number;
+    insurance_provider: string;
     scope_of_cover:string;
     insurance_duration:string;
     insuranc_company:string
+    insurance_product:string
 }
 
 interface InsuranceApplicationContextProps {
@@ -26,10 +27,11 @@ const defaultInsuranceApplication: InsuranceApplication = {
     sum_insured: 10000.0,
     insurance_start_date: new Date().toISOString().split('T')[0],
     insurance_end_date: "2026-05-01",
-    insurance_provider: 1,
+    insurance_provider: '',
     scope_of_cover:'',
     insurance_duration:'',
-    insuranc_company:''
+    insuranc_company:'',
+    insurance_product:''
 };
 
 const InsuranceApplicationContext = createContext<InsuranceApplicationContextProps | undefined>(undefined);
