@@ -64,6 +64,8 @@ export default function InsuranceActivePolicy() {
       });
 
       const result = await response.json();
+      console.log(result);
+      
 
       if (response.ok) {
         console.log("Insurance data fetched successfully:", result.data.results);

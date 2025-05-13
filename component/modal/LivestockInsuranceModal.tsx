@@ -44,6 +44,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
             insurance_start_date: insuranceApplication.insurance_start_date,
             insurance_end_date: insuranceApplication.insurance_end_date,
             insurance_provider: insuranceApplication.insurance_provider,
+            insurance_product: insuranceApplication.insurance_product,
           },
         ];
       
@@ -287,9 +288,10 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
                     <button
                             onClick={() => {
                               setSuccessMessage("");
-                              clearInsuranceApplication()
-                              setCurrentStep(0)
-                              onClose() // Clear error message
+                              // clearInsuranceApplication()
+                             
+                              onClose() 
+                              setCurrentStep(0)// Clear error message
                             }}
                             className="mt-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
                         >
