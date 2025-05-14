@@ -15,7 +15,7 @@ interface NomineeInfo {
 }
 
 const NomineeInfoByOrganizaton: React.FC = () => {
-      const {data, clearData, updateNomineeInfo} = useFarmerRegistration();
+      const {data, updateNomineeInfo} = useFarmerRegistration();
     
     const [formData, setFormData] = useState<NomineeInfo>({
         nominee_name: '',

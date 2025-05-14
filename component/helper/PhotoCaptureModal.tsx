@@ -260,38 +260,62 @@ export default function PhotoCaptureModal({
     setCameraMode(false)
   }
 
-  // Clean up on unmount or when modal closes
+  // Add a function to clear canvas
+  const clearCanvas = () => {
+    if (canvasRef.current) {
+      const context = canvasRef.current.getContext('2d');
+      if (context) {
+        context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      }
+      // Reset canvas dimensions
+      canvasRef.current.width = 0;
+      canvasRef.current.height = 0;
+    }
+  }
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen)
+    if (!newOpen) {
+      // Reset all states when closing
+      cancelCamera()
+      resetPhoto()
+      setCameraMode(false)
+      setCameraReady(false)
+      setIsTakingPhoto(false)
+      setDragActive(false)
+      setSelectedFile(null)
+      setFacingMode("environment")
+      clearCanvas() // Add canvas clearing
+    }
+  }
+
+  // Update the cleanup effect
   useEffect(() => {
     if (!open) {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop())
       }
       setCameraMode(false)
+      clearCanvas() // Add canvas clearing
     }
 
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop())
       }
+      clearCanvas() // Add canvas clearing on unmount
     }
   }, [open])
 
   // Clean up captured photo URL when component unmounts
   useEffect(() => {
+    // setCapturedPhoto(null)
     return () => {
       if (capturedPhoto) {
         URL.revokeObjectURL(capturedPhoto)
       }
     }
   }, [capturedPhoto])
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen)
-    if (!newOpen) {
-      // Reset state when closing
-      cancelCamera()
-    }
-  }
 
   const renderContent = () => (
     <div className="w-full">

@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { MdCancel } from "react-icons/md";
-import { FaCamera } from "react-icons/fa";
+
 import { useInsuranceApplication } from '@/context/InsuranceApplicationContext';
 
 
@@ -37,15 +36,15 @@ interface Asset {
     purchase_amount: string;
 }
 const AddCattleForm: React.FC = () => {
-    const [capturedCows, setCapturedCows] = useState<string[]>(["cow1", "cow2", "cow3"]);
+    // const [capturedCows, setCapturedCows] = useState<string[]>(["cow1", "cow2", "cow3"]);
     const [assetList, setAssetList] = useState<Asset[]>([]); // State to store the asset list
     const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null); // State to store the selected asset
-    const { updateInsuranceApplication, clearInsuranceApplication } = useInsuranceApplication()
+    const { updateInsuranceApplication } = useInsuranceApplication()
     const [sumInsured, setSumInsured] = useState<string>(''); // State for sum insured amount
-    const handleCaptureImage = () => {
-        const newCow = `Cow ${capturedCows.length + 1}`;
-        setCapturedCows([...capturedCows, newCow]);
-    };
+    // const handleCaptureImage = () => {
+    //     const newCow = `Cow ${capturedCows.length + 1}`;
+    //     setCapturedCows([...capturedCows, newCow]);
+    // };
 
     // Fetch asset list from the API
     useEffect(() => {

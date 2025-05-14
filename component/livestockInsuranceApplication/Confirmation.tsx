@@ -1,11 +1,11 @@
 'use client'
 import { useInsuranceApplication } from '@/context/InsuranceApplicationContext';
-import React, { useState } from 'react';
+import React, {  } from 'react';
 // import { MdCancel } from 'react-icons/md';
 
 const Confirmation: React.FC = () => {
-        const [capturedCows, setCapturedCows] = useState<string[]>(["cow1" , "cow2"]);
-            const {insuranceApplication, updateInsuranceApplication, clearInsuranceApplication } = useInsuranceApplication()
+   
+            const {insuranceApplication} = useInsuranceApplication()
         
     
     return (

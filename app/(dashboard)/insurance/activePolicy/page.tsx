@@ -6,22 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Eye, FileText } from "lucide-react"
 import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
 import StepFive from "@/component/cowRegistration/StepFive"
+import CattleVerification from "@/app/components/CattleVerification"
 
-interface Cattle {
-  id: number;
-  image: string;
-  age: string;
-  color: string;
-  cattleType: string;
-  vaccinated: string;
-  purchaseAmount: string;
-  purchaseDate: string;
-  purchaseFrom: string;
-  insurance: string;
-  scopeOfCoverage: string;
-  sumInsured: string;
-  createdBy: string;
-}
+
 
 interface InsuranceData {
   id: number;
@@ -34,6 +21,7 @@ interface InsuranceData {
   insurance_status: string;
   created_by: string;
   claim_status: string;
+  
 }
 
 export default function InsuranceActivePolicy() {
@@ -43,6 +31,8 @@ export default function InsuranceActivePolicy() {
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
       const [isModalOpen, setIsModalOpen] = useState(false);
   
+      console.log(insuranceData);
+      
 
 
  // Fetch insurance data from the API
@@ -189,110 +179,18 @@ export default function InsuranceActivePolicy() {
           )}
         </DialogContent>
       </Dialog>
-
       {/* Claim Form Dialog */}
-      <Dialog open={isClaimForm} onOpenChange={setIsClaimForm}>
-        <DialogContent className="">
-          <DialogHeader>
-            <DialogTitle className="text-green-700">Submit Insurance Claim</DialogTitle>
-          </DialogHeader>
-          {selectedCow && (
-            <div className="space-y-4 mt-4 max-h-[500px] lg:h-auto overflow-y-auto">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-semibold mb-1">Cattle ID:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.id}</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Cattle Type:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.asset}</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Insurance status:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.claim_status}</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Sum Insured:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.sum_insured}</p>
-                </div>
-              </div>
-
-               <div className="flex lg:flex-row flex-col gap-1 items-center">
-                                  <PhotoCaptureModal
-                                      onPhotoCapture={(file) =>{}
-                                        //  updateImage( "left_side_image",file)
-                                    
-                                        }
-                                      triggerText="Muzzel Verification"
-                                      title="Muzzel Verification"
-                                  />
-                                  {/* {images.left_side_image && (
-                                      <div className="mt-2 mb-4">
-                                          <h3 className="text-center text-sm font-medium">Left Side Image</h3>
-                                          <img
-                                              src={getPreviewUrl(images.left_side_image)!}
-                                              alt="Side Image"
-                                              className="w-32 h-32 object-cover border rounded"
-                                          />
-                                      </div>
-                                  )} */}
-                              </div>
-
-              <div className="space-y-4 mt-6">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Claim Reason</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-md">
-                    <option value="">Select reason</option>
-                    <option value="death">Death</option>
-                    <option value="illness">Illness</option>
-                    <option value="injury">Injury</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Claim Date</label>
-                  <input type="date" className="w-full p-2 border border-gray-300 rounded-md" />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Claim Description</label>
-                  <textarea
-                    className="w-full p-2 border border-gray-300 rounded-md h-24"
-                    placeholder="Provide details about the claim..."
-                  ></textarea>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Supporting Documents</label>
-                  <div className="border border-dashed border-gray-300 rounded-md p-4 text-center">
-                    {/* <p className="text-sm text-gray-500">Drag and drop files here or click to upload</p>
-                    <input type="file" className="hidden" id="file-upload" multiple />
-                    <label
-                      htmlFor="file-upload"
-                      className="mt-2 inline-block px-4 py-2 bg-green-700 text-white rounded-md cursor-pointer hover:bg-green-800"
-                    >
-                      Upload Files
-                    </label> */}
-                    <StepFive/>
-                  </div>
-                </div>
-
-                <div className="flex justify-end space-x-2 mt-6">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsClaimForm(false)}
-                    className="border-green-700 text-green-700 hover:bg-green-50"
-                  >
-                    Cancel
-                  </Button>
-                  <Button className="bg-green-700 hover:bg-green-800">Submit Claim</Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <CattleVerification 
+        isOpen={isClaimForm} 
+        onClose={() => setIsClaimForm(false)} 
+        selectedCow={selectedCow}
+        // selectedCow={selectedCow || {
+        //   id: '',
+        //   asset: '',
+        //   claim_status: '',
+        //   sum_insured: ''
+        // }} 
+      />
     </div>
   )
 }
