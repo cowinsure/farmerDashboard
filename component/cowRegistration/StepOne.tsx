@@ -27,21 +27,52 @@ export default function StepOne() {
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+ const [accessToken , setAccessToken] = useState('')
 
   const handleVideoUpload = async (file: File) => {
     setModalOpen(false)
-
+   
     console.log("Video file captured:", file);
 
     const formData = new FormData();
     formData.append("video", file); // Append the video file to the form data
+
+     try {
+        const response = await fetch("https://ai.insurecow.com/test", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setAccessToken(result.data.results)
+          localStorage.setItem('ai_access_token',result.data.results)
+          console.log("Asset types fetched successfully:", result.data.results);
+          // setAssetTypes(result.data.results); // Update the assetTypes state with API data
+        } else {
+          console.error("Failed to fetch asset types:", result);
+        }
+      } catch (error) {
+        console.error("Error fetching asset types:", error);
+      }
+
+
 
     try {
       setIsUploading(true);
       const response = await fetch("https://ai.insurecow.com/register", {
         method: "POST",
         body: formData,
+         headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
       });
+      // 3.110.218.87:8000
 
       if (response.status === 400) {
         const data = await response.json();
