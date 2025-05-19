@@ -1,14 +1,16 @@
 "use client";
 
+
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal";
-import { useState } from "react";
 import { Upload, X, Eye, File, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import UploadVideo from "@/component/helper/UploadVedio";
 
 interface MuzzleResponse {
   geo_location: string;
-  matched_id: string | null;
+  matched_id: string ;
   msg: string;
   segmentation_image: string;
 }
@@ -24,6 +26,20 @@ interface CattleVerificationProps {
   } | null;
 }
 
+// Define an interface for the response data
+interface ResponseData {
+  animal_name: string;
+  registration_id: string;
+  geo_location: string;
+  date: string;
+  no_of_frames: number;
+  image_url: string;
+  msg: string;
+  matched_id:string
+}
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
+
+
 export default function CattleVerification({
   isOpen,
   onClose,
@@ -33,7 +49,7 @@ export default function CattleVerification({
     reason: "",
     date: "",
     description: "",
-    muzzleImage: null as File | null,
+    claim_muzzle: null as File | null,
     claimDocuments: [] as File[],
     reference_id: "",
   });
@@ -43,6 +59,19 @@ export default function CattleVerification({
   const [muzzleUploadSuccess, setMuzzleUploadSuccess] = useState(false);
   const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(null);
+
+
+  const [accessToken , setAccessToken] = useState(jwt)
+
+    const [isUploading, setIsUploading] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+      const [isModalErrorOpen, setErrorModalOpen] = useState(false);
+        const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
+      
+    
+
+    const [isModalOpen, setModalOpen] = useState(false);
+  
 
   const handleDocumentsChange = (files: FileList | null) => {
     if (files) {
@@ -69,7 +98,101 @@ export default function CattleVerification({
   };
 
   console.log(formData);
-  
+
+    const handleVideoUpload = async (file: File) => {
+    setModalOpen(false)
+   
+    console.log("Video file captured:", file);
+
+    const formData = new FormData();
+    formData.append("video", file); // Append the video file to the form data
+   setFormData(prev => ({
+        ...prev,
+        claim_muzzle: file
+      }));
+      
+      
+    //  try {
+    //     const response = await fetch("https://ai.insurecow.com/test", {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         // Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     });
+
+    //     const result = await response.json();
+
+    //     if (response.ok) {
+    //       setAccessToken(result.data.results)
+    //       localStorage.setItem('ai_access_token',result.data.results)
+    //       console.log("Asset types fetched successfully:", result.data.results);
+    //       // setAssetTypes(result.data.results); // Update the assetTypes state with API data
+    //     } else {
+    //       console.error("Failed to fetch asset types:", result);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching asset types:", error);
+    //   }
+
+
+    console.log(accessToken);
+    
+    try {
+      setIsUploading(true);
+      const response = await fetch("https://ai.insurecow.com/claim", {
+        method: "POST",
+        body: formData,
+         headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+      });
+      // 3.110.218.87:8000
+
+      // console.log(await response.json());
+      
+
+      if (response.status === 400) {
+        const data = await response.json();
+        setErrorModalOpen(true)
+        console.error("Error 400:", data.msg);
+        alert(`Error: ${data.msg}`);
+        return;
+      }
+
+      if (response.status === 401) {
+        const data = await response.json();
+        console.error("Error 401:", data.msg);
+        alert(`Error: ${data.msg}`);
+        return;
+      }
+
+      if (response.status === 200) {
+        const data: MuzzleResponse = await response.json(); // Use the interface for type safety
+        console.log("API Response:", data);
+        setMuzzleResponse(data);
+        // setResponseData(data);
+        setModalOpen(true)
+         setFormData(prev => ({
+        ...prev,
+        reference_id: data.matched_id
+      })); // Save the response data to state
+        // alert(data.msg);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to upload video");
+      }
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      alert("Something went wrong: " + error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
 
   const handleSubmit = async () => {
     if (!selectedCow) return;
@@ -77,19 +200,22 @@ export default function CattleVerification({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("cattle_id", selectedCow.id.toString());
+      formDataToSend.append("asset_insurance", selectedCow.id.toString());
       formDataToSend.append("reason", formData.reason);
-      formDataToSend.append("claim_date", formData.date);
-      formDataToSend.append("description", formData.description);
+      formDataToSend.append("claim_date", new Date().toISOString());
+      formDataToSend.append("remarks", formData.description);
       formDataToSend.append("reference_id", formData.reference_id);
-      
-      if (formData.muzzleImage) {
-        formDataToSend.append("muzzle_image", formData.muzzleImage);
+
+      if (formData.claim_muzzle) {
+        formDataToSend.append("claim_muzzle", formData.claim_muzzle);
       }
-      
+
       formData.claimDocuments.forEach((doc) => {
         formDataToSend.append(`claim_documents`, doc);
       });
+
+     console.log(formDataToObject(formDataToSend));
+      
 
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-claim/`, {
@@ -112,12 +238,27 @@ export default function CattleVerification({
     }
   };
 
+  function formDataToObject(formData: FormData): { [key: string]: any } {
+  const obj: { [key: string]: any } = {};
+  formData.forEach((value, key) => {
+    if (obj[key] !== undefined) {
+      if (!Array.isArray(obj[key])) {
+        obj[key] = [obj[key]];
+      }
+      obj[key].push(value);
+    } else {
+      obj[key] = value;
+    }
+  });
+  return obj;
+}
+
   async function uploadmuzzelImageForClaim(file: File) {
     setIsMuzzleUploading(true);
     setMuzzleUploadSuccess(false);
     setMuzzleResponse(null);
     setVerificationError(null);
-    
+
     try {
       const formData = new FormData();
       formData.append('image', file);
@@ -185,65 +326,36 @@ export default function CattleVerification({
               </div>
 
               <div className="flex  lg:flex-col flex-col gap-1 items-center">
-                <PhotoCaptureModal
-                  onPhotoCapture={async (file) => {
-                    try {
-                      setFormData(prev => ({ ...prev, muzzleImage: file }));
-                      await uploadmuzzelImageForClaim(file);
-                    } catch (error) {
-                      console.error('Failed to process muzzle image:', error);
-                      setFormData(prev => ({ ...prev, muzzleImage: null }));
-                    }
+                <UploadVideo
+                  onVideoCapture={(file) => {
+                    // updateStep({
+                    //   muzzle_video: file,
+                    // });
+                    setSelectedFile(file); // Save the selected file to state
                   }}
-                  triggerText="Muzzle Verification"
-                  title="Muzzle Verification"
                 />
-                {formData.muzzleImage && (
-                  <div className="flex flex-col items-center gap-2 mt-2">
-                    <div className="flex items-center gap-2">
-                      {isMuzzleUploading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin text-green-600" />
-                          <span className="text-sm text-green-600">Uploading muzzle image...</span>
-                        </>
-                      ) : verificationError ? (
-                        <>
-                          <AlertCircle className="h-4 w-4 text-red-600" />
-                          <span className="text-sm text-red-600">{verificationError}</span>
-                        </>
-                      ) : muzzleUploadSuccess ? (
-                        <>
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span className="text-sm text-green-600">{muzzleResponse?.msg}</span>
-                        </>
-                      ) : (
-                        <span className="text-sm text-yellow-600">Processing muzzle image...</span>
-                      )}
-                    </div>
+                 <button onClick={() => {
+            if (selectedFile) {
+              handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+            } else {
+              alert("Please select a video file before uploading.");
+            }
 
-                    <div className="flex gap-4 items-start">
-                      {/* Original Image */}
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="text-sm font-medium">Original Image</span>
-                        <div className="relative w-40 h-40 border rounded-lg overflow-hidden">
-                          <img 
-                            src={URL.createObjectURL(formData.muzzleImage)} 
-                            alt="Muzzle Preview" 
-                            className="w-full h-full object-cover"
-                          />
-                          {isMuzzleUploading && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                              <Loader2 className="h-8 w-8 animate-spin text-white" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
+          }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
+            {isUploading ? "Uploading..." : "Claim Cow"}
+          </button>
+              </div>
 
-                      {/* Segmentation Image */}
-                      {muzzleResponse?.segmentation_image && (
+
+            {muzzleResponse && (
+                <div className="mt-6"> 
+                <div className="flex flex-col items-center justify-between gap-2">
+                <p className="text-center text-green-500">  Muzzel Detection Successful</p>
+                  {muzzleResponse?.matched_id}
+                  {muzzleResponse?.segmentation_image && (
                         <div className="flex flex-col items-center gap-2">
                           <span className="text-sm font-medium">Processed Image</span>
-                          <div className={`w-40 h-40 border rounded-lg overflow-hidden ${verificationError ? 'border-red-200' : ''}`}>
+                          <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
                             <img 
                               src={muzzleResponse.segmentation_image}
                               alt="Segmentation Preview" 
@@ -252,37 +364,14 @@ export default function CattleVerification({
                           </div>
                         </div>
                       )}
-                    </div>
-
-                    {muzzleResponse && !verificationError && (
-                      <div className="text-sm text-gray-600 mt-2">
-                        <p>Location: {muzzleResponse.geo_location}</p>
-                        {muzzleResponse.matched_id && <p>Matched ID: {muzzleResponse.matched_id}</p>}
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => {
-                        setFormData(prev => ({ ...prev, muzzleImage: null, reference_id: '' }));
-                        setMuzzleUploadSuccess(false);
-                        setMuzzleResponse(null);
-                        setVerificationError(null);
-                      }}
-                      className="p-1 hover:bg-gray-200 rounded text-sm text-red-600 flex items-center gap-1"
-                      title="Remove muzzle image"
-                      disabled={isMuzzleUploading}
-                    >
-                      <X className="h-4 w-4" />
-                      Remove Image
-                    </button>
-                  </div>
-                )}
-              </div>
+                </div>
+                 </div>
+            )}
 
               <div className="space-y-4 mt-6">
                 <div>
                   <label className="block text-sm font-medium mb-1">Claim Reason</label>
-                  <select 
+                  <select
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={formData.reason}
                     onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
@@ -297,13 +386,14 @@ export default function CattleVerification({
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Claim Date</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={formData.date}
                     onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
                   />
                 </div>
+ 
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Claim Description</label>
@@ -337,7 +427,7 @@ export default function CattleVerification({
                     {formData.claimDocuments.length > 0 && (
                       <div className="mt-4 grid grid-cols-2 gap-2">
                         {formData.claimDocuments.map((doc, index) => (
-                          <div 
+                          <div
                             key={index}
                             className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200"
                           >
@@ -377,7 +467,7 @@ export default function CattleVerification({
                   >
                     Cancel
                   </Button>
-                  <Button 
+                  <Button
                     className="bg-green-700 hover:bg-green-800"
                     onClick={handleSubmit}
                     disabled={isSubmitting}

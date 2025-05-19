@@ -74,20 +74,20 @@ export default function UploadVideo({ onVideoCapture }: { onVideoCapture?: (file
       });
     }
   }
-  useEffect(() => {
-    if (data?.muzzle_video) {
-      setSelectedFile(data.muzzle_video);
+  // useEffect(() => {
+  //   if (data?.muzzle_video) {
+  //     setSelectedFile(data.muzzle_video);
 
-      // Create a video URL and set it to the recordedVideo state
-      const videoUrl = URL.createObjectURL(data.muzzle_video);
-      setRecordedVideo(videoUrl);
+  //     // Create a video URL and set it to the recordedVideo state
+  //     const videoUrl = URL.createObjectURL(data.muzzle_video);
+  //     setRecordedVideo(videoUrl);
 
-      // Clean up the object URL when the component unmounts
-      return () => {
-        URL.revokeObjectURL(videoUrl);
-      };
-    }
-  }, [data]);
+  //     // Clean up the object URL when the component unmounts
+  //     return () => {
+  //       URL.revokeObjectURL(videoUrl);
+  //     };
+  //   }
+  // }, [data]);
 
 
   // Reset video and go back to upload state

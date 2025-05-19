@@ -1,0 +1,97 @@
+               
+                 const [isMuzzleUploading, setIsMuzzleUploading] = useState(false);
+                 const [muzzleUploadSuccess, setMuzzleUploadSuccess] = useState(false);
+                 const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
+                 const [verificationError, setVerificationError] = useState<string | null>(null);
+               {/* <PhotoCaptureModal
+                  onPhotoCapture={async (file) => {
+                    try {
+                      setFormData(prev => ({ ...prev, muzzleImage: file }));
+                      await uploadmuzzelImageForClaim(file);
+                    } catch (error) {
+                      console.error('Failed to process muzzle image:', error);
+                      setFormData(prev => ({ ...prev, muzzleImage: null }));
+                    }
+                  }}
+                  triggerText="Muzzle Verification"
+                  title="Muzzle Verification"
+                /> */}
+              {formData.muzzleImage && (
+                  <div className="flex flex-col items-center gap-2 mt-2">
+                    <div className="flex items-center gap-2">
+                      {isMuzzleUploading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin text-green-600" />
+                          <span className="text-sm text-green-600">Uploading muzzle image...</span>
+                        </>
+                      ) : verificationError ? (
+                        <>
+                          <AlertCircle className="h-4 w-4 text-red-600" />
+                          <span className="text-sm text-red-600">{verificationError}</span>
+                        </>
+                      ) : muzzleUploadSuccess ? (
+                        <>
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span className="text-sm text-green-600">{muzzleResponse?.msg}</span>
+                        </>
+                      ) : (
+                        <span className="text-sm text-yellow-600">Processing muzzle image...</span>
+                      )}
+                    </div>
+
+                    <div className="flex gap-4 items-start">
+                      {/* Original Image */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-sm font-medium">Original Image</span>
+                        <div className="relative w-40 h-40 border rounded-lg overflow-hidden">
+                          <img 
+                            src={URL.createObjectURL(formData.muzzleImage)} 
+                            alt="Muzzle Preview" 
+                            className="w-full h-full object-cover"
+                          />
+                          {isMuzzleUploading && (
+                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                              <Loader2 className="h-8 w-8 animate-spin text-white" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Segmentation Image */}
+                      {muzzleResponse?.segmentation_image && (
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="text-sm font-medium">Processed Image</span>
+                          <div className={`w-40 h-40 border rounded-lg overflow-hidden ${verificationError ? 'border-red-200' : ''}`}>
+                            <img 
+                              src={muzzleResponse.segmentation_image}
+                              alt="Segmentation Preview" 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {muzzleResponse && !verificationError && (
+                      <div className="text-sm text-gray-600 mt-2">
+                        <p>Location: {muzzleResponse.geo_location}</p>
+                        {muzzleResponse.matched_id && <p>Matched ID: {muzzleResponse.matched_id}</p>}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, muzzleImage: null, reference_id: '' }));
+                        setMuzzleUploadSuccess(false);
+                        setMuzzleResponse(null);
+                        setVerificationError(null);
+                      }}
+                      className="p-1 hover:bg-gray-200 rounded text-sm text-red-600 flex items-center gap-1"
+                      title="Remove muzzle image"
+                      disabled={isMuzzleUploading}
+                    >
+                      <X className="h-4 w-4" />
+                      Remove Image
+                    </button>
+                  </div>
+                )}

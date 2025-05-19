@@ -17,17 +17,19 @@ interface ResponseData {
   date: string;
   no_of_frames: number;
   image_url: string;
-  message: string;
+  msg: string;
 }
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
 
 export default function StepOne() {
   const router = useRouter()
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalErrorOpen, setErrorModalOpen] = useState(false);
   const { data, updateStep, validateStep, reset } = useCowRegistration();
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
- const [accessToken , setAccessToken] = useState('')
+ const [accessToken , setAccessToken] = useState(jwt)
 
   const handleVideoUpload = async (file: File) => {
     setModalOpen(false)
@@ -37,31 +39,32 @@ export default function StepOne() {
     const formData = new FormData();
     formData.append("video", file); // Append the video file to the form data
 
-     try {
-        const response = await fetch("https://ai.insurecow.com/test", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${accessToken}`,
-          },
-        });
+    //  try {
+    //     const response = await fetch("https://ai.insurecow.com/test", {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         // Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     });
 
-        const result = await response.json();
+    //     const result = await response.json();
 
-        if (response.ok) {
-          setAccessToken(result.data.results)
-          localStorage.setItem('ai_access_token',result.data.results)
-          console.log("Asset types fetched successfully:", result.data.results);
-          // setAssetTypes(result.data.results); // Update the assetTypes state with API data
-        } else {
-          console.error("Failed to fetch asset types:", result);
-        }
-      } catch (error) {
-        console.error("Error fetching asset types:", error);
-      }
+    //     if (response.ok) {
+    //       setAccessToken(result.data.results)
+    //       localStorage.setItem('ai_access_token',result.data.results)
+    //       console.log("Asset types fetched successfully:", result.data.results);
+    //       // setAssetTypes(result.data.results); // Update the assetTypes state with API data
+    //     } else {
+    //       console.error("Failed to fetch asset types:", result);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching asset types:", error);
+    //   }
 
 
-
+    console.log(accessToken);
+    
     try {
       setIsUploading(true);
       const response = await fetch("https://ai.insurecow.com/register", {
@@ -74,10 +77,14 @@ export default function StepOne() {
       });
       // 3.110.218.87:8000
 
+      // console.log(await response.json());
+      
+
       if (response.status === 400) {
         const data = await response.json();
-        console.error("Error 400:", data.message);
-        alert(`Error: ${data.message}`);
+        setErrorModalOpen(true)
+        console.error("Error 400:", data.msg);
+        alert(`Error: ${data.msg}`);
         return;
       }
 
@@ -88,7 +95,7 @@ export default function StepOne() {
         return;
       }
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         const data: ResponseData = await response.json(); // Use the interface for type safety
         console.log("API Response:", data);
         setResponseData(data);
@@ -96,7 +103,7 @@ export default function StepOne() {
         updateStep({
           reference_id: data.registration_id,
         }); // Save the response data to state
-        alert(data.message);
+        // alert(data.msg);
         return;
       }
 
@@ -170,21 +177,56 @@ export default function StepOne() {
                 priority
 
               />
+              <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
+                <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                  <h3 className="text-xl font-semibold mb-2">Registration Result</h3>
+                  <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
+                  <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
+                  {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
+                  {/* <p><strong>Date:</strong> {responseData?.date}</p> */}
+                  {/* <p><strong>No. of Frames:</strong> {responseData?.no_of_frames}</p> */}
+                  {/* <p><strong>Image:</strong></p> */}
+                  {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
+                  <p><strong>Message:</strong> {responseData?.msg}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setModalOpen(false) // Clear error message
+                  }}
+                  className="mt-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </ModalGeneral>
+
+                    <ModalGeneral isOpen={isModalErrorOpen} onClose={() => { setErrorModalOpen(false) }}>
+            <div className='text-black  text-center flex flex-col items-center p-5'>
+              <Image
+                src={logo}
+                alt="Logo"
+                width={200}
+                height={200}
+                className="h-auto "
+                priority
+
+              />
               <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-red-700">
                 <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
                   <h3 className="text-xl font-semibold mb-2">Registration Result</h3>
                   <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
                   <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
                   {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
-                  <p><strong>Date:</strong> {responseData?.date}</p>
+                  {/* <p><strong>Date:</strong> {responseData?.date}</p> */}
                   {/* <p><strong>No. of Frames:</strong> {responseData?.no_of_frames}</p> */}
                   {/* <p><strong>Image:</strong></p> */}
                   {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
-                  <p><strong>Message:</strong> {responseData?.message}</p>
+                  <p><strong>Message:</strong> {responseData?.msg}</p>
                 </div>
                 <button
                   onClick={() => {
-                    setModalOpen(false) // Clear error message
+                    setErrorModalOpen(false) // Clear error message
                   }}
                   className="mt-2 py-2 px-4 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
                 >
