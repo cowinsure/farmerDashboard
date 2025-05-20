@@ -4,12 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import ModalGeneral from '@/component/modal/DialogGeneral';
 import { CiSquarePlus } from "react-icons/ci";
+import { CiSearch } from "react-icons/ci";
 import Link from 'next/link';
 // import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 // import { DialogHeader } from '@/component/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import SearchCow from '@/app/components/SearchCow';
+import UploadVideo from '@/component/helper/UploadVedio';
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 interface Asset {
@@ -44,47 +47,68 @@ interface Asset {
     image_with_owner: string;
 }
 
+interface MuzzleResponse {
+  geo_location: string;
+  matched_id: string ;
+  msg: string;
+  segmentation_image: string;
+}
+
 const FarmerPage: React.FC = () => {
-     const { userId } = useAuth();
+    const { userId } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isMuzzelModalOpen, setIsMuzzelModalOpen] = useState(false);
     const [isCowDetails, setIsCowDetails] = useState(false);
     const [assetList, setAssetList] = useState<any[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
+
+const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
+
+  const [formData, setFormData] = useState({
+    reason: "",
+    date: "",
+    description: "",
+    claim_muzzle: null as File | null,
+    claimDocuments: [] as File[],
+    reference_id: "",
+  });
     // const [isClaimForm, setIsClaimForm] = useState(false)
     const [selectedCow, setSelectedCow] = useState<{
-      id: number;
-      owner: string;
-      asset_type: string;
-      breed: string;
-      color: string;
-      age_in_months: number;
-      weight_kg: string;
-      height: string;
-      vaccination_status: string;
-      last_vaccination_date: string;
-      deworming_status: string;
-      last_deworming_date: string;
-      is_active: boolean;
-      remarks: string;
-      gender: string;
-      purchase_date: "",
-      purchase_from: "",
-      purchase_amount: "",
-      reference_id: string;
-      created_at: string;
-      updated_at: string;
-      muzzle_video: string;
-      left_side_image: string;
-      right_side_image: string;
-      challan_paper: string;
-      vet_certificate: string;
-      chairman_certificate: string;
-      special_mark: string;
-      image_with_owner: string;
+        id: number;
+        owner: string;
+        asset_type: string;
+        breed: string;
+        color: string;
+        age_in_months: number;
+        weight_kg: string;
+        height: string;
+        vaccination_status: string;
+        last_vaccination_date: string;
+        deworming_status: string;
+        last_deworming_date: string;
+        is_active: boolean;
+        remarks: string;
+        gender: string;
+        purchase_date: "",
+        purchase_from: "",
+        purchase_amount: "",
+        reference_id: string;
+        created_at: string;
+        updated_at: string;
+        muzzle_video: string;
+        left_side_image: string;
+        right_side_image: string;
+        challan_paper: string;
+        vet_certificate: string;
+        chairman_certificate: string;
+        special_mark: string;
+        image_with_owner: string;
     } | null>(null);
 
-     // Fetch asset list from the API
-     useEffect(() => {
+    // Fetch asset list from the API
+    useEffect(() => {
         const fetchAssetList = async () => {
             const accessToken = localStorage.getItem('accessToken');
             if (!accessToken) {
@@ -117,61 +141,111 @@ const FarmerPage: React.FC = () => {
         fetchAssetList();
     }, []);
 
+      const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
+    
 
-    const sampleData = [
-        {
-            id: 1,
-            image: "/cow1.jpg",
-            age: "2 years",
-            color: "Brown",
-            cattleType: "Stud Bulls",
-            vaccinated: "Yes",
-            purchaseAmount: "1,02,735 BDT",
-            purchaseDate: "April 5 2025",
-            purchaseFrom: "Doriapur",
-            insurance: "Active",
-            scopeOfCoverage: "Death Coverage",
-            sumInsured: "1,02,735 BDT",
-            createdBy: "Agent John",
-        },
-        {
-            id: 2,
-            image: "/cow2.jpg",
-            age: "3 years",
-            color: "Black",
-            cattleType: "Dairy Cows",
-            vaccinated: "No",
-            purchaseAmount: "85,000 BDT",
-            purchaseDate: "March 10 2025",
-            purchaseFrom: "Farmville",
-            insurance: "Inactive",
-            scopeOfCoverage: "Accident Coverage",
-            sumInsured: "85,000 BDT",
-            createdBy: "Agent Smith",
-        },
-        {
-            id: 3,
-            image: "/cow3.jpg",
-            age: "1.5 years",
-            color: "White",
-            cattleType: "Heifers",
-            vaccinated: "Yes",
-            purchaseAmount: "95,000 BDT",
-            purchaseDate: "May 15 2025",
-            purchaseFrom: "Green Pastures",
-            insurance: "Active",
-            scopeOfCoverage: "Death Coverage",
-            sumInsured: "95,000 BDT",
-            createdBy: "Agent Alice",
-        },
-    ];
+   const handleVideoUpload = async (file: File) => {
+   
+   
+    console.log("Video file captured:", file);
+
+    const formData = new FormData();
+    formData.append("video", file); // Append the video file to the form data
+   setFormData(prev => ({
+        ...prev,
+        claim_muzzle: file
+      }));
+      
+      
+    //  try {
+    //     const response = await fetch("https://ai.insurecow.com/test", {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         // Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     });
+
+    //     const result = await response.json();
+
+    //     if (response.ok) {
+    //       setAccessToken(result.data.results)
+    //       localStorage.setItem('ai_access_token',result.data.results)
+    //       console.log("Asset types fetched successfully:", result.data.results);
+    //       // setAssetTypes(result.data.results); // Update the assetTypes state with API data
+    //     } else {
+    //       console.error("Failed to fetch asset types:", result);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching asset types:", error);
+    //   }
+
+
+
+    
+    try {
+      setIsUploading(true);
+      const response = await fetch("https://ai.insurecow.com/claim", {
+        method: "POST",
+        body: formData,
+         headers: {
+            // "Content-Type": "application/json",
+            "Authorization": `Bearer ${jwt}`,
+          },
+      });
+      // 3.110.218.87:8000
+
+      // console.log(await response.json());
+      
+
+      if (response.status === 400) {
+        const data = await response.json();
+       
+        console.error("Error 400:", data.msg);
+        alert(`Error: ${data.msg}`);
+        return;
+      }
+
+      if (response.status === 401) {
+        const data = await response.json();
+        console.error("Error 401:", data.msg);
+        alert(`Error: ${data.msg}`);
+        return;
+      }
+
+      if (response.status === 200) {
+        const data: MuzzleResponse = await response.json(); // Use the interface for type safety
+        console.log("API Response:", data);
+        setMuzzleResponse(data);
+        // setResponseData(data);
+        // setModalOpen(true)
+         setFormData(prev => ({
+        ...prev,
+        reference_id: data.matched_id
+      })); 
+      setIsModalOpen(true)
+      // Save the response data to state
+        // alert(data.msg);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to upload video");
+      }
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      alert("Something went wrong: " + error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
     const handleViewDetails = (cow: Asset) => {
         setSelectedCow(cow);
         setIsCowDetails(true);
     };
 
-console.log(userId, "userId from context");
+    console.log(userId, "userId from context");
 
     return (
         <>
@@ -179,7 +253,7 @@ console.log(userId, "userId from context");
 
 
 
-          
+
 
                 {userId && userId === "Enterprise" && (
                     <button
@@ -206,12 +280,26 @@ console.log(userId, "userId from context");
                         <span>Add Cow</span>
                     </Link>
                 </button>
+                <button
+                    className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${'bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600'
+
+                        }`}
+                // onClick={() => { setIsModalOpen(true) }}
+
+                >
+                    <div onClick={() => {
+                        setIsMuzzelModalOpen(true)
+                    }} className='flex flex-row items-center justify-center'>
+                        <CiSearch size={24} className='mr-2' />
+                        <span>Search Cow</span>
+                    </div>
+                </button>
             </div>
             <div className="overflow-auto max-h-[400px]  text-gray-600  rounded-lg shadow-md ">
                 <table className="w-full  ">
                     <thead>
                         <tr className='text-white bg-green-700 sticky top-0 z-10'>
-                        <th className="p-2">Cow Image</th>
+                            <th className="p-2">Cow Image</th>
                             <th className="p-2">Asset Type</th>
                             <th className="p-2">Breed</th>
                             <th className="p-2">Color</th>
@@ -225,7 +313,7 @@ console.log(userId, "userId from context");
                         </tr>
                     </thead>
                     <tbody>
-                    {assetList.map((asset) => (
+                        {assetList.map((asset) => (
                             <tr key={asset.id} className="bg-green-100 text-center">
                                 <td className="border border-gray-100 p-2">
                                     <Image
@@ -261,56 +349,85 @@ console.log(userId, "userId from context");
                     </tbody>
                 </table>
             </div>
+
+            <ModalGeneral isOpen={isMuzzelModalOpen} onClose={() => { setIsMuzzelModalOpen(false) }}>
+                <div>
+
+                    <div className="flex  lg:flex-col flex-col gap-1 items-center">
+                        <UploadVideo
+                            onVideoCapture={(file) => {
+                                // updateStep({
+                                //   muzzle_video: file,
+                                // });
+                                setSelectedFile(file); // Save the selected file to state
+                            }}
+                        />
+                        <button onClick={() => {
+                            if (selectedFile) {
+                                handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+                            } else {
+                                alert("Please select a video file before uploading.");
+                            }
+
+                        }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
+                            {isUploading ? "Uploading..." : "Search Cow"}
+                        </button>
+                    </div>
+
+                </div>
+
+            </ModalGeneral>
+
             <ModalGeneral isOpen={isModalOpen} onClose={() => { setIsModalOpen(false) }}>
-                <div className='text-black mt-10 text-center'>Add Cow</div>
+                <SearchCow reference_id={formData.reference_id} />
             </ModalGeneral>
 
             <ModalGeneral isOpen={isCowDetails} onClose={() => { setIsCowDetails(false) }}>
-            {selectedCow && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="flex justify-center">
-                <Image
-                  src={selectedCow.image_with_owner || "/placeholder.svg"}
-                  alt="Cow"
-                  width={200}
-                  height={200}
-                  className="rounded-md"
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="grid grid-cols-2 gap-2">
-                  <p className="font-semibold">Age:</p>
-                  <p>{selectedCow?.age_in_months}</p>
+                {selectedCow && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div className="flex justify-center">
+                            <Image
+                                src={selectedCow.image_with_owner || "/placeholder.svg"}
+                                alt="Cow"
+                                width={200}
+                                height={200}
+                                className="rounded-md"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                                <p className="font-semibold">Age:</p>
+                                <p>{selectedCow?.age_in_months}</p>
 
-                  <p className="font-semibold">Color:</p>
-                  <p>{selectedCow?.color}</p>
+                                <p className="font-semibold">Color:</p>
+                                <p>{selectedCow?.color}</p>
 
-                  <p className="font-semibold">Cattle Type:</p>
-                  <p>{selectedCow?.breed}</p>
+                                <p className="font-semibold">Cattle Type:</p>
+                                <p>{selectedCow?.breed}</p>
 
-                  <p className="font-semibold">Vaccinated:</p>
-                  <p>{selectedCow?.vaccination_status}</p>
+                                <p className="font-semibold">Vaccinated:</p>
+                                <p>{selectedCow?.vaccination_status}</p>
 
-                  <p className="font-semibold">Purchase Amount:</p>
-                  <p>{selectedCow?.purchase_amount}</p>
+                                <p className="font-semibold">Purchase Amount:</p>
+                                <p>{selectedCow?.purchase_amount}</p>
 
-                  <p className="font-semibold">Purchase Date:</p>
-                  <p>{selectedCow?.purchase_date}</p>
+                                <p className="font-semibold">Purchase Date:</p>
+                                <p>{selectedCow?.purchase_date}</p>
 
-                  <p className="font-semibold">Purchase From:</p>
-                  <p>{selectedCow?.purchase_from}</p>
+                                <p className="font-semibold">Purchase From:</p>
+                                <p>{selectedCow?.purchase_from}</p>
 
-              
 
-               
 
-        
 
-                  <p className="font-semibold">Owner:</p>
-                  <p>{selectedCow?.owner}</p>
-                </div>
-              </div>
-            </div>)}
+
+
+
+                                <p className="font-semibold">Owner:</p>
+                                <p>{selectedCow?.owner}</p>
+                            </div>
+                        </div>
+                    </div>)}
             </ModalGeneral>
 
 
