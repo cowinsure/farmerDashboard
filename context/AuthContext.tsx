@@ -43,36 +43,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
 
-  useEffect(() => {
-      const verifyToken = async () => {
-        try {
-        const response = await fetch("http://localhost:8000/api/v1/auth/public/token/verify/", {
-          method: "POST",
-          headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ token: accessToken }),
-        });
+  // useEffect(() => {
+  //     const verifyToken = async () => {
+  //       try {
+  //       const response = await fetch("http://localhost:8000/api/v1/auth/public/token/verify/", {
+  //         method: "POST",
+  //         headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${accessToken}`,
+  //         },
+  //         body: JSON.stringify({ token: accessToken }),
+  //       });
 
-        if (!response.ok) {
-          const data = await response.json();
-          if (data.detail === "Token expired") {
-          alert("Session expired. Please log in again.");
-          logout();
-          }
-        }
-        } catch (error) {
-        console.error("Error verifying token:", error);
-        }
-      };
+  //       if (!response.ok) {
+  //         const data = await response.json();
+  //         if (data.detail === "Token expired") {
+  //         alert("Session expired. Please log in again.");
+  //         logout();
+  //         }
+  //       }
+  //       } catch (error) {
+  //       console.error("Error verifying token:", error);
+  //       }
+  //     };
 
-      if (accessToken) {
-        verifyToken();
-      }
+  //     if (accessToken) {
+  //       verifyToken();
+  //     }
 
 
-  },[])
+  // },[])
 
   // Function to log in the user
   const login =async (userId: string, phoneNumber: string, accessToken: string) => {

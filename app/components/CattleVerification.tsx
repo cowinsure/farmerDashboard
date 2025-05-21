@@ -1,7 +1,7 @@
 "use client";
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal";
@@ -50,7 +50,7 @@ export default function CattleVerification({
     date: "",
     description: "",
     claim_muzzle: null as File | null,
-    claimDocuments: [] as File[],
+    claim_documents: [] as File[],
     reference_id: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,6 +58,7 @@ export default function CattleVerification({
   const [isMuzzleUploading, setIsMuzzleUploading] = useState(false);
   const [muzzleUploadSuccess, setMuzzleUploadSuccess] = useState(false);
   const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
+  const [erromuzzleResponse, setErroMuzzleResponse] = useState<MuzzleResponse | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(null);
 
 
@@ -77,7 +78,7 @@ export default function CattleVerification({
     if (files) {
       setFormData(prev => ({
         ...prev,
-        claimDocuments: [...prev.claimDocuments, ...Array.from(files)]
+        claim_documents: [...prev.claim_documents, ...Array.from(files)]
       }));
     }
   };
@@ -85,7 +86,7 @@ export default function CattleVerification({
   const removeDocument = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      claimDocuments: prev.claimDocuments.filter((_, i) => i !== index)
+      claim_documents: prev.claim_documents.filter((_, i) => i !== index)
     }));
   };
 
@@ -168,6 +169,14 @@ export default function CattleVerification({
         return;
       }
 
+       if (response.status === 404) {
+        const data = await response.json();
+        setErroMuzzleResponse(data);
+        console.error("Error 401:", data.msg);
+        // alert(`Error: ${data.msg}`);
+        return;
+      }
+
       if (response.status === 200) {
         const data: MuzzleResponse = await response.json(); // Use the interface for type safety
         console.log("API Response:", data);
@@ -193,6 +202,12 @@ export default function CattleVerification({
     }
   };
 
+  useEffect(()=>{
+    setErroMuzzleResponse(null)
+    setMuzzleResponse(null)
+
+  },[])
+
 
   const handleSubmit = async () => {
     if (!selectedCow) return;
@@ -205,12 +220,13 @@ export default function CattleVerification({
       formDataToSend.append("claim_date", new Date().toISOString());
       formDataToSend.append("remarks", formData.description);
       formDataToSend.append("reference_id", formData.reference_id);
+      // formDataToSend.append("reference_id", "cow_a30735f4");
 
       if (formData.claim_muzzle) {
         formDataToSend.append("claim_muzzle", formData.claim_muzzle);
       }
 
-      formData.claimDocuments.forEach((doc) => {
+      formData.claim_documents.forEach((doc) => {
         formDataToSend.append(`claim_documents`, doc);
       });
 
@@ -221,16 +237,41 @@ export default function CattleVerification({
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-claim/`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`, 
+          // 01300820884 habib
         },
         body: formDataToSend,
       });
 
+      console.log(response.status);
+      
+
       if (response.ok) {
         onClose();
-      } else {
-        console.error("Failed to submit claim");
       }
+      
+     if (response.status === 400) {
+    const data = await response.json();
+    let errorMessage = "Failed to submit claim: ";
+
+    if (data.status === "error" && data.message) {
+        // Handle the first response body format
+        errorMessage += data.message;
+    } else if (data.statusCode === "400" && data.data && data.data.details) {
+        // Handle the second response body format
+        const details = data.data.details;
+        for (const [field, errors] of Object.entries(details)) {
+            // errorMessage += `${field}: ${errors.join(', ')} `;
+            errorMessage += data.data.message;
+        }
+    } else {
+        // Handle unexpected response body format
+        errorMessage += "Unexpected error format.";
+    }
+
+    console.log(errorMessage);
+}
+
     } catch (error) {
       console.error("Error submitting claim:", error);
     } finally {
@@ -368,6 +409,27 @@ export default function CattleVerification({
                  </div>
             )}
 
+            {erromuzzleResponse && (
+                <div className="mt-6"> 
+                <div className="flex flex-col items-center justify-between gap-2">
+                <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
+                
+                  {erromuzzleResponse?.segmentation_image && (
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="text-sm font-medium">Processed Image</span>
+                          <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
+                            <img 
+                              src={erromuzzleResponse.segmentation_image}
+                              alt="Segmentation Preview" 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                      )}
+                </div>
+                 </div>
+            )}
+
               <div className="space-y-4 mt-6">
                 <div>
                   <label className="block text-sm font-medium mb-1">Claim Reason</label>
@@ -384,7 +446,7 @@ export default function CattleVerification({
                   </select>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium mb-1">Claim Date</label>
                   <input
                     type="date"
@@ -392,7 +454,7 @@ export default function CattleVerification({
                     value={formData.date}
                     onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
                   />
-                </div>
+                </div> */}
  
 
                 <div>
@@ -424,9 +486,9 @@ export default function CattleVerification({
                       <span className="text-sm text-gray-500">Upload Supporting Documents</span>
                     </label>
 
-                    {formData.claimDocuments.length > 0 && (
+                    {formData.claim_documents.length > 0 && (
                       <div className="mt-4 grid grid-cols-2 gap-2">
-                        {formData.claimDocuments.map((doc, index) => (
+                        {formData.claim_documents.map((doc, index) => (
                           <div
                             key={index}
                             className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200"

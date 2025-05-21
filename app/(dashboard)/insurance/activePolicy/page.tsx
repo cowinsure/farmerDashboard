@@ -21,7 +21,7 @@ interface InsuranceData {
   insurance_status: string;
   created_by: string;
   claim_status: string;
-  
+
 }
 
 export default function InsuranceActivePolicy() {
@@ -29,54 +29,54 @@ export default function InsuranceActivePolicy() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-      const [isModalOpen, setIsModalOpen] = useState(false);
-  
-      console.log(insuranceData);
-      
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  console.log(insuranceData);
 
 
- // Fetch insurance data from the API
- useEffect(() => {
-  const fetchInsuranceData = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      console.error("Access token is missing. Please log in again.");
-      return;
-    }
 
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const result = await response.json();
-      console.log(result);
-      
-
-      if (response.ok) {
-        console.log("Insurance data fetched successfully:", result.data.results);
-        setInsuranceData(result.data.results); // Update the state with API data
-      } else {
-        console.error("Failed to fetch insurance data:", result);
+  // Fetch insurance data from the API
+  useEffect(() => {
+    const fetchInsuranceData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.error("Access token is missing. Please log in again.");
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching insurance data:", error);
-    }
-  };
 
-  fetchInsuranceData();
-}, []);
-  
-  const handleViewDetails = (cow: InsuranceData ) => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+
+        if (response.ok) {
+          console.log("Insurance data fetched successfully:", result.data.results);
+          setInsuranceData(result.data.results); // Update the state with API data
+        } else {
+          console.error("Failed to fetch insurance data:", result);
+        }
+      } catch (error) {
+        console.error("Error fetching insurance data:", error);
+      }
+    };
+
+    fetchInsuranceData();
+  }, []);
+
+  const handleViewDetails = (cow: InsuranceData) => {
     setSelectedCow(cow)
     setIsCowDetails(true)
   }
 
-  const handleClaim = (cow:InsuranceData ) => {
+  const handleClaim = (cow: InsuranceData) => {
     setSelectedCow(cow)
     setIsClaimForm(true)
   }
@@ -129,7 +129,10 @@ export default function InsuranceActivePolicy() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleClaim(cow)}
+                    onClick={() => 
+                      
+                      
+                      handleClaim(cow)}
                     className="text-green-700 border-green-700 hover:bg-green-200"
                   >
                     <FileText size={16} className="mr-1" />
@@ -142,54 +145,72 @@ export default function InsuranceActivePolicy() {
         </table>
       </div>
 
-       {/* Cow Details Dialog */}
-       <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
+      {/* Cow Details Dialog */}
+      <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-green-700">Insurance Details</DialogTitle>
           </DialogHeader>
           {selectedCow && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className=" ">
               <div className="space-y-2">
-                <p className="font-semibold">Asset:</p>
-                <p>{selectedCow.asset}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Asset:</p>
+                  <p>{selectedCow.asset}</p>
+                </div>
 
-                <p className="font-semibold">Insurance Provider:</p>
-                <p>{selectedCow.insurance_provider}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Insurance Provider:</p>
+                  <p>{selectedCow.insurance_provider}</p>
+                </div>
 
-                <p className="font-semibold">Insurance Number:</p>
-                <p>{selectedCow.insurance_number}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Insurance Number:</p>
+                  <p>{selectedCow.insurance_number}</p>
+                </div>
 
-                <p className="font-semibold">Sum Insured:</p>
-                <p>{selectedCow.sum_insured}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Sum Insured:</p>
+                  <p>{selectedCow.sum_insured}</p>
+                </div>
 
-                <p className="font-semibold">Start Date:</p>
-                <p>{selectedCow.insurance_start_date}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Start Date:</p>
+                  <p>{selectedCow.insurance_start_date}</p>
+                </div>
 
-                <p className="font-semibold">End Date:</p>
-                <p>{selectedCow.insurance_end_date}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">End Date:</p>
+                  <p>{selectedCow.insurance_end_date}</p>
+                </div>
 
-                <p className="font-semibold">Status:</p>
-                <p>{selectedCow.insurance_status}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Status:</p>
+                  <p>{selectedCow.insurance_status}</p>
+                </div>
 
-                <p className="font-semibold">Claim Status:</p>
-                <p>{selectedCow.claim_status}</p>
+                <div className="flex justify-between">
+                  <p className="font-semibold">Claim Status:</p>
+                  <p>{selectedCow.claim_status}</p>
+                </div>
               </div>
             </div>
+
+
           )}
         </DialogContent>
       </Dialog>
       {/* Claim Form Dialog */}
-      <CattleVerification 
-        isOpen={isClaimForm} 
-        onClose={() => setIsClaimForm(false)} 
+      <CattleVerification
+        isOpen={isClaimForm}
+        onClose={() => setIsClaimForm(false)}
         selectedCow={selectedCow}
-        // selectedCow={selectedCow || {
-        //   id: '',
-        //   asset: '',
-        //   claim_status: '',
-        //   sum_insured: ''
-        // }} 
+      // selectedCow={selectedCow || {
+      //   id: '',
+      //   asset: '',
+      //   claim_status: '',
+      //   sum_insured: ''
+      // }} 
       />
     </div>
   )

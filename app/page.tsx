@@ -13,7 +13,9 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (auth?.userId) {
+    console.log("main layout" +auth?.accessToken + localStorage.getItem('accessToken') );
+    
+    if (auth?.accessToken || localStorage.getItem('accessToken')) {
       router.push('/home')
     } else {
       router.push('auth/login')

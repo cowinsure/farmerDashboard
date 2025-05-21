@@ -19,6 +19,8 @@ interface ResponseData {
   image_url: string;
   msg: string;
 }
+
+
 const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
 
 export default function StepOne() {
@@ -84,12 +86,14 @@ export default function StepOne() {
         const data = await response.json();
         setErrorModalOpen(true)
         console.error("Error 400:", data.msg);
-        alert(`Error: ${data.msg}`);
+         setResponseData(data);
+        // alert(`Error: ${data.msg}`);
         return;
       }
 
       if (response.status === 401) {
         const data = await response.json();
+        
         console.error("Error 401:", data.msg);
         alert(`Error: ${data.msg}`);
         return;
