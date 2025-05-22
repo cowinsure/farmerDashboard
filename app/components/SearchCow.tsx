@@ -1,3 +1,4 @@
+// import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 interface Cow {
   id: number;
@@ -32,41 +33,43 @@ interface Cow {
   image_with_owner: string;
 }
 
+
+
 interface SearchCowProps {
-    reference_id: string
+  reference_id: string
 }
 
 const CowDetails = ({ reference_id }: SearchCowProps) => {
   // State to store the cow data
   const [cowData, setCowData] = useState<Cow[]>([]);
   // State to store any error that might occur
-  const [error, setError] = useState(null);
-   const token = localStorage.getItem('accessToken');
+  // const [error, setError] = useState<CustomError | undefined>(undefined);
+  const token = localStorage.getItem('accessToken');
 
 
-   
+
 
   // useEffect to fetch data when the component mounts
   useEffect(() => {
-   
+
     // Function to fetch data
     const fetchData = async () => {
       try {
         const response = await fetch(`http://localhost:8000/insurecow-agent/cows/?string_id=${reference_id}`, {
-  headers: {
-    // "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-});
-        
+          headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
         setCowData(data);
-      } catch (error:any) {
-        setError(error.message);
+      } catch (error) {
+        // setError(error.message);
         console.error('Error fetching cow data:', error);
       }
     };
@@ -74,9 +77,9 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
     fetchData();
   }, []); // Empty dependency array means this effect runs once after the initial render
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   if (!cowData) {
     return <div>Loading...</div>;
@@ -112,16 +115,48 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
             <p className="mb-1">Updated At: {cow.updated_at}</p>
             <p className="mb-1">Is Active: {cow.is_active ? 'Yes' : 'No'}</p>
             <p className="mb-1">Muzzle Video: <a href={cow.muzzle_video} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Video</a></p>
-            <p className="mb-1">Left Side Image: <img src={cow.left_side_image} alt="Left Side" className="w-50 h-auto" /></p>
-            <p className="mb-1">Right Side Image: <img src={cow.right_side_image} alt="Right Side" className="w-50 h-auto" /></p>
+            
+            <p className='text-md'> Attachments below:</p>
+            
+            <p className="mb-1">Left Side Image:
+              {/* <Image src={cow.left_side_image} alt="Left Side" className="w-50 h-auto" /> */}
+              {cow?.left_side_image?.startsWith('data:image') && (
+                <img
+                  src={cow.left_side_image}
+                  alt="Segmentation Preview"
+                  className="w-full h-full object-cover"
+                />
+              )}
+
+            </p>
+            <p className="mb-1">Right Side Image:
+               {/* <Image src={cow.right_side_image} alt="Right Side" className="w-50 h-auto" /> */}
+                 {cow?.right_side_image?.startsWith('data:image') && (
+                <img
+                  src={cow.right_side_image}
+                  alt="Segmentation Preview"
+                  className="w-full h-full object-cover"
+                />
+              )}
+               </p>
+
             <p className="mb-1">Challan Paper: <a href={cow.challan_paper} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Paper</a></p>
             <p className="mb-1">Vet Certificate: <a href={cow.vet_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
             <p className="mb-1">Chairman Certificate: <a href={cow.chairman_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
-            <p className="mb-1">Image with Owner: <img src={cow.image_with_owner} alt="With Owner" className="w-50 h-auto" /></p>
+            <p className="mb-1">Image with Owner:
+               {/* <Image src={cow.image_with_owner} alt="With Owner" className="w-50 h-auto" /> */}
+                 {cow?.image_with_owner?.startsWith('data:image') && (
+                <img
+                  src={cow.image_with_owner}
+                  alt="Segmentation Preview"
+                  className="w-full h-full object-cover"
+                />
+              )}
+               </p>
           </li>
         ))}
       </ul>
-      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
+      {/* {error && <p className="text-red-500 mt-4">Error: {error}</p>} */}
     </div>
   );
 };

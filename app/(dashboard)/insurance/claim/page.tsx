@@ -1,26 +1,26 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
+// import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Eye, FileText } from "lucide-react"
 
-interface Cattle {
-  id: number;
-  image: string;
-  age: string;
-  color: string;
-  cattleType: string;
-  vaccinated: string;
-  purchaseAmount: string;
-  purchaseDate: string;
-  purchaseFrom: string;
-  insurance: string;
-  scopeOfCoverage: string;
-  sumInsured: string;
-  createdBy: string;
-}
+// interface Cattle {
+//   id: number;
+//   image: string;
+//   age: string;
+//   color: string;
+//   cattleType: string;
+//   vaccinated: string;
+//   purchaseAmount: string;
+//   purchaseDate: string;
+//   purchaseFrom: string;
+//   insurance: string;
+//   scopeOfCoverage: string;
+//   sumInsured: string;
+//   createdBy: string;
+// }
 
 interface InsuranceData {
   id: number;
@@ -41,68 +41,7 @@ export default function CattleManagementPage() {
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
 
-  const cattleData = [
-    {
-      id: 1,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 2,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 3,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-    {
-      id: 4,
-      image: "/placeholder.svg?height=50&width=50",
-      age: "2 years",
-      color: "Brown",
-      cattleType: "Stud Bulls",
-      vaccinated: "yes",
-      purchaseAmount: "1,02,735 BDT",
-      purchaseDate: "April 5 2025",
-      purchaseFrom: "doriapur",
-      insurance: "Active",
-      scopeOfCoverage: "Death Coverage",
-      sumInsured: "1,02,735 BDT",
-      createdBy: "Agent jhon",
-    },
-  ]
+
 
  // Fetch insurance data from the API
  useEffect(() => {

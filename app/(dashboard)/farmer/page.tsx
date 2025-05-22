@@ -48,10 +48,17 @@ interface Asset {
 }
 
 interface MuzzleResponse {
-  geo_location: string;
-  matched_id: string ;
-  msg: string;
-  segmentation_image: string;
+    geo_location: string;
+    matched_id: string;
+    msg: string;
+    segmentation_image: string;
+}
+
+interface MuzzleResponse {
+    geo_location: string;
+    matched_id: string;
+    msg: string;
+    segmentation_image: string;
 }
 
 const FarmerPage: React.FC = () => {
@@ -59,21 +66,23 @@ const FarmerPage: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isMuzzelModalOpen, setIsMuzzelModalOpen] = useState(false);
     const [isCowDetails, setIsCowDetails] = useState(false);
-    const [assetList, setAssetList] = useState<any[]>([]);
+    const [assetList, setAssetList] = useState<Asset[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
 
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
+    const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
 
-  const [formData, setFormData] = useState({
-    reason: "",
-    date: "",
-    description: "",
-    claim_muzzle: null as File | null,
-    claimDocuments: [] as File[],
-    reference_id: "",
-  });
+    const [formData, setFormData] = useState({
+        reason: "",
+        date: "",
+        description: "",
+        claim_muzzle: null as File | null,
+        claimDocuments: [] as File[],
+        reference_id: "",
+    });
+    const [erromuzzleResponse, setErroMuzzleResponse] = useState<MuzzleResponse | null>(null);
+
     // const [isClaimForm, setIsClaimForm] = useState(false)
     const [selectedCow, setSelectedCow] = useState<{
         id: number;
@@ -141,104 +150,87 @@ const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MT
         fetchAssetList();
     }, []);
 
-      const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
-    
-
-   const handleVideoUpload = async (file: File) => {
-   
-   
-    console.log("Video file captured:", file);
-
-    const formData = new FormData();
-    formData.append("video", file); // Append the video file to the form data
-   setFormData(prev => ({
-        ...prev,
-        claim_muzzle: file
-      }));
-      
-      
-    //  try {
-    //     const response = await fetch("https://ai.insurecow.com/test", {
-    //       method: "GET",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         // Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     });
-
-    //     const result = await response.json();
-
-    //     if (response.ok) {
-    //       setAccessToken(result.data.results)
-    //       localStorage.setItem('ai_access_token',result.data.results)
-    //       console.log("Asset types fetched successfully:", result.data.results);
-    //       // setAssetTypes(result.data.results); // Update the assetTypes state with API data
-    //     } else {
-    //       console.error("Failed to fetch asset types:", result);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching asset types:", error);
-    //   }
+    //   const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
 
 
+    const handleVideoUpload = async (file: File) => {
 
-    
-    try {
-      setIsUploading(true);
-      const response = await fetch("https://ai.insurecow.com/claim", {
-        method: "POST",
-        body: formData,
-         headers: {
-            // "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwt}`,
-          },
-      });
-      // 3.110.218.87:8000
 
-      // console.log(await response.json());
-      
+        console.log("Video file captured:", file);
 
-      if (response.status === 400) {
-        const data = await response.json();
-       
-        console.error("Error 400:", data.msg);
-        alert(`Error: ${data.msg}`);
-        return;
-      }
+        const formData = new FormData();
+        formData.append("video", file); // Append the video file to the form data
+        setFormData(prev => ({
+            ...prev,
+            claim_muzzle: file
+        }));
 
-      if (response.status === 401) {
-        const data = await response.json();
-        console.error("Error 401:", data.msg);
-        alert(`Error: ${data.msg}`);
-        return;
-      }
 
-      if (response.status === 200) {
-        const data: MuzzleResponse = await response.json(); // Use the interface for type safety
-        console.log("API Response:", data);
-        setMuzzleResponse(data);
-        // setResponseData(data);
-        // setModalOpen(true)
-         setFormData(prev => ({
-        ...prev,
-        reference_id: data.matched_id
-      })); 
-      setIsModalOpen(true)
-      // Save the response data to state
-        // alert(data.msg);
-        return;
-      }
+        try {
+            setIsUploading(true);
+            const response = await fetch("https://ai.insurecow.com/claim", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    // "Content-Type": "application/json",
+                    "Authorization": `Bearer ${jwt}`,
+                },
+            });
+            // 3.110.218.87:8000
 
-      if (!response.ok) {
-        throw new Error("Failed to upload video");
-      }
-    } catch (error) {
-      console.error("Error uploading video:", error);
-      alert("Something went wrong: " + error);
-    } finally {
-      setIsUploading(false);
-    }
-  };
+            // console.log(await response.json());
+
+
+            if (response.status === 400) {
+                const data = await response.json();
+                setErroMuzzleResponse(data);
+                console.error("Error 400:", data.msg);
+                // alert(`Error: ${data.msg}`);
+                return;
+            }
+
+
+            if (response.status === 404) {
+                const data = await response.json();
+                setErroMuzzleResponse(data);
+                // console.error("Error 400:", data.msg);
+                // alert(`Error: ${data.msg}`);
+                return;
+            }
+
+            if (response.status === 401) {
+                const data = await response.json();
+                console.error("Error 401:", data.msg);
+                alert(`Error: ${data.msg}`);
+                return;
+            }
+
+            if (response.status === 200) {
+                const data: MuzzleResponse = await response.json(); // Use the interface for type safety
+                console.log("API Response:", data);
+                // setMuzzleResponse(data);
+                // setResponseData(data);
+                // setModalOpen(true)
+                setFormData(prev => ({
+                    ...prev,
+                    reference_id: data.matched_id
+                }));
+                setIsModalOpen(true)
+                // Save the response data to state
+                // alert(data.msg);
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Failed to upload video");
+            }
+        } catch (error) {
+            console.error("Error uploading video:", error);
+            alert("Something went wrong: " + error);
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const handleViewDetails = (cow: Asset) => {
         setSelectedCow(cow);
@@ -428,6 +420,35 @@ const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MT
                             </div>
                         </div>
                     </div>)}
+            </ModalGeneral>
+
+
+            <ModalGeneral isOpen={erromuzzleResponse !== null} onClose={() => { setErroMuzzleResponse(null); }} >
+
+
+                {erromuzzleResponse && (
+                    <div className="mt-6">
+                        <div className="flex flex-col items-center justify-between gap-2">
+                            <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
+
+                            {erromuzzleResponse?.segmentation_image && (
+                                <div className="flex flex-col items-center gap-2">
+                                    <span className="text-sm font-medium">Processed Image</span>
+                                    <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
+                                        {erromuzzleResponse?.segmentation_image?.startsWith('data:image') && (
+                                            <img
+                                                src={erromuzzleResponse.segmentation_image}
+                                                alt="Segmentation Preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
             </ModalGeneral>
 
 

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Eye, FileText } from "lucide-react"
-import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
-import StepFive from "@/component/cowRegistration/StepFive"
+// import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
+// import StepFive from "@/component/cowRegistration/StepFive"
 import CattleVerification from "@/app/components/CattleVerification"
 
 
@@ -21,6 +21,7 @@ interface InsuranceData {
   insurance_status: string;
   created_by: string;
   claim_status: string;
+  reference_id: string;
 
 }
 
@@ -29,7 +30,7 @@ export default function InsuranceActivePolicy() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   console.log(insuranceData);
 
