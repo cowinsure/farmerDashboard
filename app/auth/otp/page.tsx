@@ -24,7 +24,7 @@ const OtpPage: React.FC = () => {
     if (timer > 0) {
       countdown = setInterval(() => {
         setTimer((prev) => prev - 1);
-      }, 1000);
+      }, 3000);
     } else {
       setIsResendDisabled(false);
     }
