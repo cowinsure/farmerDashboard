@@ -442,7 +442,7 @@ const FarmerPage: React.FC = () => {
                 {erromuzzleResponse && (
                     <div className="mt-6">
                         <div className="flex flex-col items-center justify-between gap-2">
-                            <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
+                            <p className="text-center text-red-500">  {erromuzzleResponse.msg}</p>
 
                             {erromuzzleResponse?.segmentation_image && (
                                 <div className="flex flex-col items-center gap-2">

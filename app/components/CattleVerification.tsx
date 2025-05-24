@@ -402,7 +402,8 @@ export default function CattleVerification({
               {erromuzzleResponse && (
                 <div className="mt-6">
                   <div className="flex flex-col items-center justify-between gap-2">
-                    <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
+                                                <p className="text-center text-red-500">  {erromuzzleResponse.msg}</p>
+
 
                     {erromuzzleResponse?.segmentation_image && (
                       <div className="flex flex-col items-center gap-2">
@@ -537,14 +538,7 @@ export default function CattleVerification({
       </Dialog>
 
 
-      {/* <ModalGeneral isOpen={claimerror != null} onClose={()=>{
-        setClaimError(null)
-      }} >
-        <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
-        </div>
-
-      </ModalGeneral> */}
+    
 
 
     
