@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 // import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal";
 import { Upload, X, Eye, File, } from "lucide-react";
 import UploadVideo from "@/component/helper/UploadVedio";
+// import ModalGeneral from "@/component/modal/DialogGeneral";
+import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
 // import Image from "next/image";
 
 interface MuzzleResponse {
@@ -60,6 +62,7 @@ export default function CattleVerification({
   // const [muzzleUploadSuccess, setMuzzleUploadSuccess] = useState(false);
   const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
   const [erromuzzleResponse, setErroMuzzleResponse] = useState<MuzzleResponse | null>(null);
+  const [claimerror, setClaimError] = useState<string | null>(null);
   // const [verificationError, setVerificationError] = useState<string | null>(null);
 
 
@@ -188,6 +191,7 @@ export default function CattleVerification({
 
 
   const handleSubmit = async () => {
+    setClaimError(null)
     if (!selectedCow) return;
     setIsSubmitting(true);
 
@@ -208,7 +212,7 @@ export default function CattleVerification({
         formDataToSend.append(`claim_documents`, doc);
       });
 
-      //  console.log(formDataToObject(formDataToSend));
+      // console.log(formDataToObject(formDataToSend));
 
 
       const accessToken = localStorage.getItem("accessToken");
@@ -248,6 +252,9 @@ export default function CattleVerification({
           errorMessage += "Unexpected error format.";
         }
 
+        setClaimError(errorMessage);
+
+
         console.log(errorMessage);
       }
 
@@ -258,7 +265,7 @@ export default function CattleVerification({
     }
   };
 
-  //   function formDataToObject(formData: FormData): { [key: string]: any } {
+  // function formDataToObject(formData: FormData): { [key: string]: any } {
   //   const obj: { [key: string]: any } = {};
   //   formData.forEach((value, key) => {
   //     if (obj[key] !== undefined) {
@@ -319,6 +326,8 @@ export default function CattleVerification({
 
   return (
     <>
+
+
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="">
           <DialogHeader>
@@ -399,8 +408,8 @@ export default function CattleVerification({
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-sm font-medium">Processed Image</span>
                         <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
-                        
-                            {erromuzzleResponse?.segmentation_image?.startsWith('data:image') && (
+
+                          {erromuzzleResponse?.segmentation_image?.startsWith('data:image') && (
                             <img
                               src={erromuzzleResponse.segmentation_image}
                               alt="Segmentation Preview"
@@ -527,6 +536,32 @@ export default function CattleVerification({
         </DialogContent>
       </Dialog>
 
+
+      {/* <ModalGeneral isOpen={claimerror != null} onClose={()=>{
+        setClaimError(null)
+      }} >
+        <div className="flex flex-col items-center justify-center gap-2">
+          <p className="text-center text-red-500">  Muzzel Detection Failed, Try Again</p>
+        </div>
+
+      </ModalGeneral> */}
+
+
+    
+
+
+      {isUploading && (
+        <Dialog open={!!isUploading} onOpenChange={() => {}}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+            </DialogHeader>
+             <div className="max-h-[80vh] overflow-y-auto p-4">
+        <CowIdentificationLoader />
+      </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
       {/* Preview Dialog */}
       {previewUrl && (
         <Dialog open={!!previewUrl} onOpenChange={() => setPreviewUrl(null)}>
@@ -544,6 +579,23 @@ export default function CattleVerification({
           </DialogContent>
         </Dialog>
       )}
+
+
+      {claimerror && (
+        <Dialog open={!!claimerror} onOpenChange={() => setClaimError(null)}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle className="text-center">Submission Failed</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <p className="text-center text-red-500">  {claimerror}</p>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+
+
     </>
   );
 } 

@@ -50,7 +50,7 @@ const InsuranceCompany: React.FC = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8000/api/v1/insurance-product/', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-product/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

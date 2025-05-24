@@ -55,7 +55,7 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/insurecow-agent/cows/?string_id=${reference_id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurecow-agent/cows/?string_id=${reference_id}`, {
           headers: {
             // "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -116,11 +116,14 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
             <p className="mb-1">Is Active: {cow.is_active ? 'Yes' : 'No'}</p>
             <p className="mb-1">Muzzle Video: <a href={cow.muzzle_video} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Video</a></p>
             
-            <p className='text-md'> Attachments below:</p>
+            <p className='text-md w-full text-center font-bold my-5'> Attachments below</p>
+            <p className="mb-1">Challan Paper: <a href={cow.challan_paper} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Paper</a></p>
+            <p className="mb-1">Vet Certificate: <a href={cow.vet_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
+            <p className="mb-1">Chairman Certificate: <a href={cow.chairman_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
             
             <p className="mb-1">Left Side Image:
               {/* <Image src={cow.left_side_image} alt="Left Side" className="w-50 h-auto" /> */}
-              {cow?.left_side_image?.startsWith('data:image') && (
+              {cow?.left_side_image && (
                 <img
                   src={cow.left_side_image}
                   alt="Segmentation Preview"
@@ -131,7 +134,7 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
             </p>
             <p className="mb-1">Right Side Image:
                {/* <Image src={cow.right_side_image} alt="Right Side" className="w-50 h-auto" /> */}
-                 {cow?.right_side_image?.startsWith('data:image') && (
+                 {cow?.right_side_image && (
                 <img
                   src={cow.right_side_image}
                   alt="Segmentation Preview"
@@ -140,12 +143,10 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
               )}
                </p>
 
-            <p className="mb-1">Challan Paper: <a href={cow.challan_paper} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Paper</a></p>
-            <p className="mb-1">Vet Certificate: <a href={cow.vet_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
-            <p className="mb-1">Chairman Certificate: <a href={cow.chairman_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
+            
             <p className="mb-1">Image with Owner:
                {/* <Image src={cow.image_with_owner} alt="With Owner" className="w-50 h-auto" /> */}
-                 {cow?.image_with_owner?.startsWith('data:image') && (
+                 {cow?.image_with_owner && (
                 <img
                   src={cow.image_with_owner}
                   alt="Segmentation Preview"

@@ -97,7 +97,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({ onSubmit , isShow
 
         setIsLoading(true); // Show loading spinner
         try {
-            const response = await fetch('http://localhost:8000/api/v1/auth/user/financial-info/', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user/financial-info/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

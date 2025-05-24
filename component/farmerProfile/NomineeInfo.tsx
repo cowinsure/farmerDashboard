@@ -87,7 +87,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
         console.log('Form Data:', formData);
         const authToken = localStorage.getItem('accessToken');
         try {
-            fetch('http://localhost:8000/api/v1/auth/user/nominee-info/', {
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/user/nominee-info/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

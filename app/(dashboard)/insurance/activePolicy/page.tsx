@@ -106,7 +106,7 @@ export default function InsuranceActivePolicy() {
           <tbody>
             {insuranceData.map((cow) => (
               <tr key={cow.id} className="bg-green-100 text-center">
-                <td className="border border-gray-100 p-2">{cow.asset}</td>
+                <td className="border border-gray-100 p-2">{cow.id}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_provider}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_number}</td>
                 <td className="border border-gray-100 p-2">{cow.sum_insured}</td>

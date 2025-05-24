@@ -12,7 +12,9 @@ import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import SearchCow from '@/app/components/SearchCow';
-import UploadVideo from '@/component/helper/UploadVedio';
+// import UploadVideo from '@/component/helper/UploadVedio';
+import UploadVedioForSearch from '@/component/helper/UploadVedioForSearch';
+import CowIdentificationLoader from '@/component/modal/cow-identification-loader';
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 interface Asset {
@@ -342,11 +344,13 @@ const FarmerPage: React.FC = () => {
                 </table>
             </div>
 
+      
+
             <ModalGeneral isOpen={isMuzzelModalOpen} onClose={() => { setIsMuzzelModalOpen(false) }}>
                 <div>
 
-                    <div className="flex  lg:flex-col flex-col gap-1 items-center">
-                        <UploadVideo
+                    <div className="flex  lg:flex-col flex-col gap-1 items-center overflow-auto">
+                        <UploadVedioForSearch
                             onVideoCapture={(file) => {
                                 // updateStep({
                                 //   muzzle_video: file,
@@ -366,8 +370,17 @@ const FarmerPage: React.FC = () => {
                         </button>
                     </div>
 
+
                 </div>
 
+            </ModalGeneral>
+
+      <ModalGeneral isOpen={isUploading} onClose={() => { }}>
+
+
+                <div className="max-h-[80vh] overflow-y-auto p-4">
+                    <CowIdentificationLoader />
+                </div>
             </ModalGeneral>
 
             <ModalGeneral isOpen={isModalOpen} onClose={() => { setIsModalOpen(false) }}>

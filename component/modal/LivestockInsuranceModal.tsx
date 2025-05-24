@@ -56,7 +56,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
             return;
           }
       
-          const response = await fetch('http://localhost:8000/api/v1/insurance-apply/', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-apply/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -258,7 +258,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
                         <button
                             onClick={() => {
                                 setErrorMessage("");
-                                clearInsuranceApplication()
+                                // clearInsuranceApplication()
                                 setCurrentStep(0)
                                 onClose() // Clear error message
                             }}

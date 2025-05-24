@@ -8,6 +8,9 @@ import ModalGeneral from "../modal/DialogGeneral";
 
 import logo from '../../public/Logo-03.png';
 import { useRouter } from 'next/navigation';
+import LottieAnimation from "../Animation/LottieAnimation";
+import animation from '../Animation/LottieAnimation'
+import CowIdentificationLoader from "../modal/cow-identification-loader";
 
 // Define an interface for the response data
 interface ResponseData {
@@ -31,11 +34,11 @@ export default function StepOne() {
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
- const [accessToken , setAccessToken] = useState(jwt)
+  const [accessToken, setAccessToken] = useState(jwt)
 
   const handleVideoUpload = async (file: File) => {
     setModalOpen(false)
-   
+
     console.log("Video file captured:", file);
 
     const formData = new FormData();
@@ -66,34 +69,34 @@ export default function StepOne() {
 
 
     console.log(accessToken);
-    
+
     try {
       setIsUploading(true);
       const response = await fetch("https://ai.insurecow.com/register", {
         method: "POST",
         body: formData,
-         headers: {
-            // "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
+        headers: {
+          // "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       // 3.110.218.87:8000
 
       // console.log(await response.json());
-      
+
 
       if (response.status === 400) {
         const data = await response.json();
         setErrorModalOpen(true)
         console.error("Error 400:", data.msg);
-         setResponseData(data);
+        setResponseData(data);
         // alert(`Error: ${data.msg}`);
         return;
       }
 
       if (response.status === 401) {
         const data = await response.json();
-        
+
         console.error("Error 401:", data.msg);
         alert(`Error: ${data.msg}`);
         return;
@@ -167,7 +170,7 @@ export default function StepOne() {
               <li>Keep the background clear of distractions.</li>
             </ul>
           </div>
-      
+
 
 
           <ModalGeneral isOpen={isModalOpen} onClose={() => { setModalOpen(false) }}>
@@ -205,7 +208,7 @@ export default function StepOne() {
             </div>
           </ModalGeneral>
 
-                    <ModalGeneral isOpen={isModalErrorOpen} onClose={() => { setErrorModalOpen(false) }}>
+          <ModalGeneral isOpen={isModalErrorOpen} onClose={() => { setErrorModalOpen(false) }}>
             <div className='text-black  text-center flex flex-col items-center p-5'>
               <Image
                 src={logo}
@@ -239,6 +242,19 @@ export default function StepOne() {
               </div>
             </div>
           </ModalGeneral>
+
+
+          <ModalGeneral isOpen={isUploading} onClose={() => { }}>
+
+
+            <div className="max-h-[80vh] overflow-y-auto p-4">
+              <CowIdentificationLoader />
+            </div>
+          </ModalGeneral>
+          {/* {isUploading && (
+               <CowIdentificationLoader />
+
+          )} */}
         </div>
       </div>
     </div>

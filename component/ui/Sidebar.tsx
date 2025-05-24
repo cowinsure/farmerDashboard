@@ -7,10 +7,16 @@ import { FaBars } from "react-icons/fa";
 import logo from '../../public/Logo-03.png'; // Importing logo
 import Image from 'next/image';
 import Link from "next/link";
-import { IoPersonCircleOutline } from "react-icons/io5";
+import { IoHomeOutline, IoPersonCircleOutline } from "react-icons/io5";
 import { LuCircleArrowRight } from "react-icons/lu";
+import { MdOutlineHealthAndSafety } from "react-icons/md";
+import { PiFarm } from "react-icons/pi";
+
+
 const Sidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+        const [isActiveMenu, setIsActiveMenu] = useState("Home");
+    
 
     return (
         <>
@@ -31,22 +37,22 @@ const Sidebar: React.FC = () => {
               
                 </div>
                 <ul className="mt-6 space-y-2">
-                <Link href="/profile" onClick={()=>{}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${true  ? "bg-green-800 text-white" : ""}`}>
+                <Link href="/home" onClick={()=>{setIsActiveMenu("Home")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Home"  ? "bg-green-800 text-white " : ""}`}>
+                <IoHomeOutline className="" size={16} />
+                    {isOpen && <span className='ml-2'>Home</span>}
+                </Link>
+                <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white " : ""}`}>
                 <IoPersonCircleOutline className="" size={16} />
                     {isOpen && <span className='ml-2'>Me</span>}
                 </Link>
-                    <Link href={'/farmer'}> 
-                    <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
-                      <GiBullHorns className="mr-2" size={20} />
-                        Farm
-                    </li>
-                    </Link>
-
-                    
-                    <li className="mx-4 p-2 rounded-md py-2 hover:bg-green-200 cursor-pointer flex items-center">
-                        <GiBullHorns className="mr-2" size={20} />
-                        Insurance
-                    </li>
+                <Link href="/farmer" onClick={()=>{setIsActiveMenu("Farm")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Farm"  ? "bg-green-800 text-white" : ""}`}>
+                    <PiFarm size={16} className="" />
+                    {isOpen && <span className='ml-2' >Farm</span>}
+                </Link>
+                <Link href="/insurance" onClick={()=>{setIsActiveMenu("Insurance")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Insurance"  ? "bg-green-800 text-white" : ""}`}>
+                    <MdOutlineHealthAndSafety size={16} className="" />
+                    {isOpen && <span className='ml-2'>Insurance</span>}
+                </Link>
                 </ul>
             </div>
 

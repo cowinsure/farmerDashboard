@@ -56,7 +56,7 @@ const AddCattleForm: React.FC = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8000/api/v1/asset-list/', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/asset-list/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ const AddCattleForm: React.FC = () => {
                         <strong>Weight:</strong> {selectedAsset.weight_kg} kg
                     </p>
                     <p className="text-sm text-gray-600 mb-1">
-                        <strong>Height:</strong> {selectedAsset.height} cm
+                        <strong>Height:</strong> {selectedAsset.height} feet
                     </p>
 
                     {/* Input for sum insured */}

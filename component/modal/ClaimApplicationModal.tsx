@@ -68,7 +68,7 @@ const ClaimApplicationModal: React.FC<ModalProps> = ({ isOpen, onClose , insuran
             return;
           }
       
-          const response = await fetch('http://localhost:8000/api/v1/insurance-apply/', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-apply/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
