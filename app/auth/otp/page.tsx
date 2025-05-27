@@ -68,8 +68,8 @@ const OtpPage: React.FC = () => {
                   alert('OTP Resend failed. Please try again.');
                 }
               } else {
-                console.error('Failed to verify OTP');
-                alert('Failed to verify OTP. Please try again.');
+                console.error('Failed to Resend OTP');
+                alert('Failed to Resend OTP. Please try again.');
               }
 
 

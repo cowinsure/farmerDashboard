@@ -186,7 +186,7 @@ export default function StepOne() {
               />
               <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
                 <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-                  <h3 className="text-xl font-semibold mb-2">Registration Result</h3>
+                  <h3 className="text-xl font-semibold mb-2">Muzzel Registration Result</h3>
                   <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
                   <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
                   {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
