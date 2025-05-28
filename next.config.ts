@@ -7,7 +7,13 @@ const nextConfig: NextConfig = {
   
   
   images: {
+     
     remotePatterns: [
+       {
+        protocol: 'https',
+        hostname: 'insuranceportal-backend.insurecow.com',
+        pathname: '/media/**',
+      },
       {
         protocol: 'http',
         hostname: 'localhost',
