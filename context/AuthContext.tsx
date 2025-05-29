@@ -48,6 +48,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to log in the user
   const login =async (userId: string, phoneNumber: string, accessToken: string) => {
     setIsLoading(true)
+        localStorage.setItem("userId", userId);
+    localStorage.setItem("phoneNumber", phoneNumber);
+    localStorage.setItem("accessToken", accessToken);
     try {
       const baseRequest = await createBaseRequest();
         if (baseRequest.location) {

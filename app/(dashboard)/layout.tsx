@@ -23,7 +23,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         router.push('/auth/login')  // Set loading to false before redirecting
         // router.replace('/auth/login')  // Redirect to login if no token
       } else {
-         router.push('/home')
+        //  router.push('/home')
         setLoading(false)  // Set loading to false after auth check
       }
     }, [auth, router])  // Run effect when auth or router changes
