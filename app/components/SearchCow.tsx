@@ -55,7 +55,7 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurecow-agent/get-cow/?string_id=${reference_id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-cow/?string_id=${reference_id}`, {
           headers: {
             // "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
