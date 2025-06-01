@@ -128,6 +128,7 @@ export default function InsuranceActivePolicy() {
                 </td>
                 <td className="border border-gray-100 p-2">
                   <Button
+                  disabled = {cow.claim_status != "No Claim" }
                     variant="outline"
                     size="sm"
                     onClick={() => 

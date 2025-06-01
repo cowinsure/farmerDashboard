@@ -151,7 +151,7 @@ export default function DashboardPage() {
                     </button>
                 </div>
             </div>
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      {/* <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border border-green-300 bg-green-100">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -528,7 +528,7 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+      </main> */}
       <LivestockInsuranceModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); } } />
       <ModalGeneral isOpen={isGeneralModalOpen} onClose={() => {setIsGeneralModalOpen(false)}}>
         <div className='text-black  text-center flex flex-col items-center p-5'>

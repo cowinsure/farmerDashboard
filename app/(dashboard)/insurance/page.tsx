@@ -19,19 +19,19 @@ const InsuranceDashboard = () => {
                         <h2 className="text-lg font-semibold">Active Policies</h2>
                         <p className="">View and manage your active insurance policies.</p>
                     </Link>
-                    <Link href={'insurance/claim'} className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
+                    <div onClick={() => { setIsGeneralModalOpen(true) }} className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
                         <h2 className="text-lg font-semibold">Claims</h2>
                         <p className="">Track your claims and their statuses.</p>
-                    </Link>
-                    <div className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
+                    </div>
+                    <div onClick={() => { setIsGeneralModalOpen(true) }} className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
                         <h2 className="text-lg font-semibold">Premium Payments</h2>
                         <p className="">Check your payment history and upcoming dues.</p>
                     </div>
-                    <div className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
+                    <div onClick={() => { setIsGeneralModalOpen(true) }} className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
                         <h2 className="text-lg font-semibold">Application Status</h2>
                         <p className="">View and manage your active insurance Applications.</p>
                     </div>
-                    <div className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
+                    <div onClick={() => { setIsGeneralModalOpen(true) }} className="bg-[#E5EBE7] shadow-md rounded-lg p-4 hover:bg-[#228C45] hover:text-white transition-colors duration-300">
                         <h2 className="text-lg font-semibold">Insurance Calculator</h2>
                         <p className="">View and manage your active insurance Applications.</p>
                     </div>
