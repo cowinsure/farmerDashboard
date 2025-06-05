@@ -79,6 +79,8 @@ const InsuranceCompany: React.FC = () => {
         setSelectedCompany(companyId);
         setSelectedInsuranceType(null);
         setSelectedPeriod(null);
+        console.log(selectedCompanyData);
+        
 
         if (selectedCompanyData && selectedCompanyData.insurance_categories.length > 0) {
             const category = selectedCompanyData.insurance_categories[0]; // Get the first category

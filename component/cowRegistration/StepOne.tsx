@@ -137,7 +137,7 @@ export default function StepOne() {
     <div>
       <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>
       <div className="flex flex-col lg:flex-row gap-2">
-        <div className="lg:w-1/2 w-full flex flex-col justify-center items-center">
+        <div className="lg:w-1/2 w-full flex flex-col  justify-center items-center">
           <UploadVideo
             onVideoCapture={(file) => {
               updateStep({
