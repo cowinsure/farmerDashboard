@@ -7,6 +7,7 @@ import { Eye, FileText } from "lucide-react"
 // import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
 // import StepFive from "@/component/cowRegistration/StepFive"
 import CattleVerification from "@/app/components/CattleVerification"
+import { PaymentDialog } from "@/component/modal/payment-dialog"
 
 
 
@@ -100,7 +101,7 @@ export default function InsuranceActivePolicy() {
               <th className="p-2">Created By</th>
               <th className="p-2">Claim Status</th>
               <th className="p-2">View</th>
-              <th className="p-2">Claim</th>
+              <th className="p-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +128,7 @@ export default function InsuranceActivePolicy() {
                   </Button>
                 </td>
                 <td className="border border-gray-100 p-2">
-                  <Button
+                  {/* <Button
                   disabled = {cow.claim_status != "No Claim" }
                     variant="outline"
                     size="sm"
@@ -138,8 +139,41 @@ export default function InsuranceActivePolicy() {
                     className="text-green-700 border-green-700 hover:bg-green-200"
                   >
                     <FileText size={16} className="mr-1" />
+                    Action
+                  </Button> */}
+                  { cow.insurance_status == "payment_pending" ? 
+                  <PaymentDialog insuranceId={cow.id.toString()} insuranceNumber = {cow.insurance_number.toString()} />
+                  // <Button
+                  
+                  //   variant="outline"
+                  //   size="sm"
+                  //   onClick={() => 
+                      
+                      
+                  //     // handleClaim(cow)
+                      
+                        
+                      
+                  //   }
+                  //   className="text-green-700 border-green-700 hover:bg-green-200"
+                  // >
+                  //   <FileText size={16} className="mr-1" />
+                  //   Pay Now
+                  // </Button>
+                  
+                  :  <Button
+                  disabled = {cow.insurance_status != "active" }
+                    variant="outline"
+                    size="sm"
+                    onClick={() => 
+                      
+                      
+                      handleClaim(cow)}
+                    className="text-green-700 border-green-700 hover:bg-green-200"
+                  >
+                    <FileText size={16} className="mr-1" />
                     Claim
-                  </Button>
+                  </Button>}
                 </td>
               </tr>
             ))}

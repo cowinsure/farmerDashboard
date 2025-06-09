@@ -83,11 +83,12 @@ const InsuranceCompany: React.FC = () => {
         
 
         if (selectedCompanyData && selectedCompanyData.insurance_categories.length > 0) {
-            const category = selectedCompanyData.insurance_categories[0]; // Get the first category
+            const category = selectedCompanyData.insurance_categories[0];
+            const premium = selectedCompanyData.insurance_categories[0].insurance_types[0].periods[0].id // Get the first category
             updateInsuranceApplication({
                 insurance_provider: companyId.toString(),
                 insuranc_company: selectedCompanyData.name,
-                insurance_product:category.id.toString()
+                // insurance_product:premium.toString()
                  // Add category ID to context
             });
         }
@@ -110,6 +111,9 @@ const InsuranceCompany: React.FC = () => {
         }
     };
 
+
+    
+
     const handlePeriodSelection = (periodId: number) => {
         const selectedCompanyData = insuranceCompanies.find((company) => company.id === selectedCompany);
         if (!selectedCompanyData) return;
@@ -118,12 +122,17 @@ const InsuranceCompany: React.FC = () => {
         const selectedPeriodData = category?.insurance_types
             .find((type) => type.id === selectedInsuranceType)
             ?.periods.find((period) => period.id === periodId);
+             const selectedPremium = selectedPeriodData?.premiums[0]; 
 
         setSelectedPeriod(periodId);
+        console.log(periodId);
+        
 
         if (selectedPeriodData) {
             updateInsuranceApplication({
                 insurance_duration: selectedPeriodData.name,
+                insurance_product:selectedPremium?.id?.toString()
+                
             });
         }
     };
@@ -187,7 +196,8 @@ const InsuranceCompany: React.FC = () => {
                                     <select
                                         className="w-full border border-gray-300 bg-white rounded-md p-2 text-gray-600"
                                         value={selectedPeriod || ''}
-                                        onChange={(e) => handlePeriodSelection(Number(e.target.value))}
+                                        onChange={(e) => handlePeriodSelection(Number(e.target.value))
+                                    }
                                     >
                                         <option value="" disabled>
                                             Select Period
