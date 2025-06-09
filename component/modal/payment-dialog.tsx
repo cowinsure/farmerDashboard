@@ -22,12 +22,13 @@ import { useToast } from "../../hook/use-toast"
 type TransactionType = "cash" | "bank" | "MFS" | "cheque" | "other"
 
 interface PaymentFormData {
-  insuranceId: string,
+  trx_through: string,
+  assetInsuranceId: string,
   insuranceNumber: string,
-  transactionId: string
-  transactionDate: string
-  transactionType: TransactionType
-  documents: File[]
+  trx_id: string
+  trx_date: string
+  trx_type: TransactionType
+  trx_documents: File[]
 }
 
 
@@ -40,32 +41,33 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<PaymentFormData>({
-    insuranceId,
+    assetInsuranceId:'',
+    trx_through:'',
     insuranceNumber,
-    transactionId: "",
-    transactionDate: "",
-    transactionType: "cash",
-    documents: [],
+    trx_id: "",
+    trx_date: "",
+    trx_type: "cash",
+    trx_documents: [],
   })
   const { toast } = useToast()
 
   const [errors, setErrors] = useState<{
-    transactionDate?: string
-    documents?: string
+    trx_date?: string
+    trx_documents?: string
   }>({})
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     setFormData((prev) => ({
       ...prev,
-      documents: [...prev.documents, ...files],
+      trx_documents: [...prev.trx_documents, ...files],
     }))
   }
 
   const removeFile = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      documents: prev.documents.filter((_, i) => i !== index),
+      trx_documents: prev.trx_documents.filter((_, i) => i !== index),
     }))
   }
 
@@ -81,22 +83,22 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
 
     // Validate transaction date
     const today = new Date()
-    const selectedDate = new Date(formData.transactionDate)
+    const selectedDate = new Date(formData.trx_date)
     const newErrors: typeof errors = {}
 
     if (selectedDate > today) {
-      newErrors.transactionDate = "Transaction date cannot be in the future"
+      newErrors.trx_date = "Transaction date cannot be in the future"
     }
 
     // Validate documents
-    if (formData.documents.length === 0) {
-      newErrors.documents = "At least one document is required"
+    if (formData.trx_documents.length === 0) {
+      newErrors.trx_documents = "At least one document is required"
     }
 
     // Check file sizes (10MB limit per file)
-    const oversizedFiles = formData.documents.filter((file) => file.size > 10 * 1024 * 1024)
+    const oversizedFiles = formData.trx_documents.filter((file) => file.size > 10 * 1024 * 1024)
     if (oversizedFiles.length > 0) {
-      newErrors.documents = `Files too large: ${oversizedFiles.map((f) => f.name).join(", ")}. Maximum 10MB per file.`
+      newErrors.trx_documents = `Files too large: ${oversizedFiles.map((f) => f.name).join(", ")}. Maximum 10MB per file.`
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -108,12 +110,13 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
 
     try {
       const submitData = new FormData()
-       submitData.append("insuranceId", formData.insuranceId)
-      submitData.append("transactionId", formData.transactionId)
-      submitData.append("transactionDate", formData.transactionDate)
-      submitData.append("transactionType", formData.transactionType)
+       submitData.append("assetInsuranceId", formData.assetInsuranceId)
+      submitData.append("trx_id", formData.trx_id)
+      submitData.append("trx_through", formData.trx_through)
+      submitData.append("trx_date", formData.trx_date)
+      submitData.append("trx_type", formData.trx_type)
 
-      formData.documents.forEach((file, index) => {
+      formData.trx_documents.forEach((file, index) => {
         submitData.append(`trx_documents`, file)
       })
 
@@ -150,11 +153,12 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
       // Reset form and close dialog
       setFormData({
         insuranceNumber,
-         insuranceId,
-        transactionId: "",
-        transactionDate: "",
-        transactionType: "cash",
-        documents: [],
+         assetInsuranceId:'',
+        trx_id: "",
+        trx_date: "",
+        trx_type: "cash",
+        trx_documents: [],
+        trx_through:''
       })
       setErrors({})
       setOpen(false)
@@ -205,8 +209,8 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
             <Label htmlFor="transactionId">Transaction ID</Label>
             <Input
               id="transactionId"
-              value={formData.transactionId}
-              onChange={(e) => setFormData((prev) => ({ ...prev, transactionId: e.target.value }))}
+              value={formData.trx_id}
+              onChange={(e) => setFormData((prev) => ({ ...prev, trx_id: e.target.value }))}
               placeholder="Enter transaction ID"
               required
             />
@@ -217,26 +221,26 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
             <Input
               id="transactionDate"
               type="date"
-              value={formData.transactionDate}
+              value={formData.trx_date}
               onChange={(e) => {
-                setFormData((prev) => ({ ...prev, transactionDate: e.target.value }))
+                setFormData((prev) => ({ ...prev, trx_date: e.target.value }))
                 // Clear error when user changes the date
-                if (errors.transactionDate) {
-                  setErrors((prev) => ({ ...prev, transactionDate: undefined }))
+                if (errors.trx_date) {
+                  setErrors((prev) => ({ ...prev, trx_date: undefined }))
                 }
               }}
               max={new Date().toISOString().split("T")[0]} // Prevent future dates
               required
-              className={errors.transactionDate ? "border-red-500" : ""}
+              className={errors.trx_date ? "border-red-500" : ""}
             />
-            {errors.transactionDate && <p className="text-sm text-red-500">{errors.transactionDate}</p>}
+            {errors.trx_date && <p className="text-sm text-red-500">{errors.trx_date}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="transactionType">Transaction Type</Label>
             <Select
-              value={formData.transactionType}
-              onValueChange={(value: TransactionType) => setFormData((prev) => ({ ...prev, transactionType: value }))}
+              value={formData.trx_type}
+              onValueChange={(value: TransactionType) => setFormData((prev) => ({ ...prev, trx_type: value }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select transaction type" />
@@ -254,7 +258,7 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
           <div className="space-y-2">
             <Label htmlFor="documents">Transaction Documents (Multiple files allowed)</Label>
             <div
-              className={`border-2 border-dashed rounded-lg p-4 ${errors.documents ? "border-red-300 bg-red-50" : "border-gray-300"}`}
+              className={`border-2 border-dashed rounded-lg p-4 ${errors.trx_documents ? "border-red-300 bg-red-50" : "border-gray-300"}`}
             >
               <div className="text-center">
                 <Upload className="mx-auto h-8 w-8 text-gray-400" />
@@ -268,7 +272,7 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
                       onChange={(e) => {
                         handleFileChange(e)
                         // Clear error when user selects files
-                        if (errors.documents) {
+                        if (errors.trx_documents) {
                           setErrors((prev) => ({ ...prev, documents: undefined }))
                         }
                       }}
@@ -281,12 +285,12 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
                 </div>
               </div>
             </div>
-            {errors.documents && <p className="text-sm text-red-500">{errors.documents}</p>}
+            {errors.trx_documents && <p className="text-sm text-red-500">{errors.trx_documents}</p>}
 
-            {formData.documents.length > 0 && (
+            {formData.trx_documents.length > 0 && (
               <div className="mt-4 space-y-2">
-                <Label>Selected Files ({formData.documents.length}):</Label>
-                {formData.documents.map((file, index) => (
+                <Label>Selected Files ({formData.trx_documents.length}):</Label>
+                {formData.trx_documents.map((file, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
                     <div className="flex items-center space-x-2">
                       <FileText className="h-4 w-4 text-gray-500" />
