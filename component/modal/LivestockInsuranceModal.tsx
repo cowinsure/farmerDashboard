@@ -19,7 +19,7 @@ interface ModalProps {
 
 const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
   const [currentStep, setCurrentStep] = useState(0);
-      const { insuranceApplication, updateInsuranceApplication , clearInsuranceApplication} = useInsuranceApplication()
+      const { insuranceApplication , clearInsuranceApplication} = useInsuranceApplication()
      const router = useRouter()
      const [sessionExpired, setSessionExpired] = useState(false);
      const [errorMessage, setErrorMessage] = useState('');

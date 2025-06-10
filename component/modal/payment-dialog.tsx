@@ -23,12 +23,14 @@ type TransactionType = "cash" | "bank" | "MFS" | "cheque" | "other"
 
 interface PaymentFormData {
   trx_through: string,
-  assetInsuranceId: string,
+  remarks: string,
+  insuranceId: string,
   insuranceNumber: string,
   trx_id: string
   trx_date: string
   trx_type: TransactionType
   trx_documents: File[]
+  trx_amount: string // added
 }
 
 
@@ -41,13 +43,15 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<PaymentFormData>({
-    assetInsuranceId:'',
+   insuranceId,
+   remarks:'',
     trx_through:'',
     insuranceNumber,
     trx_id: "",
     trx_date: "",
     trx_type: "cash",
     trx_documents: [],
+    trx_amount: "", // added
   })
   const { toast } = useToast()
 
@@ -110,18 +114,20 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
 
     try {
       const submitData = new FormData()
-       submitData.append("assetInsuranceId", formData.assetInsuranceId)
+       submitData.append("assetInsuranceId", formData.insuranceId)
       submitData.append("trx_id", formData.trx_id)
+      submitData.append("amount", formData.trx_amount) // added
       submitData.append("trx_through", formData.trx_through)
       submitData.append("trx_date", formData.trx_date)
       submitData.append("trx_type", formData.trx_type)
 
-      formData.trx_documents.forEach((file, index) => {
+      formData.trx_documents.forEach((file) => {
         submitData.append(`trx_documents`, file)
       })
 
       console.log(formDataToObject(submitData));
-      
+      // return
+
 
 
 
@@ -143,7 +149,7 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
         throw new Error("Failed to submit payment")
       }
 
-      const result = await response.json()
+      // const result = await response.json()
 
       toast({
         title: "Payment Submitted",
@@ -152,17 +158,20 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
 
       // Reset form and close dialog
       setFormData({
+        remarks: '',	
         insuranceNumber,
-         assetInsuranceId:'',
+        insuranceId: insuranceId,	
         trx_id: "",
         trx_date: "",
         trx_type: "cash",
         trx_documents: [],
-        trx_through:''
+        trx_through:'',
+        trx_amount: "", // added
       })
       setErrors({})
       setOpen(false)
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Failed to submit payment. Please try again.",
@@ -195,7 +204,7 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
       <DialogTrigger asChild>
         <Button className="bg-green-700">Submit Payment</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Payment Submission</DialogTitle>
           <DialogDescription>Fill in the payment details and upload transaction documents.</DialogDescription>
@@ -212,6 +221,19 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
               value={formData.trx_id}
               onChange={(e) => setFormData((prev) => ({ ...prev, trx_id: e.target.value }))}
               placeholder="Enter transaction ID"
+              required
+            />
+          </div>
+          {/* Transaction Amount input field */}
+          <div className="space-y-2">
+            <Label htmlFor="transactionAmount">Transaction Amount</Label>
+            <Input
+              id="transactionAmount"
+              type="number"
+              min="0"
+              value={formData.trx_amount}
+              onChange={(e) => setFormData((prev) => ({ ...prev, trx_amount: e.target.value }))}
+              placeholder="Enter transaction amount"
               required
             />
           </div>
@@ -254,7 +276,32 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
               </SelectContent>
             </Select>
           </div>
+            <div className="space-y-2">
+            <Label htmlFor="trxThrough">Transaction Through</Label>
+            <Input
+              id="trxThrough"
+              value={formData.trx_through}
+              onChange={(e) => setFormData((prev) => ({ ...prev, trx_through: e.target.value }))}
+              placeholder="Enter transaction through (e.g., Bkash, Nagad, Bank Name)"
+              required
+            />
+            </div>
 
+            <div className="space-y-2">
+            <Label htmlFor="remarks">Remarks</Label>
+            <Input
+              id="remarks"
+              value={(formData.remarks)}
+              onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+               
+                remarks: e.target.value,
+              }))
+              }
+              placeholder="Add any remarks (optional)"
+            />
+            </div>
           <div className="space-y-2">
             <Label htmlFor="documents">Transaction Documents (Multiple files allowed)</Label>
             <div
