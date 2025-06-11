@@ -307,7 +307,8 @@ const FarmerPage: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {assetList.map((asset) => (
+                         {assetList && assetList.length > 0 ? (
+                        assetList.map((asset) => (
                             <tr key={asset.id} className="bg-green-100 text-center">
                                 <td className="border border-gray-100 p-2">
                                     <Image
@@ -339,7 +340,13 @@ const FarmerPage: React.FC = () => {
                                     </Button>
                                 </td>
                             </tr>
-                        ))}
+                         ))) : (
+              <tr>
+                <td colSpan={11} className="text-center py-4 text-gray-600 bg-green-100">
+                 Add new asset to see the list here.
+                </td>
+              </tr>
+            )}
                     </tbody>
                 </table>
             </div>

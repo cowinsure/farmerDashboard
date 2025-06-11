@@ -84,7 +84,11 @@ const AddCattleForm: React.FC = () => {
     const handleAssetSelection = (assetId: number) => {
         const selected = assetList.find((asset) => asset.id === assetId) || null;
         setSelectedAsset(selected);
-        updateInsuranceApplication({ asset: assetId }); // Update the context with the selected asset ID
+        updateInsuranceApplication({ asset: assetId });
+          updateInsuranceApplication({ sum_insured:parseFloat(selected?.purchase_amount ?? '0') * 0.4 });
+          const sum_insured = parseFloat(selected?.purchase_amount ?? '0') * 0.4;
+            setSumInsured(sum_insured.toString());
+         // Update the context with the selected asset ID
     };
 
 
@@ -106,7 +110,10 @@ const AddCattleForm: React.FC = () => {
                     id="asset"
                     name="asset"
                     value={selectedAsset?.id || ''}
-                    onChange={(e) => handleAssetSelection(Number(e.target.value))}
+                    onChange={(e) => handleAssetSelection(Number(e.target.value))
+
+
+                    }
                     className="p-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                     <option value="" disabled>
@@ -114,7 +121,7 @@ const AddCattleForm: React.FC = () => {
                     </option>
                     {assetList.map((asset) => (
                         <option key={asset.id} value={asset.id}>
-                            {`${asset.asset_type} - ${asset.breed} - ${asset.color}`}
+                            {` ${asset.reference_id}`}
                         </option>
                     ))}
                 </select>

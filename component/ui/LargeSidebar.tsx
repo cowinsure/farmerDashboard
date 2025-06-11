@@ -41,7 +41,7 @@ function LargeSidebar() {
                 </Link>
                 <Link href="/profile" onClick={()=>{setIsActiveMenu("Me")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Me"  ? "bg-green-800 text-white " : ""}`}>
                 <IoPersonCircleOutline className="" size={16} />
-                    {isOpen && <span className='ml-2'>Me</span>}
+                    {isOpen && <span className='ml-2'>Profile</span>}
                 </Link>
                 <Link href="/farmer" onClick={()=>{setIsActiveMenu("Farm")}} className={`p-4   w-full hover:bg-green-800 hover:text-white flex items-center ${isActiveMenu == "Farm"  ? "bg-green-800 text-white" : ""}`}>
                     <PiFarm size={16} className="" />

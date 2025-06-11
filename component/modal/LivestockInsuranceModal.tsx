@@ -69,8 +69,8 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
       
           if (response.ok) {
             setSuccessMessage("Insurance  Applied successfully! check your insurance in Active policy");
-            clearInsuranceApplication(); // Clear the context after successful submission
-            onClose(); // Close the modal
+            // clearInsuranceApplication(); // Clear the context after successful submission
+            // onClose(); // Close the modal
           } else if (response.status === 400) {
             setErrorMessage(result.data.message || "Invalid input. Please check your data.");
           } else if (response.status === 401) {
@@ -288,7 +288,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose}) => {
                     <button
                             onClick={() => {
                               setSuccessMessage("");
-                              // clearInsuranceApplication()
+                              clearInsuranceApplication()
                              
                               onClose() 
                               setCurrentStep(0)// Clear error message

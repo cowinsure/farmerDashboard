@@ -33,6 +33,7 @@ interface InsuranceData {
   insurance_status: string;
   created_by: string;
   claim_status: string;
+  premium_amount: string;
 }
 
 export default function CattleManagementPage() {
@@ -64,8 +65,14 @@ export default function CattleManagementPage() {
       const result = await response.json();
 
       if (response.ok) {
-        console.log("Insurance data fetched successfully:", result.data.results);
-        setInsuranceData(result.data.results); // Update the state with API data
+           const validStatuses = [
+            'claim_pending',
+
+          ];
+          const filteredData: InsuranceData[] = result.data.results.filter(
+            (item: InsuranceData) => validStatuses.includes(item.claim_status)
+          );
+        setInsuranceData(filteredData); // Update the state with API data
       } else {
         console.error("Failed to fetch insurance data:", result);
       }
@@ -99,6 +106,7 @@ export default function CattleManagementPage() {
               <th className="p-2">Insurance Provider</th>
               <th className="p-2">Insurance Number</th>
               <th className="p-2">Sum Insured</th>
+              <th className="p-2">Premium Amount</th>
               <th className="p-2">Start Date</th>
               <th className="p-2">End Date</th>
               <th className="p-2">Status</th>
@@ -109,12 +117,14 @@ export default function CattleManagementPage() {
             </tr>
           </thead>
           <tbody>
-            {insuranceData.map((cow) => (
+               {insuranceData && insuranceData.length > 0 ? (
+            insuranceData.map((cow) => (
               <tr key={cow.id} className="bg-green-100 text-center">
                 <td className="border border-gray-100 p-2">{cow.asset}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_provider}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_number}</td>
                 <td className="border border-gray-100 p-2">{cow.sum_insured}</td>
+                <td className="border border-gray-100 p-2">{cow.premium_amount}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_start_date}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_end_date}</td>
                 <td className="border border-gray-100 p-2">{cow.insurance_status}</td>
@@ -143,7 +153,13 @@ export default function CattleManagementPage() {
                   </Button>
                 </td>
               </tr>
-            ))}
+               ))) : (
+              <tr>
+                <td colSpan={11} className="text-center py-4 text-gray-600 bg-green-100">
+                  No Claim data found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

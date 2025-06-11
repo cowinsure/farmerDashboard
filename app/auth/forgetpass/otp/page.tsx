@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
-const OtpPage: React.FC = () => {
+const ForgetPassOtpPage: React.FC = () => {
    const router = useRouter();
     
   const [otp, setOtp] = useState<string>('');
@@ -48,12 +48,12 @@ const OtpPage: React.FC = () => {
        
         const requestBody = {
             mobile_number:  localStorage.getItem('mobile_number'),
-            role_id: localStorage.getItem('role_id'),
+        
           };
 
         console.log(requestBody);
         
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/register/step1/`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/request/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const OtpPage: React.FC = () => {
             if (response.ok) {
                 // const data = await response.json();
                 if (response.status == 200) {
-                  // console.log(data.data.message); // "OTP verified successfully."
+                //   console.log(data.data.message); // "OTP verified successfully."
                  // Navigate to the set password page
                 } else {
                   alert('OTP Resend failed. Please try again.');
@@ -90,10 +90,14 @@ const OtpPage: React.FC = () => {
       try {
         const requestBody = {
           mobile_number: mobileNumber,
-          otp,
+          otp: otp,
+         
         };
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/register/verify-otp/`, {
+        console.log(requestBody);
+        
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/verify/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -101,12 +105,15 @@ const OtpPage: React.FC = () => {
           body: JSON.stringify(requestBody),
         });
 
+
+        console.log(response.ok);
+
         if (response.ok) {
-          const data = await response.json();
-          if (data.statusCode === '200') {
-            console.log(data.data.message); // "OTP verified successfully."
+        //   const data = await response.json();
+          if (response.status == 200) {
+            // console.log(data.data.message); // "OTP verified successfully."
             // Navigate to the set password page
-            router.push('/auth/setpassword');  
+            router.push('/auth/forgetpass/setpasss');  
         } else {
             alert('OTP verification failed. Please try again.');
           }
@@ -168,4 +175,4 @@ const OtpPage: React.FC = () => {
   );
 };
 
-export default OtpPage;
+export default ForgetPassOtpPage;

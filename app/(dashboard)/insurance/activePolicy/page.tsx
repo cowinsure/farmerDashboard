@@ -23,6 +23,7 @@ interface InsuranceData {
   created_by: string;
   claim_status: string;
   reference_id: string;
+  premium_amount: string;
 
 }
 
@@ -60,8 +61,15 @@ export default function InsuranceActivePolicy() {
 
 
         if (response.ok) {
-          console.log("Insurance data fetched successfully:", result.data.results);
-          setInsuranceData(result.data.results); // Update the state with API data
+          // console.log("Insurance data fetched successfully:", result.data.results);
+          const validStatuses = [
+            'active',
+
+          ];
+          const filteredData: InsuranceData[] = result.data.results.filter(
+            (item: InsuranceData) => validStatuses.includes(item.insurance_status)
+          );
+          setInsuranceData(filteredData); // Update the state with API data
         } else {
           console.error("Failed to fetch insurance data:", result);
         }
@@ -95,6 +103,7 @@ export default function InsuranceActivePolicy() {
               <th className="p-2">Insurance Provider</th>
               <th className="p-2">Insurance Number</th>
               <th className="p-2">Sum Insured</th>
+              <th className="p-2">Premium Amount</th>
               <th className="p-2">Start Date</th>
               <th className="p-2">End Date</th>
               <th className="p-2">Status</th>
@@ -105,78 +114,59 @@ export default function InsuranceActivePolicy() {
             </tr>
           </thead>
           <tbody>
-            {insuranceData.map((cow) => (
-              <tr key={cow.id} className="bg-green-100 text-center">
-                <td className="border border-gray-100 p-2">{cow.id}</td>
-                <td className="border border-gray-100 p-2">{cow.insurance_provider}</td>
-                <td className="border border-gray-100 p-2">{cow.insurance_number}</td>
-                <td className="border border-gray-100 p-2">{cow.sum_insured}</td>
-                <td className="border border-gray-100 p-2">{cow.insurance_start_date}</td>
-                <td className="border border-gray-100 p-2">{cow.insurance_end_date}</td>
-                <td className="border border-gray-100 p-2">{cow.insurance_status}</td>
-                <td className="border border-gray-100 p-2">{cow.created_by}</td>
-                <td className="border border-gray-100 p-2">{cow.claim_status}</td>
-                <td className="border border-gray-100 p-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleViewDetails(cow)}
-                    className="text-green-700 hover:text-green-900 hover:bg-green-200"
-                  >
-                    <Eye size={16} className="mr-1" />
-                    View
-                  </Button>
-                </td>
-                <td className="border border-gray-100 p-2">
-                  {/* <Button
-                  disabled = {cow.claim_status != "No Claim" }
-                    variant="outline"
-                    size="sm"
-                    onClick={() => 
-                      
-                      
-                      handleClaim(cow)}
-                    className="text-green-700 border-green-700 hover:bg-green-200"
-                  >
-                    <FileText size={16} className="mr-1" />
-                    Action
-                  </Button> */}
-                  { cow.insurance_status == "payment_pending" ? 
-                  <PaymentDialog insuranceId={cow.id.toString()} insuranceNumber = {cow.insurance_number.toString()} />
-                  // <Button
-                  
-                  //   variant="outline"
-                  //   size="sm"
-                  //   onClick={() => 
-                      
-                      
-                  //     // handleClaim(cow)
-                      
-                        
-                      
-                  //   }
-                  //   className="text-green-700 border-green-700 hover:bg-green-200"
-                  // >
-                  //   <FileText size={16} className="mr-1" />
-                  //   Pay Now
-                  // </Button>
-                  
-                  :  <Button
-                  disabled = {cow.insurance_status != "active" }
-                    variant="outline"
-                    size="sm"
-                    onClick={() => 
-                      
-                      
-                      handleClaim(cow)}
-                    className="text-green-700 border-green-700 hover:bg-green-200"
-                  >
-                    <FileText size={16} className="mr-1" />
-                    Claim
-                  </Button>}
+
+            {insuranceData && insuranceData.length > 0 ? (
+              insuranceData.map((cow) => (
+                <tr key={cow.id} className="bg-green-100 text-center">
+                  <td className="border border-gray-100 p-2">{cow.id}</td>
+                  <td className="border border-gray-100 p-2">{cow.insurance_provider}</td>
+                  <td className="border border-gray-100 p-2">{cow.insurance_number}</td>
+                  <td className="border border-gray-100 p-2">{cow.sum_insured}</td>
+                  <td className="border border-gray-100 p-2">{cow.premium_amount}</td>
+                  <td className="border border-gray-100 p-2">{cow.insurance_start_date}</td>
+                  <td className="border border-gray-100 p-2">{cow.insurance_end_date}</td>
+                  <td className="border border-gray-100 p-2">{cow.insurance_status}</td>
+                  <td className="border border-gray-100 p-2">{cow.created_by}</td>
+                  <td className="border border-gray-100 p-2">{cow.claim_status}</td>
+                  <td className="border border-gray-100 p-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleViewDetails(cow)}
+                      className="text-green-700 hover:text-green-900 hover:bg-green-200"
+                    >
+                      <Eye size={16} className="mr-1" />
+                      View
+                    </Button>
+                  </td>
+                  <td className="border border-gray-100 p-2">
+                 
+                    {cow.insurance_status == "payment_pending" ?
+                      <PaymentDialog insuranceId={cow.id.toString()} insuranceNumber={cow.insurance_number.toString()} />
+                    
+
+                      : <Button
+                        disabled={cow.insurance_status != "active"}
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+
+
+                          handleClaim(cow)}
+                        className="text-green-700 border-green-700 hover:bg-green-200"
+                      >
+                        <FileText size={16} className="mr-1" />
+                        Claim
+                      </Button>}
+                  </td>
+                </tr>
+              ))) : (
+              <tr>
+                <td colSpan={11} className="text-center py-4 text-gray-600 bg-green-100">
+                  No active policy found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -91,8 +91,8 @@ export default function StepTwo() {
     purchase_amount: "",
   });
 
-   // Fetch asset types from the API
-   useEffect(() => {
+  // Fetch asset types from the API
+  useEffect(() => {
     const fetchAssetTypes = async () => {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
@@ -161,39 +161,39 @@ export default function StepTwo() {
     fetchBreeds();
   }, []);
 
-      // Fetch colors from the API
-    useEffect(() => {
-      const fetchColors = async () => {
-        const accessToken = localStorage.getItem("accessToken");
-        if (!accessToken) {
-          console.error("Access token is missing. Please log in again.");
-          return;
+  // Fetch colors from the API
+  useEffect(() => {
+    const fetchColors = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.error("Access token is missing. Please log in again.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/colors/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log("Colors fetched successfully:", result.data.results);
+          setColors(result.data.results);
+        } else {
+          console.error("Failed to fetch colors:", result);
         }
+      } catch (error) {
+        console.error("Error fetching colors:", error);
+      }
+    };
 
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/colors/`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            console.log("Colors fetched successfully:", result.data.results);
-            setColors(result.data.results);
-          } else {
-            console.error("Failed to fetch colors:", result);
-          }
-        } catch (error) {
-          console.error("Error fetching colors:", error);
-        }
-      };
-
-      fetchColors();
-    }, []);
+    fetchColors();
+  }, []);
 
 
   // Fetch vaccination statuses from the API
@@ -303,8 +303,8 @@ export default function StepTwo() {
                 className="w-full p-2 border rounded"
               />
             </div> */}
-<div className="mb-4">
-<label className="block mb-2">Asset Type</label>
+      <div className="mb-4">
+        <label className="block mb-2">Asset Type</label>
         <select
           name="asset_type"
           value={formData.asset_type}
@@ -321,15 +321,20 @@ export default function StepTwo() {
             </option>
           ))}
         </select>
-        </div>
-      <input
-        type="number"
-        name="age_in_months"
-        value={formData.age_in_months}
-        onChange={handleInputChange}
-        placeholder="Age in Months"
-        className="w-full p-2 border rounded mb-4"
-      />
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2">Age in Month</label>
+        <input
+          type="number"
+          name="age_in_months"
+          value={formData.age_in_months}
+          onChange={handleInputChange}
+          placeholder="Age in Months"
+          className="w-full p-2 border rounded mb-4"
+        />
+
+      </div>
+
       <select
         name="gender"
         value={formData.gender}
@@ -376,14 +381,22 @@ export default function StepTwo() {
           </option>
         ))}
       </select>
-      <input
-        type="text"
-        name="weight_kg"
-        value={formData.weight_kg}
-        onChange={handleInputChange}
-        placeholder="weight kg"
-        className="w-full p-2 border rounded mb-4"
-      />
+      <div className="mb-4">
+        <label className="block mb-2">Weight in Kg</label>
+        <input
+          type="text"
+          name="weight_kg"
+          value={formData.weight_kg}
+          onChange={handleInputChange}
+          placeholder="weight kg"
+          className="w-full p-2 border rounded mb-4"
+        />
+      </div>
+
+                    <div className="mb-4">
+<label className="block mb-2">Height in feet</label>
+
+
       <input
         type="text"
         name="height"
@@ -392,6 +405,11 @@ export default function StepTwo() {
         placeholder="Height"
         className="w-full p-2 border rounded mb-4"
       />
+</div>
+                    <div className="mb-4">
+<label className="block mb-2">Purchase Amount</label>
+
+
       <input
         type="text"
         name="purchase_amount"
@@ -400,7 +418,8 @@ export default function StepTwo() {
         placeholder="Purchase Amount"
         className="w-full p-2 border rounded mb-4"
       />
-       <div className="mb-4">
+</div>
+      <div className="mb-4">
         <label className="block mb-2" htmlFor="dateOfBirth">Purchase From</label>
         <input
           type="text"
@@ -503,7 +522,9 @@ export default function StepTwo() {
         </select>
       </div>
       {formData.hasDisease && (
-        <input
+                            <div className="mb-4">
+<label className="block mb-2">Disease Name</label>
+ <input
           type="text"
           name="health_issues"
           value={formData.health_issues}
@@ -511,6 +532,8 @@ export default function StepTwo() {
           placeholder="Disease Name"
           className="w-full p-2 border rounded mb-4"
         />
+</div>
+       
       )}
 
       {formData.gender === "female" && (
@@ -533,7 +556,10 @@ export default function StepTwo() {
           </div>
           {formData.isPregnant && (
             <>
-              <input
+             <div className="mb-4">
+            <label className="block mb-2" >Pregnancy Status</label>
+            
+             <input
                 type="text"
                 name="pregnancy_status"
                 value={formData.pregnancy_status}
@@ -541,6 +567,8 @@ export default function StepTwo() {
                 placeholder="Pregnancy Stage"
                 className="w-full p-2 border rounded mb-4"
               />
+            </div>
+             
               <div className="mb-4">
                 <label className="block mb-2" htmlFor="dateOfBirth">Date of Last Calving</label>
                 <input

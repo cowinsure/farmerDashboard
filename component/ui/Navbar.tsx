@@ -7,6 +7,8 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaBell } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import ModalGeneral from '../modal/DialogGeneral';
+import Image from 'next/image';
+import logo from '../../public/Logo-03.png';
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
   const router = useRouter()
@@ -32,7 +34,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
         setIsModalOpen(true)
       }} className="p-4 relative flex items-center">
         <FaBell size={18}  />
-        <span className="absolute top-2 right-0 bg-white text-green-800 text rounded-full w-4 h-4 flex items-center justify-center text-xs">3</span>
+        <span className="absolute top-2 right-0 bg-white text-green-800 text rounded-full w-4 h-4 flex items-center justify-center text-xs">0</span>
         </Link>
     
         <Link href="/profile" className="p-4">
@@ -46,7 +48,20 @@ const [isModalOpen, setIsModalOpen] = useState(false);
       </div>
       </div>
       <ModalGeneral isOpen={isModalOpen} onClose={() => {setIsModalOpen(false)}}>
-        <div className='text-black mt-10 text-center'>Notifications</div>
+          <div className='text-black  text-center flex flex-col items-center p-5'>
+         <Image
+                        src={logo}
+                        alt="Logo"
+                        width={200}
+                        height={200}
+                        className="h-auto "
+                        priority
+
+                    />
+        <div className='text-black mt-10 text-center'>No new notification available</div>
+
+          </div>
+
       </ModalGeneral>
     </nav>
   );

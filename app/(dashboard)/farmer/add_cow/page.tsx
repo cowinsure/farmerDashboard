@@ -21,7 +21,8 @@ export default function StepForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0)
-     const {data } = useCowRegistration();
+     const {data,reset } = useCowRegistration();
+  
     
 
 
@@ -139,11 +140,11 @@ export default function StepForm() {
             )}
 
             {/* Success Message Dialog */}
-            {successMessage && (
+            {/* {successMessage && (
                 <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
                     <p>{successMessage}</p>
                 </div>
-            )}
+            )} */}
 
 
             <ModalGeneral isOpen={sessionExpired} onClose={() => { setSessionExpired(false) }}>
@@ -194,6 +195,38 @@ export default function StepForm() {
                             Close
                         </button>
                     </div>
+                </div>
+            </ModalGeneral>
+                 <ModalGeneral isOpen={successMessage != null} onClose={() => { setSuccessMessage(null) }}>
+                <div className='text-black  text-center flex flex-col items-center p-5'>
+                    <Image
+                        src={logo}
+                        alt="Logo"
+                        width={200}
+                        height={200}
+                        className="h-auto "
+                        priority
+
+                    />
+                       {/* Success Message Dialog */}
+            {successMessage && (
+                <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
+                    <p>{successMessage}</p>
+                    <button
+                            onClick={() => {
+                              setSuccessMessage(null);
+                              // clearInsuranceApplication()
+                              reset();
+                              setCurrentStep(0)// Clear error message
+                               router.push('/farmer'); 
+                              // onClose() 
+                            }}
+                            className="mt-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+                        >
+                            ok
+                        </button>
+                </div>
+            )}
                 </div>
             </ModalGeneral>
     </div>

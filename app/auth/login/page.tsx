@@ -121,7 +121,7 @@ const Login: React.FC = () => {
                     </button>
                 </form>
                 <div className="mt-4 text-center">
-                    <Link href="/auth/otp" className="text-sm text-green-600 hover:underline">
+                    <Link href="/auth/forgetpass/phone" className="text-sm text-green-600 hover:underline">
                         Forgot Password?
                     </Link>
                 </div>
