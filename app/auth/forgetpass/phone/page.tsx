@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import ForgetPassOtpPage from '../otp/page';
+
 
 const ForgetPassPhonePage: React.FC = () => {
     
@@ -22,7 +22,7 @@ const ForgetPassPhonePage: React.FC = () => {
         
     
         // Map account type to role_id
-        const role_id = 1 ;
+  
     
         const requestBody = {
           mobile_number: phone,
