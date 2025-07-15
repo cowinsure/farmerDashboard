@@ -138,7 +138,7 @@ export default function Sidebar() {
                 <span
                   className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-gray-800 text-white rounded shadow-md 
       opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 pointer-events-none whitespace-nowrap 
-      translate-x-1 group-hover:translate-x-0"
+      -translate-x-5 group-hover:translate-x-0"
                 >
                   {item.name}
                 </span>
@@ -156,7 +156,7 @@ export default function Sidebar() {
             handleLogout();
           }}
           className={`flex items-center justify-center w-full text-red-600 border border-red-600  ${
-            isOpen ? "px-3 py-2 rounded-md" : "px-1 py-3 rounded-full"
+            isOpen ? "px-3 py-2 rounded-md" : "px-1 py-3 rounded-2xl"
           } text-sm hover:bg-red-600 hover:text-white transition-all font-bold cursor-pointer`}
         >
           <MdLogout className={`${isOpen ? "w-5 h-5 mr-2" : "w-5 h-5"}`} />

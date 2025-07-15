@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FaBell } from "react-icons/fa";
+import { FaBell } from "react-icons/fa6";
 
 const Navbar: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
       <div className="h-full flex items-center justify-end px-2">
         <div className="relative group">
           {/* Bell Icon */}
-          <div className="p-4 relative flex items-center text-[#005921] cursor-pointer">
+          <div className="p-4 relative flex items-center text-[var(--base-color)] cursor-pointer">
             <FaBell
               size={25}
               className="cursor-pointer group-hover:rotate-12 transition-transform duration-200"

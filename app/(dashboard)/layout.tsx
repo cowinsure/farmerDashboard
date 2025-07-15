@@ -12,7 +12,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const auth = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const accesstoken = localStorage.getItem("accessToken");
@@ -26,13 +26,13 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
     if (!accesstoken) {
       console.log("No userId found, redirecting to login...");
       setLoading(false);
-      router.push("/auth/login"); // Set loading to false before redirecting
+      router.push("/auth/login");
       // router.replace('/auth/login')  // Redirect to login if no token
     } else {
       //  router.push('/home')
-      setLoading(false); // Set loading to false after auth check
+      setLoading(false);
     }
-  }, [auth, router]); // Run effect when auth or router changes
+  }, [auth, router]);
 
   if (loading) {
     return <Loader />; // Or show a loading spinner bg-[#2e5e3a]
@@ -47,7 +47,9 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
         </div>
         <div className="flex-1 overflow-y-auto h-screen">
           <Navbar />
-          <div className=" h-auto m-2 rounded-md w-[90%] mx-auto">{children}</div>
+          <div className=" h-auto m-2 rounded-md w-[95%] mx-auto">
+            {children}
+          </div>
         </div>
       </div>
     </div>

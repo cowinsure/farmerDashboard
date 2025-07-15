@@ -49,13 +49,8 @@ export default function MobileSidebar() {
   ];
 
   const handleLogout = () => {
-    // Call the logout function from the AuthContext
-    // This will remove the userId, phoneNumber, and accessToken from local storage and state
-    // Implement your logout logic here
-    console.log("User logged out");
     logout();
-    router.replace("/auth/login"); // Redirect to login page after logout
-    // window.location.href = "/login" // Call the logout function from context
+    router.replace("/auth/login");
   };
 
   return (
@@ -64,7 +59,7 @@ export default function MobileSidebar() {
       <div className="md:hidden fixed top-3 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-gray-200 font-bold text-2xl"
+          className="text-green-800 font-bold text-2xl"
         >
           {isOpen ? "" : <IoMenu className="cursor-pointer hover:scale-110" />}
         </button>
