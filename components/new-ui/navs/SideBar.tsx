@@ -20,7 +20,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { logout } = useAuth();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSidebarFullyClosed, setIsSidebarFullyClosed] = useState(false);
   const menuItems = [
     {

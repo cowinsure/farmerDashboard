@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // ✅ ADD usePathname
 import { useAuth } from "@/context/AuthContext";
 import Loader from "@/component/helper/Loader";
 import Sidebar from "@/components/new-ui/navs/SideBar";
@@ -12,7 +12,9 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const auth = useAuth();
   const router = useRouter();
+  const pathname = usePathname(); // ✅ Track route path changes
   const [loading, setLoading] = useState(true);
+  const [routeLoading, setRouteLoading] = useState(false); // ✅ ADD new loader state
 
   useEffect(() => {
     const accesstoken = localStorage.getItem("accessToken");
@@ -27,16 +29,19 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
       console.log("No userId found, redirecting to login...");
       setLoading(false);
       router.push("/auth/login");
-      // router.replace('/auth/login')  // Redirect to login if no token
     } else {
-      //  router.push('/home')
       setLoading(false);
     }
   }, [auth, router]);
 
-  if (loading) {
-    return <Loader />; // Or show a loading spinner bg-[#2e5e3a]
-  }
+  // ✅ Show loader briefly when route changes
+  useEffect(() => {
+    if (!loading) {
+      // setRouteLoading(true);
+      const timer = setTimeout(() => setRouteLoading(false), 400); // Adjust time as needed
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, loading]);
 
   return (
     <div>
@@ -48,6 +53,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
         <div className="flex-1 overflow-y-auto h-screen">
           <Navbar />
           <div className=" h-auto m-2 rounded-md w-[95%] mx-auto">
+            {loading || (routeLoading && <Loader />)}
             {children}
           </div>
         </div>
