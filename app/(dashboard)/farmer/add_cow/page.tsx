@@ -53,6 +53,10 @@ export default function StepForm() {
         formData.append('latitude', String(latitude));
         formData.append('longitude', String(longitude));
 
+        for (const [key, value] of formData.entries()) {
+          console.log(key, value);
+        }
+
         try {
           const token = localStorage.getItem('accessToken');
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/create-asset/`, {
