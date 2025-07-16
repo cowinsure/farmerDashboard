@@ -712,10 +712,18 @@ export default function DashboardPage() {
       {/* Page Heading */}
 
       <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-[clamp(1.5rem,5vw,3.5rem)] font-extrabold text-[#202020]" data-aos="fade-in" data-aos-duration="1500">
+        <h1
+          className="text-[clamp(1.5rem,5vw,3.5rem)] font-extrabold text-[#202020]"
+          data-aos="fade-in"
+          data-aos-duration="3000"
+        >
           Welcome to <span className="text-[var(--base-color)]">Company</span>
         </h1>
-        <p className="text-gray-500/80 md:text-lg font-medium md:w-[70%] lg:w-[40%] mx-auto text-center" data-aos="fade-in" data-aos-duration="2000">
+        <p
+          className="text-gray-500/80 md:text-lg font-medium md:w-[70%] lg:w-[40%] mx-auto text-center"
+          data-aos="fade-in"
+          data-aos-duration="2000"
+        >
           Protect what matters most with our comprehensive insurance solutions
           designed for modern farming and life.
         </p>
@@ -726,7 +734,9 @@ export default function DashboardPage() {
           <div
             key={idx}
             style={{ backgroundColor: `#${item.bgColor}` }}
-            className="flex flex-col items-center gap-5 rounded-xl p-5 shadow-lg hover:drop-shadow-md custom-hover" data-aos="zoom-in-up"
+            className="flex flex-col items-center gap-5 rounded-xl p-5 shadow-lg hover:drop-shadow-md custom-hover"
+            data-aos="flip-left"
+            data-aos-delay={`${idx * 100}`} // delay 0ms, 100ms, 200ms, ...
           >
             <div className="flex items-center w-full gap-4">
               <div className="bg-[#515151]/10 rounded-2xl p-2">

@@ -34,11 +34,11 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [auth, router]);
 
-  // ✅ Show loader briefly when route changes
+
   useEffect(() => {
     if (!loading) {
       // setRouteLoading(true);
-      const timer = setTimeout(() => setRouteLoading(false), 400); // Adjust time as needed
+      const timer = setTimeout(() => setRouteLoading(false), 400);
       return () => clearTimeout(timer);
     }
   }, [pathname, loading]);

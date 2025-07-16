@@ -56,14 +56,16 @@ export default function MobileSidebar() {
   return (
     <>
       {/* Toggle Button (Hamburger) */}
-      <div className="md:hidden fixed top-3 left-4 z-50">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-green-800 font-bold text-2xl"
-        >
-          {isOpen ? "" : <IoMenu className="cursor-pointer hover:scale-110" />}
-        </button>
-      </div>
+      {!isOpen && (
+        <div className="md:hidden fixed top-5 left-4 z-50 backdrop-blur-sm">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="text-green-800 font-bold text-2xl"
+          >
+            <IoMenu className="cursor-pointer hover:scale-110" />
+          </button>
+        </div>
+      )}
 
       {/* Sidebar Overlay */}
       {isOpen && (

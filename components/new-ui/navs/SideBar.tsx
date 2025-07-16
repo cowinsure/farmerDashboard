@@ -74,7 +74,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`h-screen hidden md:flex flex-col justify-between transition-all duration-300
+      className={`h-screen hidden md:flex flex-col justify-between transition-all duration-300 z-50
         ${
           isOpen ? "w-[220px] drop-shadow-2xl" : "w-[60px] pr-1 drop-shadow-sm"
         } bg-white`}
@@ -94,7 +94,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <div className="flex flex-col items-start gap-4 w-full flex-1 mt-8">
+      <div className="flex flex-col items-start gap-4 w-full flex-1 mt-8 z-50">
         {menuItems.map((item) => (
           <Link
             key={item.name}
@@ -130,7 +130,7 @@ export default function Sidebar() {
 
             {/* Label OR Tooltip */}
             {isOpen ? (
-              <span className="z-10 transition-opacity duration-300 group-hover:text-white">
+              <span className="z-50 transition-opacity duration-300 group-hover:text-white">
                 {item.name}
               </span>
             ) : (

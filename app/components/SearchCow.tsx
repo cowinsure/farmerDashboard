@@ -1,5 +1,5 @@
-// import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 interface Cow {
   id: number;
   reference_id: string;
@@ -33,10 +33,8 @@ interface Cow {
   image_with_owner: string;
 }
 
-
-
 interface SearchCowProps {
-  reference_id: string
+  reference_id: string;
 }
 
 const CowDetails = ({ reference_id }: SearchCowProps) => {
@@ -44,24 +42,25 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
   const [cowData, setCowData] = useState<Cow>();
   // State to store any error that might occur
   // const [error, setError] = useState<CustomError | undefined>(undefined);
-  const token = localStorage.getItem('accessToken');
-
 
   console.log(cowData);
-  
 
   // useEffect to fetch data when the component mounts
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
 
     // Function to fetch data
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-cow/?string_id=${reference_id}`, {
-          headers: {
-            // "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/get-cow/?string_id=${reference_id}`,
+          {
+            headers: {
+              // "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -71,7 +70,7 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
         setCowData(data);
       } catch (error) {
         // setError(error.message);
-        console.error('Error fetching cowdata data:', error);
+        console.error("Error fetching cowdata data:", error);
       }
     };
 
@@ -91,72 +90,130 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Cow Details</h1>
       <ul className="overflow-y-auto max-h-96 border border-gray-300 rounded-lg p-4">
-        
-          <li key={cowData.id} className="border-b border-gray-300 pb-4 mb-4 last:border-b-0">
-            <h2 className="text-xl font-semibold mb-2">{cowData.reference_id}</h2>
-            <p className="mb-1">Owner Name: {cowData.owner_name}</p>
-            <p className="mb-1">Breed Name: {cowData.breed_name}</p>
-            <p className="mb-1">Color Name: {cowData.color_name}</p>
-            <p className="mb-1">Age in Months: {cowData.age_in_months}</p>
-            <p className="mb-1">Weight (kg): {cowData.weight_kg}</p>
-            <p className="mb-1">Height: {cowData.height}</p>
-            <p className="mb-1">Vaccination Status: {cowData.vaccination_status_name}</p>
-            <p className="mb-1">Last Vaccination Date: {cowData.last_vaccination_date}</p>
-            <p className="mb-1">Deworming Status: {cowData.deworming_status_name}</p>
-            <p className="mb-1">Last Deworming Date: {cowData.last_deworming_date}</p>
-            <p className="mb-1">Health Issues: {cowData.health_issues}</p>
-            <p className="mb-1">Pregnancy Status: {cowData.pregnancy_status}</p>
-            <p className="mb-1">Last Date of Calving: {cowData.last_date_of_calving !== null ? cowData.last_date_of_calving : 'N/A'}</p>
-            <p className="mb-1">Purchase Date: {cowData.purchase_date}</p>
-            <p className="mb-1">Purchase From: {cowData.purchase_from}</p>
-            <p className="mb-1">Purchase Amount: {cowData.purchase_amount}</p>
-            <p className="mb-1">Gender: {cowData.gender}</p>
-            <p className="mb-1">Remarks: {cowData.remarks}</p>
-            <p className="mb-1">Created At: {cowData.created_at}</p>
-            <p className="mb-1">Updated At: {cowData.updated_at}</p>
-            <p className="mb-1">Is Active: {cowData.is_active ? 'Yes' : 'No'}</p>
-            <p className="mb-1">Muzzle Video: <a href={cowData.muzzle_video} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Video</a></p>
-            
-            <p className='text-md w-full text-center font-bold my-5'> Attachments below</p>
-            <p className="mb-1">Challan Paper: <a href={cowData.challan_paper} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Paper</a></p>
-            <p className="mb-1">Vet Certificate: <a href={cowData.vet_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
-            <p className="mb-1">Chairman Certificate: <a href={cowData.chairman_certificate} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View Certificate</a></p>
-            
-            <p className="mb-1">Left Side Image:
-              {/* <Image src={cowdata.left_side_image} alt="Left Side" className="w-50 h-auto" /> */}
-              {cowData?.left_side_image && (
-                <img
-                  src={cowData.left_side_image}
-                  alt="Segmentation Preview"
-                  className="w-full h-full object-cover"
-                />
-              )}
+        <li
+          key={cowData.id}
+          className="border-b border-gray-300 pb-4 mb-4 last:border-b-0"
+        >
+          <h2 className="text-xl font-semibold mb-2">{cowData.reference_id}</h2>
+          <p className="mb-1">Owner Name: {cowData.owner_name}</p>
+          <p className="mb-1">Breed Name: {cowData.breed_name}</p>
+          <p className="mb-1">Color Name: {cowData.color_name}</p>
+          <p className="mb-1">Age in Months: {cowData.age_in_months}</p>
+          <p className="mb-1">Weight (kg): {cowData.weight_kg}</p>
+          <p className="mb-1">Height: {cowData.height}</p>
+          <p className="mb-1">
+            Vaccination Status: {cowData.vaccination_status_name}
+          </p>
+          <p className="mb-1">
+            Last Vaccination Date: {cowData.last_vaccination_date}
+          </p>
+          <p className="mb-1">
+            Deworming Status: {cowData.deworming_status_name}
+          </p>
+          <p className="mb-1">
+            Last Deworming Date: {cowData.last_deworming_date}
+          </p>
+          <p className="mb-1">Health Issues: {cowData.health_issues}</p>
+          <p className="mb-1">Pregnancy Status: {cowData.pregnancy_status}</p>
+          <p className="mb-1">
+            Last Date of Calving:{" "}
+            {cowData.last_date_of_calving !== null
+              ? cowData.last_date_of_calving
+              : "N/A"}
+          </p>
+          <p className="mb-1">Purchase Date: {cowData.purchase_date}</p>
+          <p className="mb-1">Purchase From: {cowData.purchase_from}</p>
+          <p className="mb-1">Purchase Amount: {cowData.purchase_amount}</p>
+          <p className="mb-1">Gender: {cowData.gender}</p>
+          <p className="mb-1">Remarks: {cowData.remarks}</p>
+          <p className="mb-1">Created At: {cowData.created_at}</p>
+          <p className="mb-1">Updated At: {cowData.updated_at}</p>
+          <p className="mb-1">Is Active: {cowData.is_active ? "Yes" : "No"}</p>
+          <p className="mb-1">
+            Muzzle Video:{" "}
+            <a
+              href={cowData.muzzle_video}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View Video
+            </a>
+          </p>
 
-            </p>
-            <p className="mb-1">Right Side Image:
-               {/* <Image src={cowdata.right_side_image} alt="Right Side" className="w-50 h-auto" /> */}
-                 {cowData?.right_side_image && (
-                <img
-                  src={cowData.right_side_image}
-                  alt="Segmentation Preview"
-                  className="w-full h-full object-cover"
-                />
-              )}
-               </p>
+          <p className="text-md w-full text-center font-bold my-5">
+            {" "}
+            Attachments below
+          </p>
+          <p className="mb-1">
+            Challan Paper:{" "}
+            <a
+              href={cowData.challan_paper}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View Paper
+            </a>
+          </p>
+          <p className="mb-1">
+            Vet Certificate:{" "}
+            <a
+              href={cowData.vet_certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View Certificate
+            </a>
+          </p>
+          <p className="mb-1">
+            Chairman Certificate:{" "}
+            <a
+              href={cowData.chairman_certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View Certificate
+            </a>
+          </p>
 
-            
-            <p className="mb-1">Image with Owner:
-               {/* <Image src={cowdata.image_with_owner} alt="With Owner" className="w-50 h-auto" /> */}
-                 {cowData?.image_with_owner && (
-                <img
-                  src={cowData.image_with_owner}
-                  alt="Segmentation Preview"
-                  className="w-full h-full object-cover"
-                />
-              )}
-               </p>
-          </li>
-       
+          <p className="mb-1">
+            Left Side Image:
+            {/* <Image src={cowdata.left_side_image} alt="Left Side" className="w-50 h-auto" /> */}
+            {cowData?.left_side_image && (
+              <img
+                src={cowData.left_side_image}
+                alt="Segmentation Preview"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </p>
+          <p className="mb-1">
+            Right Side Image:
+            {/* <Image src={cowdata.right_side_image} alt="Right Side" className="w-50 h-auto" /> */}
+            {cowData?.right_side_image && (
+              <img
+                src={cowData.right_side_image}
+                alt="Segmentation Preview"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </p>
+
+          <p className="mb-1">
+            Image with Owner:
+            {/* <Image src={cowdata.image_with_owner} alt="With Owner" className="w-50 h-auto" /> */}
+            {cowData?.image_with_owner && (
+              <img
+                src={cowData.image_with_owner}
+                alt="Segmentation Preview"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </p>
+        </li>
       </ul>
       {/* {error && <p className="text-red-500 mt-4">Error: {error}</p>} */}
     </div>
