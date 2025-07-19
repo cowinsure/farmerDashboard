@@ -74,7 +74,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`h-screen hidden md:flex flex-col justify-between transition-all duration-300 z-50
+      className={`h-screen hidden md:flex flex-col justify-between transition-all duration-300 z-[999]
         ${
           isOpen ? "w-[220px] drop-shadow-2xl" : "w-[60px] pr-1 drop-shadow-sm"
         } bg-white`}

@@ -50,7 +50,7 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="p-2 md:p-6 text-gray-800">
+    <div className="p-2 md:px-6 text-gray-800">
       <PageHeading
         pageTitle="User Profile"
         description="Manage your personal information and preferences"

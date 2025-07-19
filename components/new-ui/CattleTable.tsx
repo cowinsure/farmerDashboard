@@ -13,32 +13,40 @@ interface CattleTableProps {
   onView?: (asset: Asset) => void;
   className?: string;
   maxHeight?: string;
+  isLoading?: boolean;
 }
 
 export function CattleTable({
   data,
   onView,
   className,
-  maxHeight = "500px",
+  maxHeight,
+  isLoading,
 }: CattleTableProps) {
   const columns: Column<Asset>[] = [
     {
       key: "left_side_image",
       header: "Cow Image",
       width: "80px",
+      className: "text-center",
       render: (value, row) => (
-        <ImageCell src={value} alt={`${row.breed} cow`} />
+        <span className="flex items-center justify-center w-full">
+          {" "}
+          <ImageCell src={value} alt={`${row.breed} cow`} />
+        </span>
       ),
     },
     {
       key: "asset_type",
       header: "Asset Type",
       width: "120px",
+      className: "text-center",
     },
     {
       key: "breed",
       header: "Breed",
       width: "120px",
+      className: "text-center",
       render: (value) => (
         <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded border border-blue-200">
           {value}
@@ -49,6 +57,7 @@ export function CattleTable({
       key: "color",
       header: "Color",
       width: "100px",
+      className: "text-center",
     },
     {
       key: "age_in_months",
@@ -112,6 +121,7 @@ export function CattleTable({
       columns={columns}
       className={className}
       maxHeight={maxHeight}
+      isLoading={isLoading}
     />
   );
 }

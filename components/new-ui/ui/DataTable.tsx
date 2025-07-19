@@ -3,6 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Eye, Check, X } from "lucide-react";
+import Loader from "@/component/helper/Loader";
 
 export interface Column<T> {
   key: keyof T;
@@ -18,13 +19,15 @@ export interface DataTableProps<T> {
   columns: Column<T>[];
   className?: string;
   maxHeight?: string;
+  isLoading?: boolean;
 }
 
 export function DataTable<T extends Record<string, any>>({
   data,
   columns,
   className,
-  maxHeight = "400px",
+  maxHeight,
+  isLoading,
 }: DataTableProps<T>) {
   const renderCell = (column: Column<T>, row: T) => {
     const value = row[column.key];
@@ -32,38 +35,34 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   const getStickyStyles = (column: Column<T>, isHeader = false) => {
-    if (!column.sticky) return {};
+    if (!column.sticky && !isHeader) return {};
 
     const baseStyles = {
       position: "sticky" as const,
-      zIndex: isHeader ? 20 : 10,
-      backgroundColor: isHeader ? "rgba(250,250,250,0.9)" : "white",
+      zIndex: isHeader ? 10 : 0,
+      backgroundColor: isHeader ? "#eaeced" : "white",
       backdropFilter: "blur(4px)",
+      paddingTop: "20px",
+      paddingBottom: "20px",
     };
 
     return {
       ...baseStyles,
-      [column.sticky]: 0,
+      [column.sticky || ""]: 0,
     };
   };
 
   return (
-    <div
-      className={cn(
-        "w-full rounded-lg bg-white",
-        className
-      )}
-    >
-      <div className="" style={{ maxHeight }}>
+    <div className={cn("w-full rounded-lg bg-white relative", className)}>
+      <div className="overflow-y-auto" style={{ maxHeight }}>
         <table className="w-full table-fixed border-collapse">
           <thead>
-            <tr className="bg-muted/60 backdrop-blur-sm">
+            <tr className="drop-shadow-lg">
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
                   className={cn(
-                    "px-4 py-3 text-sm font-medium text-muted-foreground tracking-wider text-center",
-                    "border-r border-border last:border-r-0",
+                    "sticky top-0 z-30 px-4 py-3 text-sm text-center font-extrabold text-gray-500 text-[16px] backdrop-blur-sm",
                     column.sticky === "right" &&
                       "shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.1)]",
                     column.sticky === "left" &&
@@ -71,7 +70,6 @@ export function DataTable<T extends Record<string, any>>({
                     column.className
                   )}
                   style={{
-                    top: 0,
                     ...getStickyStyles(column, true),
                     minWidth: column.width || "auto",
                     width: column.width || "auto",
@@ -83,13 +81,14 @@ export function DataTable<T extends Record<string, any>>({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {data.length === 0 ? (
+            {isLoading ? (
               <tr>
-                <td
-                  colSpan={columns.length}
-                  className="text-center py-4 text-muted-foreground"
-                >
-                  Add new asset to see the list here.
+                <td colSpan={columns.length}>
+                  <div className="flex justify-center items-center h-40">
+                    <span className="text-muted-foreground text-sm font-medium">
+                      Loading...
+                    </span>
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -102,8 +101,7 @@ export function DataTable<T extends Record<string, any>>({
                     <td
                       key={String(column.key)}
                       className={cn(
-                        "px-4 py-3 text-sm text-foreground",
-                        "border-r border-border last:border-r-0",
+                        "px-4 py-3 text- text-gray-500 font-medium",
                         column.sticky === "right" &&
                           "shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.05)]",
                         column.sticky === "left" &&
@@ -151,7 +149,7 @@ export const ViewButton = ({ onClick }: { onClick?: () => void }) => (
     className="p-1 rounded transition-colors"
     aria-label="View details"
   >
-    <Eye className="w-4 h-4 text-muted-foreground hover:text-foreground" />
+    <Eye className="w-4 h-4" />
   </button>
 );
 

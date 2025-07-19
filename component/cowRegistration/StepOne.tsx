@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import UploadVideo from "../helper/UploadVedio";
 import Image from "next/image";
@@ -6,10 +6,10 @@ import { useCowRegistration } from "@/context/CowRegistrationContext";
 
 import ModalGeneral from "../modal/DialogGeneral";
 
-import logo from '../../public/Logo-03.png';
-import { useRouter } from 'next/navigation';
+import logo from "../../public/Logo-03.png";
+import { useRouter } from "next/navigation";
 import LottieAnimation from "../Animation/LottieAnimation";
-import animation from '../Animation/LottieAnimation'
+import animation from "../Animation/LottieAnimation";
 import CowIdentificationLoader from "../modal/cow-identification-loader";
 
 // Define an interface for the response data
@@ -23,21 +23,21 @@ interface ResponseData {
   msg: string;
 }
 
-
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
+const jwt =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
 
 export default function StepOne() {
-  const router = useRouter()
+  const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalErrorOpen, setErrorModalOpen] = useState(false);
   const { data, updateStep, validateStep, reset } = useCowRegistration();
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [accessToken, setAccessToken] = useState(jwt)
+  const [accessToken, setAccessToken] = useState(jwt);
 
   const handleVideoUpload = async (file: File) => {
-    setModalOpen(false)
+    setModalOpen(false);
 
     console.log("Video file captured:", file);
 
@@ -67,7 +67,6 @@ export default function StepOne() {
     //     console.error("Error fetching asset types:", error);
     //   }
 
-
     console.log(accessToken);
 
     try {
@@ -84,10 +83,9 @@ export default function StepOne() {
 
       // console.log(await response.json());
 
-
       if (response.status === 400) {
         const data = await response.json();
-        setErrorModalOpen(true)
+        setErrorModalOpen(true);
         console.error("Error 400:", data.msg);
         setResponseData(data);
         // alert(`Error: ${data.msg}`);
@@ -106,7 +104,7 @@ export default function StepOne() {
         const data: ResponseData = await response.json(); // Use the interface for type safety
         console.log("API Response:", data);
         setResponseData(data);
-        setModalOpen(true)
+        setModalOpen(true);
         updateStep({
           reference_id: data.registration_id,
         }); // Save the response data to state
@@ -124,8 +122,6 @@ export default function StepOne() {
       setIsUploading(false);
     }
   };
-
-
 
   useEffect(() => {
     if (data?.muzzle_video) {
@@ -147,34 +143,28 @@ export default function StepOne() {
             }}
           />
 
-
-          <button onClick={() => {
-            if (selectedFile) {
-              handleVideoUpload(selectedFile); // Call the upload function when the video is captured
-            } else {
-              alert("Please select a video file before uploading.");
-            }
-
-          }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
+          <button
+            onClick={() => {
+              if (selectedFile) {
+                handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+              } else {
+                alert("Please select a video file before uploading.");
+              }
+            }}
+            className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded"
+          >
             {isUploading ? "Uploading..." : "Register Cow"}
           </button>
         </div>
         <div className=" lg:w-1/2 w-full text-start flex flex-col justify-start items-center">
-          <div className="bg-green-700 text-white p-4 rounded-lg shadow-md">
-            <p className="text-center text-3xl mb-4">Guideline for using Muzzle Tech</p>
-            <ul className="list-disc text-md pl-5 mt-2">
-              <li>Take a 3-second video slowly.</li>
-              <li>Move the camera steadily without shaking.</li>
-              <li>Ensure the cow's muzzle is placed inside the box on the screen.</li>
-              <li>Make sure there is adequate lighting for better detection.</li>
-              <li>Keep the background clear of distractions.</li>
-            </ul>
-          </div>
 
-
-
-          <ModalGeneral isOpen={isModalOpen} onClose={() => { setModalOpen(false) }}>
-            <div className='text-black  text-center flex flex-col items-center p-5'>
+          <ModalGeneral
+            isOpen={isModalOpen}
+            onClose={() => {
+              setModalOpen(false);
+            }}
+          >
+            <div className="text-black  text-center flex flex-col items-center p-5">
               <Image
                 src={logo}
                 alt="Logo"
@@ -182,23 +172,31 @@ export default function StepOne() {
                 height={200}
                 className="h-auto "
                 priority
-
               />
               <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
                 <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-                  <h3 className="text-xl font-semibold mb-2">Muzzel Registration Result</h3>
-                  <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
-                  <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Muzzel Registration Result
+                  </h3>
+                  <p>
+                    <strong>Animal Name:</strong> {responseData?.animal_name}
+                  </p>
+                  <p>
+                    <strong>Registration ID:</strong>{" "}
+                    {responseData?.registration_id}
+                  </p>
                   {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
                   {/* <p><strong>Date:</strong> {responseData?.date}</p> */}
                   {/* <p><strong>No. of Frames:</strong> {responseData?.no_of_frames}</p> */}
                   {/* <p><strong>Image:</strong></p> */}
                   {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
-                  <p><strong>Message:</strong> {responseData?.msg}</p>
+                  <p>
+                    <strong>Message:</strong> {responseData?.msg}
+                  </p>
                 </div>
                 <button
                   onClick={() => {
-                    setModalOpen(false) // Clear error message
+                    setModalOpen(false); // Clear error message
                   }}
                   className="mt-2 py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
                 >
@@ -208,8 +206,13 @@ export default function StepOne() {
             </div>
           </ModalGeneral>
 
-          <ModalGeneral isOpen={isModalErrorOpen} onClose={() => { setErrorModalOpen(false) }}>
-            <div className='text-black  text-center flex flex-col items-center p-5'>
+          <ModalGeneral
+            isOpen={isModalErrorOpen}
+            onClose={() => {
+              setErrorModalOpen(false);
+            }}
+          >
+            <div className="text-black  text-center flex flex-col items-center p-5">
               <Image
                 src={logo}
                 alt="Logo"
@@ -217,23 +220,31 @@ export default function StepOne() {
                 height={200}
                 className="h-auto "
                 priority
-
               />
               <div className="mt-4 p-4 bg-red-100 border border-red-300 rounded-md text-red-700">
                 <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-md">
-                  <h3 className="text-xl font-semibold mb-2">Registration Result</h3>
-                  <p><strong>Animal Name:</strong> {responseData?.animal_name}</p>
-                  <p><strong>Registration ID:</strong> {responseData?.registration_id}</p>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Registration Result
+                  </h3>
+                  <p>
+                    <strong>Animal Name:</strong> {responseData?.animal_name}
+                  </p>
+                  <p>
+                    <strong>Registration ID:</strong>{" "}
+                    {responseData?.registration_id}
+                  </p>
                   {/* <p><strong>Geo Location:</strong> {responseData?.geo_location}</p> */}
                   {/* <p><strong>Date:</strong> {responseData?.date}</p> */}
                   {/* <p><strong>No. of Frames:</strong> {responseData?.no_of_frames}</p> */}
                   {/* <p><strong>Image:</strong></p> */}
                   {/* <Image src={`data:image/jpeg;base64,${responseData.image_url}`} alt="Cow Muzzle" className="mt-2 rounded shadow-md" /> */}
-                  <p><strong>Message:</strong> {responseData?.msg}</p>
+                  <p>
+                    <strong>Message:</strong> {responseData?.msg}
+                  </p>
                 </div>
                 <button
                   onClick={() => {
-                    setErrorModalOpen(false) // Clear error message
+                    setErrorModalOpen(false); // Clear error message
                   }}
                   className="mt-2 py-2 px-4 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600"
                 >
@@ -243,10 +254,7 @@ export default function StepOne() {
             </div>
           </ModalGeneral>
 
-
-          <ModalGeneral isOpen={isUploading} onClose={() => { }}>
-
-
+          <ModalGeneral isOpen={isUploading} onClose={() => {}}>
             <div className="max-h-[80vh] overflow-y-auto p-4">
               <CowIdentificationLoader />
             </div>

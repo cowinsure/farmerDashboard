@@ -17,7 +17,7 @@ const ActionButton = ({
       <button
         type={type}
         onClick={onClick}
-        className={`bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold w-full rounded-md py-2 custom-hover ${className}`}
+        className={`bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold w-full rounded-md py-2 custom-hover active:scale-95 ${className}`}
       >
         {btnText}
       </button>

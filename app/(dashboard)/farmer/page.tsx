@@ -3,19 +3,18 @@ import React, { useEffect, useState } from "react";
 // import image from '../../../public/WhatsApp Image 2025-04-07 at 12.32.06 PM.jpeg';
 import Image from "next/image";
 import ModalGeneral from "@/component/modal/DialogGeneral";
-import { CiSquarePlus } from "react-icons/ci";
-import { CiSearch } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 import Link from "next/link";
 // import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 // import { DialogHeader } from '@/component/ui/dialog';
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import SearchCow from "@/app/components/SearchCow";
 // import UploadVideo from '@/component/helper/UploadVedio';
 import UploadVedioForSearch from "@/component/helper/UploadVedioForSearch";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
 import { CattleTable } from "@/components/new-ui/CattleTable";
+import PageHeading from "@/components/new-ui/utils/PageHeading";
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 export interface Asset {
@@ -72,6 +71,7 @@ const FarmerPage: React.FC = () => {
   const [assetList, setAssetList] = useState<Asset[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const jwt =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
@@ -123,6 +123,7 @@ const FarmerPage: React.FC = () => {
   // Fetch asset list from the API
   useEffect(() => {
     const fetchAssetList = async () => {
+      setIsLoading(true);
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         console.error("Access token is missing. Please log in again.");
@@ -146,6 +147,7 @@ const FarmerPage: React.FC = () => {
         if (response.ok) {
           console.log("Asset list fetched successfully:", result.data.results);
           setAssetList(result.data.results); // Update the asset list state
+          setIsLoading(false);
         } else {
           console.error("Failed to fetch asset list:", result);
         }
@@ -241,8 +243,13 @@ const FarmerPage: React.FC = () => {
   console.log(userId, "userId from context");
 
   return (
-    <div className="-z-10">
-      <div className="flex text-black my-5 mx-5 gap-2.5">
+    <div className="p-2 md:px-6">
+      <PageHeading
+        pageTitle="Farm"
+        description="Manage and search data for your farm"
+      />
+
+      <div className="flex text-black mb-6 gap-2.5">
         {userId && userId === "Enterprise" && (
           <button
             className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${"bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600"}`}
@@ -251,26 +258,26 @@ const FarmerPage: React.FC = () => {
               href="/farmer/add_farmer"
               className="flex flex-row items-center justify-center"
             >
-              <CiSquarePlus size={24} className="mr-2" />
+              <IoAddCircleOutline size={24} className="mr-2" />
               <span>Add Farmer</span>
             </Link>
           </button>
         )}
 
         <button
-          className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${"bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600"}`}
+          className={`bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold rounded-md px-5 py-2 custom-hover hover:scale-[103%] active:scale-95`}
           // onClick={() => { setIsModalOpen(true) }}
         >
           <Link
             href="/farmer/add_cow"
             className="flex flex-row items-center justify-center"
           >
-            <CiSquarePlus size={24} className="mr-2" />
+            <IoAddCircleOutline size={26} className="mr-2" />
             <span>Add Cow</span>
           </Link>
         </button>
         <button
-          className={`px-4 py-2 border rounded transition-colors duration-200 cursor-pointer ${"bg-green-800 text-white border-green-800 hover:border-green-600 hover:bg-green-600"}`}
+          className={`border-2 border-green-700 hover:bg-green-900 hover:text-white cursor-pointer text-green-700 font-semibold rounded-md px-4 py-2 custom-hover hover:scale-[103%] active:scale-95`}
           // onClick={() => { setIsModalOpen(true) }}
         >
           <div
@@ -279,12 +286,12 @@ const FarmerPage: React.FC = () => {
             }}
             className="flex flex-row items-center justify-center"
           >
-            <CiSearch size={24} className="mr-2" />
+            <IoSearch size={24} className="mr-2" />
             <span>Search Cow</span>
           </div>
         </button>
       </div>
-      <div className="overflow-auto max-h-[400px]  text-gray-600  rounded-lg shadow-md">
+      <div className="overflow-auto rounded-lg shadow-md">
         {/* <table className="w-full  ">
           <thead>
             <tr className="text-white bg-green-700 top-0">
@@ -358,7 +365,12 @@ const FarmerPage: React.FC = () => {
             )}
           </tbody>
         </table> */}
-        <CattleTable data={assetList} onView={handleViewDetails} maxHeight="800px" />
+        <CattleTable
+          data={assetList}
+          onView={handleViewDetails}
+          maxHeight="600px"
+          isLoading={isLoading}
+        />
       </div>
 
       <ModalGeneral

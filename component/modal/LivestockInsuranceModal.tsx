@@ -136,7 +136,10 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center text-gray-600 bg-[#0000004d] backdrop-blur-xs">
-      <div className="bg-white p-2 lg:m-20 rounded-xl shadow-lg w-[90%] lg:max-w-[800px] h-auto relative" data-aos="zoom-in">
+      <div
+        className="bg-white p-2 lg:m-20 rounded-xl shadow-lg w-[90%] lg:max-w-[800px] h-auto relative"
+        data-aos="zoom-in"
+      >
         <button
           onClick={onClose}
           className="absolute top-2 text-4xl right-2 text-[#AF0205] cursor-pointer hover:text-red-600"
@@ -145,7 +148,6 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         </button>
 
         <Heading heading="Livestock Insurance" />
-        {/* Step bar */}
         {/* Step bar container */}
         <div className="flex justify-between mb-8 mt-14 relative items-center">
           {/* Render steps */}
