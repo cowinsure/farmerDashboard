@@ -34,7 +34,6 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [auth, router]);
 
-
   useEffect(() => {
     if (!loading) {
       // setRouteLoading(true);
@@ -46,7 +45,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   return (
     <div>
       <div className="flex h-screen  bg-[#F8FFF9]">
-        <div>
+        <div className="z-50">
           <Sidebar />
           <MobileSidebar />
         </div>

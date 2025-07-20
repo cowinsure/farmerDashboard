@@ -37,13 +37,19 @@ export function DataTable<T extends Record<string, any>>({
   const getStickyStyles = (column: Column<T>, isHeader = false) => {
     if (!column.sticky && !isHeader) return {};
 
+    const hasCustomBg = column.className?.includes("bg-");
+
     const baseStyles = {
       position: "sticky" as const,
-      zIndex: isHeader ? 10 : 0,
-      backgroundColor: isHeader ? "#eaeced" : "white",
-      backdropFilter: "blur(4px)",
-      paddingTop: "20px",
-      paddingBottom: "20px",
+      zIndex: isHeader ? 50 : 10, // Ensure header is above animated body
+      backgroundColor: !hasCustomBg
+        ? isHeader
+          ? "#f9fafb" // match Tailwind's gray-50
+          : "#ffffff"
+        : undefined,
+      // backdropFilter: "blur(4px)",
+      paddingTop: "15px",
+      paddingBottom: "15px",
     };
 
     return {
@@ -95,17 +101,18 @@ export function DataTable<T extends Record<string, any>>({
               data.map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className="hover:bg-muted/30 transition-colors"
+                  className="hover:bg-muted/30 transition-colors z-10"
+                  data-aos="fade-up"
+                  data-aos-delay={rowIndex * 100}
+                  data-aos-duration="500"
                 >
                   {columns.map((column) => (
                     <td
                       key={String(column.key)}
                       className={cn(
-                        "px-4 py-3 text- text-gray-500 font-medium",
-                        column.sticky === "right" &&
-                          "shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.05)]",
-                        column.sticky === "left" &&
-                          "shadow-[4px_0_8px_-2px_rgba(0,0,0,0.05)]",
+                        "px-4 py-3 text-gray-500 font-medium",
+                        column.sticky === "right" && "z-20", // add z-20 for sticky right cell
+                        column.sticky === "left" && "z-20",
                         column.className
                       )}
                       style={{

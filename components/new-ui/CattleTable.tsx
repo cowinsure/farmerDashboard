@@ -31,7 +31,6 @@ export function CattleTable({
       className: "text-center",
       render: (value, row) => (
         <span className="flex items-center justify-center w-full">
-          {" "}
           <ImageCell src={value} alt={`${row.breed} cow`} />
         </span>
       ),
@@ -109,7 +108,7 @@ export function CattleTable({
       key: "id",
       header: "View",
       width: "60px",
-      className: "text-center",
+      className: "text-center bg-blue-50",
       sticky: "right",
       render: (_, row) => <ViewButton onClick={() => onView?.(row)} />,
     },

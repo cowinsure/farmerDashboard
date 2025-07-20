@@ -15,6 +15,7 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { FaCircleCheck } from "react-icons/fa6";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Stepper } from "@/components/new-ui/utils/Stepper";
 
 interface ModalProps {
   isOpen: boolean;
@@ -149,59 +150,11 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
         <Heading heading="Livestock Insurance" />
         {/* Step bar container */}
-        <div className="flex justify-between mb-8 mt-14 relative items-center">
-          {/* Render steps */}
-          {steps.map((step, index) => {
-            const isCurrent = index === currentStep;
-            const isCompleted = completedSteps.has(index);
-
-            return (
-              <div key={index} className="flex-1 text-center relative z-10">
-                <div
-                  className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center
-          ${
-            isCurrent
-              ? "bg-green-800 text-white"
-              : isCompleted
-              ? "bg-green-800 text-white"
-              : "bg-gray-300 text-gray-600"
-          }`}
-                >
-                  {index + 1}
-                </div>
-                <p
-                  className={`text-sm mt-2 ${
-                    isCurrent || isCompleted
-                      ? "font-semibold text-gray-800"
-                      : "text-gray-500"
-                  }`}
-                >
-                  {step}
-                </p>
-              </div>
-            );
-          })}
-
-          {/* Render connecting lines between steps */}
-          {steps.map((_, index) => {
-            if (index === steps.length - 1) return null; // no line after last step
-            const prevStepCompleted = completedSteps.has(index);
-
-            return (
-              <div
-                key={"line-" + index}
-                className={`absolute top-4 left-0 right-0 h-1`}
-                style={{
-                  width: `calc((100% / ${steps.length}) - 1rem)`, // adjust width minus circles
-                  left: `calc((100% / ${steps.length}) * ${index} + 9rem)`, // position after step circle
-                  backgroundColor: prevStepCompleted ? "#166534" : "#D1D5DB", // tailwind green-800 or gray-300
-                  borderRadius: "9999px",
-                  zIndex: 5,
-                }}
-              />
-            );
-          })}
-        </div>
+        <Stepper
+          steps={["Cattle Info", "Attachments", "Owner Info"]}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+        />
 
         <div className=" overflow-y-auto max-h-[40vh] lg:max-h-[60vh] ">
           {renderStepContent()}

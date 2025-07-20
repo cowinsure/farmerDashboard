@@ -130,10 +130,10 @@ export default function StepOne() {
   }, [data]);
   // Add an empty dependency array to ensure it runs only once
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2>
-      <div className="flex flex-col lg:flex-row gap-2">
-        <div className="lg:w-1/2 w-full flex flex-col  justify-center items-center">
+    <div className="w-full flex items-center justify-center h-full">
+      {/* <h2 className="text-xl font-semibold mb-4">Muzzle Detection</h2> */}
+      <div className="md:w-[60%] mx-auto">
+        <div className="w-full flex flex-col justify-center items-center">
           <UploadVideo
             onVideoCapture={(file) => {
               updateStep({
@@ -143,21 +143,22 @@ export default function StepOne() {
             }}
           />
 
-          <button
-            onClick={() => {
-              if (selectedFile) {
-                handleVideoUpload(selectedFile); // Call the upload function when the video is captured
-              } else {
-                alert("Please select a video file before uploading.");
-              }
-            }}
-            className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded"
-          >
-            {isUploading ? "Uploading..." : "Register Cow"}
-          </button>
+          {selectedFile && (
+            <button
+              onClick={() => {
+                if (selectedFile) {
+                  handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+                } else {
+                  alert("Please select a video file before uploading.");
+                }
+              }}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded"
+            >
+              {isUploading ? "Uploading..." : "Register Cow"}
+            </button>
+          )}
         </div>
         <div className=" lg:w-1/2 w-full text-start flex flex-col justify-start items-center">
-
           <ModalGeneral
             isOpen={isModalOpen}
             onClose={() => {
@@ -255,9 +256,7 @@ export default function StepOne() {
           </ModalGeneral>
 
           <ModalGeneral isOpen={isUploading} onClose={() => {}}>
-            <div className="max-h-[80vh] overflow-y-auto p-4">
-              <CowIdentificationLoader />
-            </div>
+            <CowIdentificationLoader />
           </ModalGeneral>
           {/* {isUploading && (
                <CowIdentificationLoader />

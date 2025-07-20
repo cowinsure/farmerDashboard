@@ -15,6 +15,8 @@ import UploadVedioForSearch from "@/component/helper/UploadVedioForSearch";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
 import { CattleTable } from "@/components/new-ui/CattleTable";
 import PageHeading from "@/components/new-ui/utils/PageHeading";
+import { Eye } from "lucide-react";
+import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 export interface Asset {
@@ -291,8 +293,8 @@ const FarmerPage: React.FC = () => {
           </div>
         </button>
       </div>
-      <div className="overflow-auto rounded-lg shadow-md">
-        {/* <table className="w-full  ">
+      {/* <div className=" rounded-lg shadow-md animate__animated animate__fadeIn"> */}
+      {/* <table className="w-full  ">
           <thead>
             <tr className="text-white bg-green-700 top-0">
               <th className="p-2">Cow Image</th>
@@ -308,10 +310,10 @@ const FarmerPage: React.FC = () => {
               <th className="p-2">View</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="h-[300px] overflow-auto">
             {assetList && assetList.length > 0 ? (
               assetList.map((asset) => (
-                <tr key={asset.id} className="bg-green-100 text-center">
+                <tr key={asset.id} className="bg-green-100 text-center ">
                   <td className="border border-gray-100 p-2">
                     <Image
                       src={asset.left_side_image || "/placeholder.svg"}
@@ -341,15 +343,13 @@ const FarmerPage: React.FC = () => {
                   </td>
                   <td className="border border-gray-100 p-2">{asset.gender}</td>
                   <td className="border border-gray-100 p-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <button
                       onClick={() => handleViewDetails(asset)}
                       className="text-green-700 hover:text-green-900 hover:bg-green-200"
                     >
                       <Eye size={16} className="mr-1" />
                       View
-                    </Button>
+                    </button>
                   </td>
                 </tr>
               ))
@@ -365,13 +365,40 @@ const FarmerPage: React.FC = () => {
             )}
           </tbody>
         </table> */}
-        <CattleTable
+      {/* <CattleTable
           data={assetList}
           onView={handleViewDetails}
           maxHeight="600px"
           isLoading={isLoading}
-        />
-      </div>
+        /> */}
+      {/* </div> */}
+      <BasicTable
+        data={assetList}
+        onView={handleViewDetails}
+        maxHeight="500px"
+        columns={[
+          {
+            key: "left_side_image",
+            header: "Image",
+            render: (row) => (
+              <img
+                src={row.left_side_image || "/placeholder.svg"}
+                alt="cow"
+                className="w-12 h-12 rounded object-cover mx-auto"
+              />
+            ),
+          },
+          { key: "asset_type", header: "Type" },
+          { key: "breed", header: "Breed" },
+          { key: "color", header: "Color" },
+          { key: "age_in_months", header: "Age" },
+          { key: "weight_kg", header: "Weight" },
+          { key: "height", header: "Height" },
+          { key: "gender", header: "Gender" },
+          { key: "vaccination_status", header: "Vaccination " },
+          { key: "deworming_status", header: "Deworming " },
+        ]}
+      />
 
       <ModalGeneral
         isOpen={isMuzzelModalOpen}

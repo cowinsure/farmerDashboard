@@ -14,6 +14,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { TbArrowBadgeRightFilled } from "react-icons/tb";
 import MuzzleGuidlines from "@/components/new-ui/MuzzleGuidlines";
 import Link from "next/link";
+import { Stepper } from "@/components/new-ui/utils/Stepper";
 
 const steps = ["Muzzel Detection", "Cow Details", "Attachments"];
 
@@ -132,10 +133,9 @@ export default function StepForm() {
         return null;
     }
   };
-
   return (
     <div className="p-2 md:px-6">
-      <div className="mb-14">
+      <div className="mb-5">
         <div className="flex items-center gap-3">
           <Link
             href={"/farmer"}
@@ -146,66 +146,30 @@ export default function StepForm() {
           <TbArrowBadgeRightFilled size={30} className="text-[#089C3E] -mb-1" />
           <h1 className="text-2xl md:text-3xl font-extrabold">Add cow</h1>
         </div>
-        <p className="md:text-lg font-medium text-gray-400">Add a new asset</p>
-      </div>
-      {/* Step bar container */}
-      <div className="flex justify-between mb-8 relative items-center">
-        {steps.map((step, index) => {
-          const isCurrent = index === currentStep;
-          // For Add Cow stepper, let's track completed steps similarly:
-          const isCompleted = completedSteps.has(index);
-
-          return (
-            <div key={index} className="flex-1 text-center relative z-10">
-              <div
-                className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center
-            ${
-              isCurrent
-                ? "bg-green-800 text-white"
-                : isCompleted
-                ? "bg-green-800 text-white"
-                : "bg-gray-300 text-gray-600"
-            }`}
-              >
-                {index + 1}
-              </div>
-              <p
-                className={`text-sm mt-2 ${
-                  isCurrent || isCompleted
-                    ? "font-semibold text-gray-800"
-                    : "text-gray-500"
-                }`}
-              >
-                {step}
-              </p>
-            </div>
-          );
-        })}
-
-        {/* Render connecting lines between steps */}
-        {steps.map((_, index) => {
-          if (index === steps.length - 1) return null; // no line after last step
-          const prevStepCompleted = completedSteps.has(index);
-
-          return (
-            <div
-              key={"line-" + index}
-              className="absolute top-4 left-0 right-0 h-1"
-              style={{
-                width: `calc((100% / ${steps.length}) - 1rem)`, // adjust width minus circles
-                left: `calc((100% / ${steps.length}) * ${index} + 18rem)`, // position after step circle
-                backgroundColor: prevStepCompleted ? "#166534" : "#D1D5DB", // green-800 or gray-300
-                borderRadius: "9999px",
-                zIndex: 5,
-              }}
-            />
-          );
-        })}
+        <p className="md:text-lg font-medium text-gray-400 mt-2">
+          Add a new asset
+        </p>
       </div>
 
       {/* Step content */}
-      <div className="mb-6 overflow-y-auto max-h-auto bg-white">
+      <div className=" bg-white rounded-xl flex flex-col justify-center">
+        {/* Step bar container */}
+        <Stepper
+          steps={["Cattle Info", "Attachments", "Owner Info"]}
+          currentStep={currentStep}
+          completedSteps={completedSteps}
+        />
+      </div>
+      <div className="overflow-y-auto h-[550px] flex flex-col items-center bg-white mb-5 rounded-b-xl py-1">
         {renderStep()}
+        {currentStep === 0 && (
+          <button
+            onClick={() => setIsGuidanceModal(true)}
+            className="text-green-600 font-bold underline hover:text-green-800 custom-hover hover:underline-offset-2 cursor-pointer mt-6"
+          >
+            View Guidelines
+          </button>
+        )}
       </div>
 
       {/* Navigation buttons */}

@@ -29,7 +29,7 @@ const MuzzleGuidlines = ({ close }: GuidlineProps) => {
       icon: MdCenterFocusStrong,
       title: "Center the muzzle",
       description:
-        "Align the cow’s muzzle inside the box. Ensure the muzzle is visible and centered on-screen.",
+        "Align the cow’s muzzle inside the box. Ensure the muzzle is centered on-screen.",
     },
     {
       icon: MdLightbulbOutline,
