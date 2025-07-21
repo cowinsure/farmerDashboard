@@ -13,9 +13,7 @@ import SearchCow from "@/app/components/SearchCow";
 // import UploadVideo from '@/component/helper/UploadVedio';
 import UploadVedioForSearch from "@/component/helper/UploadVedioForSearch";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
-import { CattleTable } from "@/components/new-ui/CattleTable";
 import PageHeading from "@/components/new-ui/utils/PageHeading";
-import { Eye } from "lucide-react";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
@@ -398,6 +396,7 @@ const FarmerPage: React.FC = () => {
           { key: "vaccination_status", header: "Vaccination " },
           { key: "deworming_status", header: "Deworming " },
         ]}
+        isLoading={isLoading}
       />
 
       <ModalGeneral

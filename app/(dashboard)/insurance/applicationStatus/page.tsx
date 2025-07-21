@@ -1,247 +1,282 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Eye, FileText } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Eye, FileText } from "lucide-react";
 // import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal"
 // import StepFive from "@/component/cowRegistration/StepFive"
-import CattleVerification from "@/app/components/CattleVerification"
-import { PaymentDialog } from "@/component/modal/payment-dialog"
-
-
+import CattleVerification from "@/app/components/CattleVerification";
+import { PaymentDialog } from "@/component/modal/payment-dialog";
+import { TbArrowBadgeRightFilled } from "react-icons/tb";
+import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 
 interface InsuranceData {
-    id: number;
-    asset: string;
-    insurance_provider: string;
-    insurance_number: string;
-    sum_insured: string;
-    insurance_start_date: string;
-    insurance_end_date: string;
-    insurance_status: string;
-    created_by: string;
-    claim_status: string;
-    reference_id: string;
-    premium_amount: string;
-
+  id: number;
+  asset: string;
+  insurance_provider: string;
+  insurance_number: string;
+  sum_insured: string;
+  insurance_start_date: string;
+  insurance_end_date: string;
+  insurance_status: string;
+  created_by: string;
+  claim_status: string;
+  reference_id: string;
+  premium_amount: string;
 }
 
-
-
 export default function ApplciationStatus() {
-    const [insuranceData, setInsuranceData] = useState<InsuranceData[]>([]);
-    const [isCowDetails, setIsCowDetails] = useState(false);
-    const [isClaimForm, setIsClaimForm] = useState(false);
-    const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-    // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [insuranceData, setInsuranceData] = useState<InsuranceData[]>([]);
+  const [isCowDetails, setIsCowDetails] = useState(false);
+  const [isClaimForm, setIsClaimForm] = useState(false);
+  const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(insuranceData);
+  console.log(insuranceData);
 
+  // Fetch insurance data from the API
+  useEffect(() => {
+    const fetchInsuranceData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.error("Access token is missing. Please log in again.");
+        return;
+      }
 
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-    // Fetch insurance data from the API
-    useEffect(() => {
-        const fetchInsuranceData = async () => {
-            const accessToken = localStorage.getItem("accessToken");
-            if (!accessToken) {
-                console.error("Access token is missing. Please log in again.");
-                return;
-            }
+        const result = await response.json();
+        console.log(result);
 
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+        if (response.ok) {
+          // console.log("Insurance data fetched successfully:", result.data.results);
+          const validStatuses = [
+            "pending",
+            "pending_payment_verification",
+            "payment_pending",
+            "under_review",
+          ];
+          const filteredData: InsuranceData[] = result.data.results.filter(
+            (item: InsuranceData) =>
+              validStatuses.includes(item.insurance_status)
+          );
+          setInsuranceData(filteredData); // Update the state with API data
+        } else {
+          console.error("Failed to fetch insurance data:", result);
+        }
+      } catch (error) {
+        console.error("Error fetching insurance data:", error);
+      }
+    };
 
-                const result = await response.json();
-                console.log(result);
+    fetchInsuranceData();
+  }, []);
 
+  const handleViewDetails = (cow: InsuranceData) => {
+    setSelectedCow(cow);
+    setIsCowDetails(true);
+  };
 
-                if (response.ok) {
-                    // console.log("Insurance data fetched successfully:", result.data.results);
-                    const validStatuses = [
-                        'pending',
-                        'pending_payment_verification',
-                        'payment_pending',
-                        'under_review'
-                    ];
-                    const filteredData: InsuranceData[] = result.data.results.filter(
-                        (item: InsuranceData) => validStatuses.includes(item.insurance_status)
-                    );
-                    setInsuranceData(filteredData); // Update the state with API data
-                } else {
-                    console.error("Failed to fetch insurance data:", result);
-                }
-            } catch (error) {
-                console.error("Error fetching insurance data:", error);
-            }
-        };
+  const handleClaim = (cow: InsuranceData) => {
+    setSelectedCow(cow);
+    setIsClaimForm(true);
+  };
 
-        fetchInsuranceData();
-    }, []);
-
-    const handleViewDetails = (cow: InsuranceData) => {
-        setSelectedCow(cow)
-        setIsCowDetails(true)
-    }
-
-    const handleClaim = (cow: InsuranceData) => {
-        setSelectedCow(cow)
-        setIsClaimForm(true)
-    }
-
-    return (
-        <div className=" mx-auto py-8 px-4">
-            <h1 className="text-2xl font-bold mb-6 text-green-700">Insurance Application Status</h1>
-
-            <div className="overflow-auto max-h-[600px] text-gray-600 rounded-lg shadow-md">
-                <table className="w-full">
-                    <thead>
-                        <tr className="text-white bg-green-700 sticky top-0 z-10">
-                            <th className="p-2">Asset</th>
-                            <th className="p-2">Insurance Provider</th>
-                            <th className="p-2">Insurance Number</th>
-                            <th className="p-2">Sum Insured</th>
-              <th className="p-2">Premium Amount</th>
-
-                            <th className="p-2">Start Date</th>
-                            <th className="p-2">End Date</th>
-                            <th className="p-2">Status</th>
-                            <th className="p-2">Created By</th>
-                            <th className="p-2">Claim Status</th>
-                            <th className="p-2">View</th>
-                            <th className="p-2">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                          {insuranceData && insuranceData.length > 0 ? (
-                        insuranceData.map((cow) => (
-                            <tr key={cow.id} className="bg-green-100 text-center">
-                                <td className="border border-gray-100 p-2">{cow.id}</td>
-                                <td className="border border-gray-100 p-2">{cow.insurance_provider}</td>
-                                <td className="border border-gray-100 p-2">{cow.insurance_number}</td>
-                                <td className="border border-gray-100 p-2">{cow.sum_insured}</td>
-                  <td className="border border-gray-100 p-2">{cow.premium_amount}</td>
-
-                                <td className="border border-gray-100 p-2">{cow.insurance_start_date}</td>
-                                <td className="border border-gray-100 p-2">{cow.insurance_end_date}</td>
-                                <td className="border border-gray-100 p-2">{cow.insurance_status}</td>
-                                <td className="border border-gray-100 p-2">{cow.created_by}</td>
-                                <td className="border border-gray-100 p-2">{cow.claim_status}</td>
-                                <td className="border border-gray-100 p-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => handleViewDetails(cow)}
-                                        className="text-green-700 hover:text-green-900 hover:bg-green-200"
-                                    >
-                                        <Eye size={16} className="mr-1" />
-                                        View
-                                    </Button>
-                                </td>
-                                <td className="border border-gray-100 p-2">
-                                
-                                    {cow.insurance_status == "payment_pending" ?
-                                        <PaymentDialog insuranceId={cow.id.toString()} insuranceNumber={cow.insurance_number.toString()} />
-                                      
-                                        : <Button
-                                            disabled={cow.insurance_status != "active"}
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-
-
-                                                handleClaim(cow)}
-                                            className="text-green-700 border-green-700 hover:bg-green-200"
-                                        >
-                                            <FileText size={16} className="mr-1" />
-                                            Claim
-                                        </Button>}
-                                </td>
-                            </tr>
-                         ))) : (
-              <tr>
-                <td colSpan={11} className="text-center py-4 text-gray-600 bg-green-100">
-                  No Application data found
-                </td>
-              </tr>
-            )}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Cow Details Dialog */}
-            <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
-                <DialogContent className="max-w-3xl">
-                    <DialogHeader>
-                        <DialogTitle className="text-green-700">Insurance Details</DialogTitle>
-                    </DialogHeader>
-                    {selectedCow && (
-                        <div className=" ">
-                            <div className="space-y-2">
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Asset:</p>
-                                    <p>{selectedCow.asset}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Insurance Provider:</p>
-                                    <p>{selectedCow.insurance_provider}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Insurance Number:</p>
-                                    <p>{selectedCow.insurance_number}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Sum Insured:</p>
-                                    <p>{selectedCow.sum_insured}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Start Date:</p>
-                                    <p>{selectedCow.insurance_start_date}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">End Date:</p>
-                                    <p>{selectedCow.insurance_end_date}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Status:</p>
-                                    <p>{selectedCow.insurance_status}</p>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <p className="font-semibold">Claim Status:</p>
-                                    <p>{selectedCow.claim_status}</p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    )}
-                </DialogContent>
-            </Dialog>
-            {/* Claim Form Dialog */}
-            <CattleVerification
-                isOpen={isClaimForm}
-                onClose={() => setIsClaimForm(false)}
-                selectedCow={selectedCow}
-            // selectedCow={selectedCow || {
-            //   id: '',
-            //   asset: '',
-            //   claim_status: '',
-            //   sum_insured: ''
-            // }} 
-            />
+  return (
+    <div className=" mx-auto py-8 px-4">
+      <div className="mb-10">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-700">
+            Insurance
+          </h1>
+          <TbArrowBadgeRightFilled size={30} className="text-[#089C3E] -mb-1" />
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800">
+            Insurance Application Status
+          </h1>
         </div>
-    )
+        <p className="md:text-lg font-medium text-gray-400 mt-2">
+          Check and handle insurance application status
+        </p>
+      </div>
+
+      <BasicTable
+        data={insuranceData}
+        emptyMessage="No active policy found"
+        maxHeight="600px"
+        columns={[
+          { key: "id", header: "Asset", className: "w-16" },
+          {
+            key: "insurance_provider",
+            header: "Insurance Provider",
+            className: "w-40",
+          },
+          {
+            key: "insurance_number",
+            header: "Insurance Number",
+            className: "w-40",
+          },
+          {
+            key: "sum_insured",
+            header: "Sum Insured",
+            className: "w-32",
+          },
+          {
+            key: "premium_amount",
+            header: "Premium Amount",
+            className: "w-40",
+          },
+          {
+            key: "insurance_start_date",
+            header: "Start Date",
+            className: "w-28",
+          },
+          {
+            key: "insurance_end_date",
+            header: "End Date",
+            className: "w-24",
+          },
+          {
+            key: "insurance_status",
+            header: "Status",
+            className: "w-32",
+          },
+          {
+            key: "created_by",
+            header: "Created By",
+            className: "w-36",
+          },
+          {
+            key: "claim_status",
+            header: "Claim Status",
+            className: "w-36",
+          },
+
+          {
+            key: "view",
+            header: "View",
+            className: "w-32",
+            render: (row) => (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleViewDetails(row)}
+                className="text-green-700 hover:text-green-900 hover:bg-green-200"
+              >
+                <Eye size={16} className="mr-1" />
+                View
+              </Button>
+            ),
+          },
+          {
+            key: "action",
+            header: "Action",
+            sticky: "right",
+            className: "w-32",
+            render: (row) =>
+              row.insurance_status === "payment_pending" ? (
+                <PaymentDialog
+                  insuranceId={row.id.toString()}
+                  insuranceNumber={row.insurance_number.toString()}
+                />
+              ) : (
+                <Button
+                  disabled={row.insurance_status !== "active"}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleClaim(row)}
+                  className="text-green-700 border-green-700 hover:bg-green-200"
+                >
+                  <FileText size={16} className="mr-1" />
+                  Claim
+                </Button>
+              ),
+          },
+        ]}
+      />
+
+      {/* Cow Details Dialog */}
+      <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-green-700">
+              Insurance Details
+            </DialogTitle>
+          </DialogHeader>
+          {selectedCow && (
+            <div className=" ">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <p className="font-semibold">Asset:</p>
+                  <p>{selectedCow.asset}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Insurance Provider:</p>
+                  <p>{selectedCow.insurance_provider}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Insurance Number:</p>
+                  <p>{selectedCow.insurance_number}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Sum Insured:</p>
+                  <p>{selectedCow.sum_insured}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Start Date:</p>
+                  <p>{selectedCow.insurance_start_date}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">End Date:</p>
+                  <p>{selectedCow.insurance_end_date}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Status:</p>
+                  <p>{selectedCow.insurance_status}</p>
+                </div>
+
+                <div className="flex justify-between">
+                  <p className="font-semibold">Claim Status:</p>
+                  <p>{selectedCow.claim_status}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+      {/* Claim Form Dialog */}
+      <CattleVerification
+        isOpen={isClaimForm}
+        onClose={() => setIsClaimForm(false)}
+        selectedCow={selectedCow}
+        // selectedCow={selectedCow || {
+        //   id: '',
+        //   asset: '',
+        //   claim_status: '',
+        //   sum_insured: ''
+        // }}
+      />
+    </div>
+  );
 }

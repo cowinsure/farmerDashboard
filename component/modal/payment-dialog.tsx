@@ -202,7 +202,7 @@ export function PaymentDialog({ insuranceId,insuranceNumber }: PaymentDialogProp
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-green-700">Submit Payment</Button>
+        <Button className="bg-green-700">Submit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>

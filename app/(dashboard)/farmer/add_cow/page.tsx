@@ -173,18 +173,19 @@ export default function StepForm() {
       </div>
 
       {/* Navigation buttons */}
-      <div className="flex justify-between">
-        <button
-          disabled={currentStep === 0}
-          onClick={handlePrev}
-          className={`px-4 py-2 rounded-lg flex items-center justify-center gap-1 ${
-            currentStep === 0
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "border cursor-pointer hover:bg-gray-200"
-          }`}
-        >
-          <IoIosArrowBack /> Prev
-        </button>
+      <div className={`flex ${currentStep === 0 ? "justify-end" : "justify-between"}`}>
+        {currentStep !== 0 && (
+          <button
+            onClick={handlePrev}
+            className={`px-4 py-2 rounded-lg flex items-center justify-center gap-1 ${
+              currentStep === 0
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "border cursor-pointer hover:bg-gray-200"
+            }`}
+          >
+            <IoIosArrowBack /> Prev
+          </button>
+        )}
         {currentStep === steps.length - 1 ? (
           <button
             onClick={() => {
