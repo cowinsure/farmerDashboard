@@ -75,7 +75,7 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
     };
 
     fetchData();
-  }, []); // Empty dependency array means this effect runs once after the initial render
+  }, [reference_id]); // Empty dependency array means this effect runs once after the initial render
 
   // if (error) {
   //   return <div>Error: {error.message}</div>;

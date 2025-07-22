@@ -32,9 +32,9 @@ export default function StepForm() {
   const [isGuidanceModal, setIsGuidanceModal] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsGuidanceModal(true);
-    }, 200);
+    const showModal = () => setIsGuidanceModal(true);
+    const timer = setTimeout(showModal, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = async () => {
@@ -173,7 +173,11 @@ export default function StepForm() {
       </div>
 
       {/* Navigation buttons */}
-      <div className={`flex ${currentStep === 0 ? "justify-end" : "justify-between"}`}>
+      <div
+        className={`flex ${
+          currentStep === 0 ? "justify-end" : "justify-between"
+        }`}
+      >
         {currentStep !== 0 && (
           <button
             onClick={handlePrev}

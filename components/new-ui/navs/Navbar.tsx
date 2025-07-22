@@ -4,7 +4,7 @@ import { FaBell } from "react-icons/fa6";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="sticky top-0 left- h-10 text-white pt-8 bg-gradient-to-r from-transparent to-transparent z-[9999]">
+    <nav className=" top-0 h-10 text-white pt-8 bg-gradient-to-r from-transparent to-transparent z-40">
       <div className="h-full flex items-center justify-end px-2">
         <div className="relative group z-50">
           {/* Bell Icon */}

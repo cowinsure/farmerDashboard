@@ -146,7 +146,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
         description="Manage your financial details and payment information"
         icon={<IoWalletOutline />}
       />
-      <form onSubmit={handleSubmit} className=" space-y-8 rounded-md">
+      <form onSubmit={handleSubmit}>
         {/* <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Bank Name:
@@ -195,44 +195,47 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
           />
         </div> */}
 
-        <InputField
-          placeholder="Enter bank name"
-          label="Bank Name"
-          id="bank_name"
-          name="bank_name"
-          value={bank_name}
-          onChange={(e) => setBankName(e.target.value)}
-        />
-
-        <InputField
-          placeholder="Enter branch name"
-          label="Branch Name"
-          id="branch_name"
-          name="branch_name"
-          value={branch_name}
-          onChange={(e) => setbranch_name(e.target.value)}
-        />
-
-        <InputField
-          placeholder="Enter account name"
-          label="Account Name"
-          id="account_name"
-          name="account_name"
-          value={account_name}
-          onChange={(e) => setaccount_name(e.target.value)}
-        />
-
-        <InputField
-          placeholder="Enter account number"
-          type="number"
-          label="Account Number"
-          id="account_number"
-          name="account_number"
-          value={account_number}
-          onChange={(e) => setaccount_number(e.target.value)}
-        />
-
-        {isShowSubmit && <ActionButton btnText="Submit" type="submit" />}
+        <div
+          data-aos="fade-in"
+          data-aos-delay="400"
+          className=" space-y-8 rounded-md"
+        >
+          {" "}
+          <InputField
+            placeholder="Enter bank name"
+            label="Bank Name"
+            id="bank_name"
+            name="bank_name"
+            value={bank_name}
+            onChange={(e) => setBankName(e.target.value)}
+          />
+          <InputField
+            placeholder="Enter branch name"
+            label="Branch Name"
+            id="branch_name"
+            name="branch_name"
+            value={branch_name}
+            onChange={(e) => setbranch_name(e.target.value)}
+          />
+          <InputField
+            placeholder="Enter account name"
+            label="Account Name"
+            id="account_name"
+            name="account_name"
+            value={account_name}
+            onChange={(e) => setaccount_name(e.target.value)}
+          />
+          <InputField
+            placeholder="Enter account number"
+            type="number"
+            label="Account Number"
+            id="account_number"
+            name="account_number"
+            value={account_number}
+            onChange={(e) => setaccount_number(e.target.value)}
+          />
+          {isShowSubmit && <ActionButton btnText="Submit" type="submit" />}
+        </div>
       </form>
       {/* Loading Spinner */}
       {isLoading && (
@@ -244,11 +247,11 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
       )}
 
       {/* Success Message Dialog */}
-      {successMessage && (
+      {/* {successMessage && (
         <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
           <p>{successMessage}</p>
         </div>
-      )}
+      )} */}
 
       <ModalGeneral
         isOpen={sessionExpired}

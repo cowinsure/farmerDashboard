@@ -92,7 +92,7 @@ export function BasicTable<T extends { id: string | number }>({
                         >
                           {col.render
                             ? col.render(row)
-                            : (row[col.key as keyof T] as any)}
+                            : (row[col.key as keyof T] as string | number)}
                         </td>
                       ))}
                       {onView && (

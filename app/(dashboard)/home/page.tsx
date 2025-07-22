@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import logo from "../../../public/Logo-03.png";
 import { useState } from "react";
@@ -36,6 +36,7 @@ import { FaCow, FaShield, FaHeart } from "react-icons/fa6";
 import LivestockInsuranceModal from "@/component/modal/LivestockInsuranceModal";
 import ModalGeneral from "@/component/modal/DialogGeneral";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
+import Aos from "aos";
 
 export default function DashboardPage() {
   // type CowKey = "all" | "cow-1" | "cow-2" | "cow-3";
@@ -44,6 +45,9 @@ export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGeneralModalOpen, setIsGeneralModalOpen] = useState(false);
 
+  useEffect(() => {
+    Aos.init({ once: true, disable: false });
+  });
   // // Sample data for farmer registrations over time
   // const farmerRegistrationData = [
   //   { month: "Jan", count: 12 },
@@ -708,12 +712,12 @@ export default function DashboardPage() {
 
   // New UI
   return (
-    <div className="flex w-full flex-col gap-20">
+    <div className="flex w-full flex-col gap-20 pt-14 pb-16 md:pb-0 md:pt-0">
       {/* Page Heading */}
 
       <div className="flex flex-col items-center justify-center gap-4">
         <h1
-          className="text-[clamp(1.5rem,5vw,3.5rem)] font-extrabold text-[#202020]"
+          className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold text-[#202020]"
           data-aos="fade-in"
           data-aos-duration="3000"
         >
@@ -729,14 +733,52 @@ export default function DashboardPage() {
         </p>
       </div>
       {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
         {insuranceCard.map((item, idx) => (
           <div
             key={idx}
             style={{ backgroundColor: `#${item.bgColor}` }}
-            className="flex flex-col items-center gap-5 rounded-xl p-5 shadow-lg hover:drop-shadow-md custom-hover"
+            className="flex flex-col items-center gap-5 rounded-xl p-5 shadow-lg hover:drop-shadow-md custom-hover mx-auto sm:w-[90%] w-full"
             data-aos="flip-left"
-            data-aos-delay={`${idx * 100}`} // delay 0ms, 100ms, 200ms, ...
+            data-aos-delay={`${idx * 100}`}
+          >
+            <div className="flex items-center w-full gap-4">
+              <div className="bg-[#515151]/10 rounded-2xl p-2">
+                <span>{item.icon}</span>
+              </div>
+              <h1 className="text-[#252525] text-xl lg:text-[22px] font-bold">
+                {item.title}
+              </h1>
+            </div>
+            <div className="flex-1">
+              <p className="text-gray-500 lg:text-lg font-medium leading-relaxed">
+                {item.description}
+              </p>
+            </div>
+
+            {item.title === "Livestock Insurance" ? (
+              <ActionButton
+                btnText={item.buttonText}
+                onClick={() => setIsModalOpen(true)}
+                className="mt-4 lg:mt-8"
+              />
+            ) : (
+              <ActionButton
+                btnText={item.buttonText}
+                onClick={() => setIsGeneralModalOpen(true)}
+                className="mt-4 lg:mt-8"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      {/* Mobile Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:hidden">
+        {insuranceCard.map((item, idx) => (
+          <div
+            key={idx}
+            style={{ backgroundColor: `#${item.bgColor}` }}
+            className="flex flex-col items-center gap-5 rounded-xl p-5 shadow-lg hover:drop-shadow-md custom-hover mx-auto sm:w-[90%] w-full"
           >
             <div className="flex items-center w-full gap-4">
               <div className="bg-[#515151]/10 rounded-2xl p-2">

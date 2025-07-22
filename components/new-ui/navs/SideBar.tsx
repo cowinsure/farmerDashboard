@@ -142,12 +142,14 @@ export default function Sidebar() {
   const handleMouseEnter = (itemName: string) => {
     if (itemName === "Insurance") {
       setIsHovered(true);
+      setIsOpen(true);
     }
   };
 
   const handleMouseLeave = (itemName: string) => {
     if (itemName === "Insurance") {
       setIsHovered(false);
+      setIsOpen(false);
     }
   };
 
@@ -160,8 +162,8 @@ export default function Sidebar() {
     >
       {/* Logo and Close Button */}
       <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center space-x-2">
-          {isOpen && <Image alt="Logo" src={logo} width={150} height={150} />}
+        <div className="flex items-center w-[150px] h-[40px]">
+          {isOpen && <Image alt="Logo" src={logo} width={150} height={40} />}
         </div>
         <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600">
           {isOpen ? (

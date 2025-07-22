@@ -137,92 +137,91 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
         description="Add your nominee details for insurance claims"
         icon={<LuUsers />}
       />
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <InputField
-          placeholder="Enter nominee name"
-          label="Nominee Name"
-          id="nominee_name"
-          name="nominee_name"
-          value={formData.nominee_name}
-          onChange={handleChange}
-          required
-        />
-
-        <InputField
-          placeholder="Enter phone no."
-          label="Phone"
-          id="phone"
-          name="phone"
-          type="tel"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
-
-        <InputField
-          placeholder="Enter NID number"
-          label="NID"
-          id="nid"
-          name="nid"
-          type="text"
-          value={formData.nid}
-          onChange={handleChange}
-          required
-        />
-
-        <InputField
-          placeholder="Enter email"
-          label="Email"
-          id="email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <div className="relative w-full flex flex-col">
-          <label
-            htmlFor="relationship"
-            className="mb-1 text-sm font-bold text-gray-600"
-          >
-            Relationship
-          </label>
-
-          <select
-            id="relationship"
-            name="relationship"
-            value={formData.relationship}
+      <form onSubmit={handleSubmit}>
+        <div data-aos="fade-in" data-aos-delay="400" className="space-y-8">
+          {" "}
+          <InputField
+            placeholder="Enter nominee name"
+            label="Nominee Name"
+            id="nominee_name"
+            name="nominee_name"
+            value={formData.nominee_name}
             onChange={handleChange}
             required
-            className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
-          >
-            <option value="" disabled className="text-sm text-gray-400">
-              Select Relationship
-            </option>
-            <option value="male" className="text-sm text-gray-700">
-              Parent
-            </option>
-            <option value="female" className="text-sm text-gray-700">
-              Spouse
-            </option>
-            <option value="other" className="text-sm text-gray-700">
-              Child
-            </option>
-            <option value="other" className="text-sm text-gray-700">
-              Sibling
-            </option>
-            <option value="other" className="text-sm text-gray-700">
-              Other
-            </option>
-          </select>
+          />
+          <InputField
+            placeholder="Enter phone no."
+            label="Phone"
+            id="phone"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            placeholder="Enter NID number"
+            label="NID"
+            id="nid"
+            name="nid"
+            type="text"
+            value={formData.nid}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            placeholder="Enter email"
+            label="Email"
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <div className="relative w-full flex flex-col">
+            <label
+              htmlFor="relationship"
+              className="mb-1 text-sm font-bold text-gray-600"
+            >
+              Relationship
+            </label>
 
-          {/* Custom dropdown icon */}
-          <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
-            <IoMdArrowDropdown className="text-xl" />
+            <select
+              id="relationship"
+              name="relationship"
+              value={formData.relationship}
+              onChange={handleChange}
+              required
+              className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+            >
+              <option value="" disabled className="text-sm text-gray-400">
+                Select Relationship
+              </option>
+              <option value="male" className="text-sm text-gray-700">
+                Parent
+              </option>
+              <option value="female" className="text-sm text-gray-700">
+                Spouse
+              </option>
+              <option value="other" className="text-sm text-gray-700">
+                Child
+              </option>
+              <option value="other" className="text-sm text-gray-700">
+                Sibling
+              </option>
+              <option value="other" className="text-sm text-gray-700">
+                Other
+              </option>
+            </select>
+
+            {/* Custom dropdown icon */}
+            <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+              <IoMdArrowDropdown className="text-xl" />
+            </div>
           </div>
+          {isShowSubmit && <ActionButton btnText="Submit" type="submit" />}
         </div>
-        {isShowSubmit && <ActionButton btnText="Submit" type="submit" />}
       </form>
 
       {/* Loading Spinner */}
@@ -235,11 +234,11 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
       )}
 
       {/* Success Message Dialog */}
-      {successMessage && (
+      {/* {successMessage && (
         <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-md text-green-700">
           <p>{successMessage}</p>
         </div>
-      )}
+      )} */}
 
       <ModalGeneral
         isOpen={sessionExpired}

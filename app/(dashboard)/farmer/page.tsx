@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
 // import image from '../../../public/WhatsApp Image 2025-04-07 at 12.32.06 PM.jpeg';
-import Image from "next/image";
 import ModalGeneral from "@/component/modal/DialogGeneral";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
@@ -15,6 +15,7 @@ import UploadVedioForSearch from "@/component/helper/UploadVedioForSearch";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
 import PageHeading from "@/components/new-ui/utils/PageHeading";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
+import CattleDetailsModal from "@/components/new-ui/ui/CattleDetailsModal";
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 export interface Asset {
@@ -453,44 +454,51 @@ const FarmerPage: React.FC = () => {
         }}
       >
         {selectedCow && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="flex justify-center">
-              <Image
-                src={selectedCow.image_with_owner || "/placeholder.svg"}
-                alt="Cow"
-                width={200}
-                height={200}
-                className="rounded-md"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-2">
-                <p className="font-semibold">Age:</p>
-                <p>{selectedCow?.age_in_months}</p>
+          // <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          //   <div className="flex justify-center">
+          //     <Image
+          //       src={selectedCow.image_with_owner || "/placeholder.svg"}
+          //       alt="Cow"
+          //       width={200}
+          //       height={200}
+          //       className="rounded-md"
+          //     />
+          //   </div>
+          //   <div className="space-y-2">
+          //     <div className="grid grid-cols-2 gap-2">
+          //       <p className="font-semibold">Age:</p>
+          //       <p>{selectedCow?.age_in_months}</p>
 
-                <p className="font-semibold">Color:</p>
-                <p>{selectedCow?.color}</p>
+          //       <p className="font-semibold">Color:</p>
+          //       <p>{selectedCow?.color}</p>
 
-                <p className="font-semibold">Cattle Type:</p>
-                <p>{selectedCow?.breed}</p>
+          //       <p className="font-semibold">Cattle Type:</p>
+          //       <p>{selectedCow?.breed}</p>
 
-                <p className="font-semibold">Vaccinated:</p>
-                <p>{selectedCow?.vaccination_status}</p>
+          //       <p className="font-semibold">Vaccinated:</p>
+          //       <p>{selectedCow?.vaccination_status}</p>
 
-                <p className="font-semibold">Purchase Amount:</p>
-                <p>{selectedCow?.purchase_amount}</p>
+          //       <p className="font-semibold">Purchase Amount:</p>
+          //       <p>{selectedCow?.purchase_amount}</p>
 
-                <p className="font-semibold">Purchase Date:</p>
-                <p>{selectedCow?.purchase_date}</p>
+          //       <p className="font-semibold">Purchase Date:</p>
+          //       <p>{selectedCow?.purchase_date}</p>
 
-                <p className="font-semibold">Purchase From:</p>
-                <p>{selectedCow?.purchase_from}</p>
+          //       <p className="font-semibold">Purchase From:</p>
+          //       <p>{selectedCow?.purchase_from}</p>
 
-                <p className="font-semibold">Owner:</p>
-                <p>{selectedCow?.owner}</p>
-              </div>
-            </div>
-          </div>
+          //       <p className="font-semibold">Owner:</p>
+          //       <p>{selectedCow?.owner}</p>
+          //     </div>
+          //   </div>
+          // </div>
+          <CattleDetailsModal
+            cattle={selectedCow}
+            isOpen={isCowDetails}
+            onClose={() => {
+              setIsCowDetails(false);
+            }}
+          />
         )}
       </ModalGeneral>
 

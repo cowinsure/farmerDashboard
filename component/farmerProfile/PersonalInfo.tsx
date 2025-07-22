@@ -63,7 +63,7 @@ const PersonalInfo: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (typeof window === "undefined") return;
-      
+
       const storedUserType = localStorage.getItem("userId");
       const authToken = localStorage.getItem("accessToken");
       try {
@@ -244,250 +244,255 @@ const PersonalInfo: React.FC = () => {
         description="Manage your personal information and preferences"
         icon={<GoPerson />}
       />
-      <form
-        className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8"
-        onSubmit={handleSubmit}
-      >
-        {/* Profile Image Column */}
-        <div className="flex flex-col w-full">
-          <label
-            htmlFor="userType"
-            className="mb-1 text-sm font-medium text-gray-700"
-          >
-            Profile Image
-          </label>
-          <PhotoCaptureModal
-            onPhotoCapture={(file) =>
-              handlePhotoCapture(file, "profile_image", setprofileImage)
-            }
-            triggerText="Capture profile Image"
-            title="Capture profile Image"
-          />
-          {profileImage && (
-            <div className="mt-2 text-center">
-              <h3 className="text-sm font-medium mb-1">Profile Image</h3>
-              <Image
-                src={URL.createObjectURL(profileImage)}
-                alt="Profile Image"
-                width={128}
-                height={128}
-                className="w-32 h-32 object-cover border rounded-full"
-              />
-            </div>
-          )}
-          {profileImageUrl && (
-            <div className="mt-2 text-center">
-              <h3 className="text-sm font-medium mb-1">Profile Image</h3>
-              <Image
-                src={profileImageUrl}
-                alt="Profile Image"
-                width={128}
-                height={128}
-                className="w-32 h-32 object-cover border rounded-full"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* User Type */}
-        <InputField
-          placeholder=""
-          label="User Type"
-          id="userType"
-          name="userType"
-          value={formData.userType || ""}
-          onChange={handleInputChange}
-          disabled
-        />
-
-        {/* First & Last Name */}
-        <InputField
-          placeholder="Enter first name"
-          label="First Name"
-          id="first_name"
-          name="first_name"
-          value={formData.first_name}
-          onChange={handleInputChange}
-          required
-        />
-
-        <InputField
-          placeholder="Enter last name"
-          label="Last Name"
-          id="last_name"
-          name="last_name"
-          value={formData.last_name}
-          onChange={handleInputChange}
-          required
-        />
-
-        {/* Gender */}
-        <div className="relative w-full flex flex-col">
-          <label
-            htmlFor="gender"
-            className="mb-1 text-sm font-bold text-gray-600"
-          >
-            Gender
-          </label>
-
-          <select
-            id="gender"
-            name="gender"
-            value={formData.gender}
-            onChange={handleInputChange}
-            required
-            className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
-          >
-            <option value="" disabled className="text-sm text-gray-400">
-              Select gender
-            </option>
-            <option value="male" className="text-sm text-gray-700">
-              Male
-            </option>
-            <option value="female" className="text-sm text-gray-700">
-              Female
-            </option>
-            <option value="other" className="text-sm text-gray-700">
-              Other
-            </option>
-          </select>
-
-          {/* Custom dropdown icon */}
-          <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
-            <IoMdArrowDropdown className="text-xl" />
+      <form onSubmit={handleSubmit}>
+        <div
+          data-aos="fade-in"
+          data-aos-delay="400"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8"
+        >
+          {/* Profile Image Column */}
+          <div className="flex flex-col w-full">
+            <label
+              htmlFor="userType"
+              className="mb-1 text-sm font-medium text-gray-700"
+            >
+              Profile Image
+            </label>
+            <PhotoCaptureModal
+              onPhotoCapture={(file) =>
+                handlePhotoCapture(file, "profile_image", setprofileImage)
+              }
+              triggerText="Capture profile Image"
+              title="Capture profile Image"
+            />
+            {profileImage && (
+              <div className="mt-2 text-center">
+                <h3 className="text-sm font-medium mb-1">Profile Image</h3>
+                <Image
+                  src={URL.createObjectURL(profileImage)}
+                  alt="Profile Image"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded-full"
+                />
+              </div>
+            )}
+            {profileImageUrl && (
+              <div className="mt-2 text-center">
+                <h3 className="text-sm font-medium mb-1">Profile Image</h3>
+                <Image
+                  src={profileImageUrl}
+                  alt="Profile Image"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded-full"
+                />
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* Date of Birth  */}
-        <div className="relative w-full">
+          {/* User Type */}
           <InputField
-            label="Date of Birth"
-            id="date_of_birth"
-            name="date_of_birth"
-            type="date"
-            value={formData.date_of_birth}
+            placeholder=""
+            label="User Type"
+            id="userType"
+            name="userType"
+            value={formData.userType || ""}
+            onChange={handleInputChange}
+            disabled
+          />
+
+          {/* First & Last Name */}
+          <InputField
+            placeholder="Enter first name"
+            label="First Name"
+            id="first_name"
+            name="first_name"
+            value={formData.first_name}
             onChange={handleInputChange}
             required
           />
 
-          {/* Custom calendar icon */}
-          <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
-            <MdOutlineCalendarToday className="text-lg" />
+          <InputField
+            placeholder="Enter last name"
+            label="Last Name"
+            id="last_name"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleInputChange}
+            required
+          />
+
+          {/* Gender */}
+          <div className="relative w-full flex flex-col">
+            <label
+              htmlFor="gender"
+              className="mb-1 text-sm font-bold text-gray-600"
+            >
+              Gender
+            </label>
+
+            <select
+              id="gender"
+              name="gender"
+              value={formData.gender}
+              onChange={handleInputChange}
+              required
+              className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+            >
+              <option value="" disabled className="text-sm text-gray-400">
+                Select gender
+              </option>
+              <option value="male" className="text-sm text-gray-700">
+                Male
+              </option>
+              <option value="female" className="text-sm text-gray-700">
+                Female
+              </option>
+              <option value="other" className="text-sm text-gray-700">
+                Other
+              </option>
+            </select>
+
+            {/* Custom dropdown icon */}
+            <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+              <IoMdArrowDropdown className="text-xl" />
+            </div>
           </div>
-        </div>
 
-        {/* NID Front */}
-        <div className="flex flex-col">
-          <label className="mb-1 text-sm font-bold text-gray-600">
-            NID Front
-          </label>
-          <PhotoCaptureModal
-            onPhotoCapture={(file) =>
-              handlePhotoCapture(file, "nid_front", setnidFront)
-            }
-            triggerText="Click to upload front image"
-            title="Capture NID Front"
-          />
-          {(nidFront || nidFrontUrl) && (
-            <div className="mt-2 text-center">
-              <h3 className="text-sm font-medium mb-1">NID Front</h3>
-              <Image
-                src={
-                  nidFront ? URL.createObjectURL(nidFront) : nidFrontUrl || ""
-                }
-                alt="NID Front"
-                width={128}
-                height={128}
-                className="w-32 h-32 object-cover border rounded"
-              />
+          {/* Date of Birth  */}
+          <div className="relative w-full">
+            <InputField
+              label="Date of Birth"
+              id="date_of_birth"
+              name="date_of_birth"
+              type="date"
+              value={formData.date_of_birth}
+              onChange={handleInputChange}
+              required
+            />
+
+            {/* Custom calendar icon */}
+            <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
+              <MdOutlineCalendarToday className="text-lg" />
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* NID Back */}
-        <div className="flex flex-col">
-          <label className="mb-1 text-sm font-bold text-gray-600">
-            NID Back
-          </label>
-          <PhotoCaptureModal
-            onPhotoCapture={(file) =>
-              handlePhotoCapture(file, "nidBackFile", setnidBack)
-            }
-            triggerText="Click to upload back image"
-            title="Capture NID Back"
+          {/* NID Front */}
+          <div className="flex flex-col">
+            <label className="mb-1 text-sm font-bold text-gray-600">
+              NID Front
+            </label>
+            <PhotoCaptureModal
+              onPhotoCapture={(file) =>
+                handlePhotoCapture(file, "nid_front", setnidFront)
+              }
+              triggerText="Click to upload front image"
+              title="Capture NID Front"
+            />
+            {(nidFront || nidFrontUrl) && (
+              <div className="mt-2 text-center">
+                <h3 className="text-sm font-medium mb-1">NID Front</h3>
+                <Image
+                  src={
+                    nidFront ? URL.createObjectURL(nidFront) : nidFrontUrl || ""
+                  }
+                  alt="NID Front"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* NID Back */}
+          <div className="flex flex-col">
+            <label className="mb-1 text-sm font-bold text-gray-600">
+              NID Back
+            </label>
+            <PhotoCaptureModal
+              onPhotoCapture={(file) =>
+                handlePhotoCapture(file, "nidBackFile", setnidBack)
+              }
+              triggerText="Click to upload back image"
+              title="Capture NID Back"
+            />
+            {(nidBack || nidBackUrl) && (
+              <div className="mt-2 text-center">
+                <h3 className="text-sm font-medium mb-1">NID Back</h3>
+                <Image
+                  src={
+                    nidBack ? URL.createObjectURL(nidBack) : nidBackUrl || ""
+                  }
+                  alt="NID Back"
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 object-cover border rounded"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* NID number */}
+          <InputField
+            placeholder="Enter NID number"
+            label="NID (10 digit number)"
+            id="nid"
+            name="nid"
+            type="text"
+            maxLength={10}
+            value={formData.nid}
+            onChange={handleInputChange}
+            required
           />
-          {(nidBack || nidBackUrl) && (
-            <div className="mt-2 text-center">
-              <h3 className="text-sm font-medium mb-1">NID Back</h3>
-              <Image
-                src={nidBack ? URL.createObjectURL(nidBack) : nidBackUrl || ""}
-                alt="NID Back"
-                width={128}
-                height={128}
-                className="w-32 h-32 object-cover border rounded"
-              />
-            </div>
-          )}
+
+          {/* Address Fields */}
+          <InputField
+            placeholder="Enter TIN number"
+            label="TIN No."
+            id="tin"
+            name="tin"
+            value={formData.tin}
+            onChange={handleInputChange}
+          />
+
+          <InputField
+            placeholder="Enter thana"
+            label="Thana"
+            id="thana"
+            name="thana"
+            value={formData.thana}
+            onChange={handleInputChange}
+          />
+
+          <InputField
+            placeholder="Enter village"
+            label="Village"
+            id="village"
+            name="village"
+            value={formData.village}
+            onChange={handleInputChange}
+          />
+
+          <InputField
+            placeholder="Enter union"
+            label="Union"
+            id="union"
+            name="union"
+            value={formData.union}
+            onChange={handleInputChange}
+          />
+
+          <InputField
+            placeholder="Enter zilla"
+            label="Zilla"
+            id="zilla"
+            name="zilla"
+            value={formData.zilla}
+            onChange={handleInputChange}
+          />
         </div>
-
-        {/* NID number */}
-        <InputField
-          placeholder="Enter NID number"
-          label="NID (10 digit number)"
-          id="nid"
-          name="nid"
-          type="text"
-          maxLength={10}
-          value={formData.nid}
-          onChange={handleInputChange}
-          required
-        />
-
-        {/* Address Fields */}
-        <InputField
-          placeholder="Enter TIN number"
-          label="TIN No."
-          id="tin"
-          name="tin"
-          value={formData.tin}
-          onChange={handleInputChange}
-        />
-
-        <InputField
-          placeholder="Enter thana"
-          label="Thana"
-          id="thana"
-          name="thana"
-          value={formData.thana}
-          onChange={handleInputChange}
-        />
-
-        <InputField
-          placeholder="Enter village"
-          label="Village"
-          id="village"
-          name="village"
-          value={formData.village}
-          onChange={handleInputChange}
-        />
-
-        <InputField
-          placeholder="Enter union"
-          label="Union"
-          id="union"
-          name="union"
-          value={formData.union}
-          onChange={handleInputChange}
-        />
-
-        <InputField
-          placeholder="Enter zilla"
-          label="Zilla"
-          id="zilla"
-          name="zilla"
-          value={formData.zilla}
-          onChange={handleInputChange}
-        />
 
         <div className="lg:col-span-2">
           <ActionButton btnText="Save Information" type="submit" />
