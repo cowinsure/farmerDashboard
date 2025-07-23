@@ -384,7 +384,7 @@ const FarmerPage: React.FC = () => {
               <img
                 src={row.left_side_image || "/placeholder.svg"}
                 alt="cow"
-                className="w-12 h-12 rounded object-cover mx-auto"
+                className="w-full h-full md:w-12 md:h-12 rounded mx-auto"
               />
             ),
           },
