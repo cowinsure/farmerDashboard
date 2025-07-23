@@ -16,6 +16,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Stepper } from "@/components/new-ui/utils/Stepper";
+import { toast } from "sonner";
 
 interface ModalProps {
   isOpen: boolean;
@@ -95,7 +96,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert(`Something went wrong. Please try again.\nError: ${error}`);
+      toast.error(`Something went wrong. Please try again.\nError: ${error}`);
     } finally {
       setIsLoading(false); // Hide loading spinner
     }

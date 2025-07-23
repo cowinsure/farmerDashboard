@@ -9,6 +9,7 @@ import { LuUsers } from "react-icons/lu";
 import InputField from "@/components/new-ui/ui/InputField";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { toast } from "sonner";
 
 interface NomineeInfoProps {
   isShowSubmit?: boolean;
@@ -41,7 +42,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     const fetchNomineeInfo = async () => {
       const authToken = localStorage.getItem("accessToken");
       if (!authToken) {
-        alert("Access token is missing. Please log in again.");
+        toast.error("Access token is missing. Please log in again.");
         return;
       }
 
@@ -122,7 +123,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
         })
         .catch((error) => {
           console.error("Error submitting form:", error);
-          alert(`Something went wrong. Please try again.\nError: ${error}`);
+          toast.error(`Something went wrong. Please try again.\nError: ${error}`);
         });
     } finally {
       setIsLoading(false); // Hide loading spinner

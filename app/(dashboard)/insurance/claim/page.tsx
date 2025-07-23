@@ -12,6 +12,11 @@ import {
 import { Eye, FileText } from "lucide-react";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 import { TbArrowBadgeRightFilled } from "react-icons/tb";
+import { IoCalendarClearOutline, IoShieldCheckmark } from "react-icons/io5";
+import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import { HiOutlineBuildingOffice } from "react-icons/hi2";
+import { GoHash } from "react-icons/go";
+import { FaRegFileAlt } from "react-icons/fa";
 
 // interface Cattle {
 //   id: number;
@@ -103,11 +108,11 @@ export default function CattleManagementPage() {
     <div className=" mx-auto py-8 px-4">
       <div className="mb-10">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-700">
+          <h1 className="text-xl md:text-3xl font-extrabold text-gray-700">
             Insurance
           </h1>
           <TbArrowBadgeRightFilled size={30} className="text-[#089C3E] -mb-1" />
-          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800">
+          <h1 className="text-xl md:text-3xl font-extrabold text-gray-800">
             Claims
           </h1>
         </div>
@@ -128,27 +133,27 @@ export default function CattleManagementPage() {
           {
             key: "insurance_provider",
             header: "Insurance Provider",
-            className: "w-48"
+            className: "w-48",
           },
           {
             key: "insurance_number",
             header: "Insurance Number",
-            className: "w-40"
+            className: "w-40",
           },
           {
             key: "sum_insured",
             header: "Sum Insured",
-            className: "w-30"
+            className: "w-30",
           },
           {
             key: "premium_amount",
             header: "Premium Amount",
-            className: "w-40"
+            className: "w-40",
           },
           {
             key: "insurance_start_date",
             header: "Start Date",
-            className: "w-28"
+            className: "w-28",
           },
           {
             key: "insurance_end_date",
@@ -163,12 +168,12 @@ export default function CattleManagementPage() {
           {
             key: "created_by",
             header: "Created By",
-            className: "w-30"
+            className: "w-30",
           },
           {
             key: "claim_status",
             header: "Claim Status",
-            className: "w-30"
+            className: "w-30",
           },
 
           {
@@ -210,38 +215,150 @@ export default function CattleManagementPage() {
 
       {/* Cow Details Dialog */}
       <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-green-700">
+            <DialogTitle className="text-green-700 text-2xl font-bold text-center flex items-center justify-center gap-2">
+              <span>
+                <IoShieldCheckmark />
+              </span>
               Insurance Details
             </DialogTitle>
           </DialogHeader>
           {selectedCow && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div className="space-y-2">
-                <p className="font-semibold">Asset:</p>
-                <p>{selectedCow.asset}</p>
+            <div className="space-y-6 text-sm text-gray-800">
+              {/* Top Summary Card */}
+              <div className="bg-gray-50 p-5 rounded-md shadow border flex flex-col gap-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="font-semibold text-lg">
+                      {selectedCow.asset}
+                    </h2>
+                    <p className="text-gray-500 text-sm">Protected Asset</p>
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <span
+                      className={`${
+                        selectedCow.insurance_status === "active"
+                          ? "bg-green-200 text-green-800"
+                          : "bg-yellow-200 text-yellow-800"
+                      } px-3 py-1 text-sm rounded-full`}
+                    >
+                      {selectedCow.insurance_status === "active"
+                        ? "Active"
+                        : selectedCow.insurance_status}
+                    </span>
+                    <span className="bg-gray-200 text-gray-700 px-3 py-1 text-sm rounded-full">
+                      {selectedCow.claim_status}
+                    </span>
+                  </div>
+                </div>
 
-                <p className="font-semibold">Insurance Provider:</p>
-                <p>{selectedCow.insurance_provider}</p>
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
+                    <FaBangladeshiTakaSign
+                      className="text-gray-700"
+                      size={20}
+                    />
+                    {Number(selectedCow.sum_insured).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </p>
+                  <p className="text-gray-500 text-sm">Sum Insured</p>
+                </div>
+              </div>
 
-                <p className="font-semibold">Insurance Number:</p>
-                <p>{selectedCow.insurance_number}</p>
+              {/* Insurance Info Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Left Info */}
+                <div className="border rounded-md p-4 bg-white">
+                  <div className="mb-3 flex items-center gap-2">
+                    <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center">
+                      <HiOutlineBuildingOffice
+                        size={20}
+                        className="text-blue-700"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">
+                        Insurance Provider
+                      </p>
+                      <p className="font-semibold text-base">
+                        {selectedCow.insurance_provider}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
+                      <GoHash size={20} className="text-purple-700" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-sm">Policy Number</p>
+                      <p className="font-semibold text-base">
+                        {selectedCow.insurance_number}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-                <p className="font-semibold">Sum Insured:</p>
-                <p>{selectedCow.sum_insured}</p>
+                {/* Right Info */}
+                <div className="border rounded-md p-4 bg-white grid gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 bg-green-200 rounded-full flex items-center justify-center">
+                      <IoCalendarClearOutline
+                        size={18}
+                        className="text-green-700"
+                      />
+                    </span>
+                    <div>
+                      <p className="text-gray-500 text-sm">Start Date</p>
+                      <p className="flex items-center gap-1 text-base font-semibold">
+                        {selectedCow.insurance_start_date}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 bg-red-200 rounded-full flex items-center justify-center">
+                      <IoCalendarClearOutline
+                        size={18}
+                        className="text-red-700"
+                      />
+                    </span>
+                    <div>
+                      <p className="text-gray-500 text-sm">End Date</p>
+                      <p className="flex items-center gap-1 text-base font-semibold">
+                        {selectedCow.insurance_end_date}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                <p className="font-semibold">Start Date:</p>
-                <p>{selectedCow.insurance_start_date}</p>
-
-                <p className="font-semibold">End Date:</p>
-                <p>{selectedCow.insurance_end_date}</p>
-
-                <p className="font-semibold">Status:</p>
-                <p>{selectedCow.insurance_status}</p>
-
-                <p className="font-semibold">Claim Status:</p>
-                <p>{selectedCow.claim_status}</p>
+              {/* Coverage Summary */}
+              <div className="border rounded-md p-4 bg-white hidden md:block">
+                <div className="flex items-center gap-2 mb-5">
+                  <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <FaRegFileAlt size={18} className="text-gray-600" />
+                  </span>
+                  <p className="font-semibold text-base">Coverage Summary</p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
+                  <div>
+                    <p className="text-gray-500 text-sm">Type</p>
+                    <p className="font-semibold text-base mt-1">Livestock</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Premium</p>
+                    <p className="font-semibold text-base mt-1">Annual</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Deductible</p>
+                    <p className="font-semibold text-base mt-1">$500</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Coverage</p>
+                    <p className="font-semibold text-base mt-1">Full</p>
+                  </div>
+                </div>
               </div>
             </div>
           )}

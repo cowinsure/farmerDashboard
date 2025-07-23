@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from "next/navigation"; // Updated import
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const ForgetPassSetPasswordPage = () => {
     const router = useRouter(); // Updated useRouter
@@ -11,14 +12,14 @@ const ForgetPassSetPasswordPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            alert("Passwords do not match!");
+            toast.error("Passwords do not match!");
             return;
         }
 
         try {
             const mobileNumber = localStorage.getItem("mobile_number"); // Retrieve mobile number from localStorage
             if (!mobileNumber) {
-                alert("Mobile number not found. Please try again.");
+                toast.error("Mobile number not found. Please try again.");
                 return;
             }
 
@@ -41,17 +42,17 @@ const ForgetPassSetPasswordPage = () => {
             if (response.ok) {
                 // const data = await response.json();
                 if (response.status == 200) {
-                    // alert(data.data.message); // "User registered successfully."
+                    // toast.error(data.data.message); // "User registered successfully."
                     router.push("/auth/login"); // Redirect to login page
                 } else {
-                    alert("Failed to set password. Please try again.");
+                    toast.error("Failed to set password. Please try again.");
                 }
             } else {
-                alert("Failed to set password. Please try again.");
+                toast.error("Failed to set password. Please try again.");
             }
         } catch (error) {
             console.error("Error during password submission:", error);
-            alert("An error occurred. Please try again.");
+            toast.error("An error occurred. Please try again.");
         }
     };
 

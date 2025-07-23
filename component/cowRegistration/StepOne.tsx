@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import LottieAnimation from "../Animation/LottieAnimation";
 import animation from "../Animation/LottieAnimation";
 import CowIdentificationLoader from "../modal/cow-identification-loader";
+import { toast } from "sonner";
 
 // Define an interface for the response data
 interface ResponseData {
@@ -88,7 +89,7 @@ export default function StepOne() {
         setErrorModalOpen(true);
         console.error("Error 400:", data.msg);
         setResponseData(data);
-        // alert(`Error: ${data.msg}`);
+        // toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -96,7 +97,7 @@ export default function StepOne() {
         const data = await response.json();
 
         console.error("Error 401:", data.msg);
-        alert(`Error: ${data.msg}`);
+        toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -108,7 +109,7 @@ export default function StepOne() {
         updateStep({
           reference_id: data.registration_id,
         }); // Save the response data to state
-        // alert(data.msg);
+        // toast.error(data.msg);
         return;
       }
 
@@ -117,7 +118,7 @@ export default function StepOne() {
       }
     } catch (error) {
       console.error("Error uploading video:", error);
-      alert("Something went wrong: " + error);
+      toast.error("Something went wrong: " + error);
     } finally {
       setIsUploading(false);
     }
@@ -149,7 +150,7 @@ export default function StepOne() {
                 if (selectedFile) {
                   handleVideoUpload(selectedFile); // Call the upload function when the video is captured
                 } else {
-                  alert("Please select a video file before uploading.");
+                  toast.error("Please select a video file before uploading.");
                 }
               }}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded"

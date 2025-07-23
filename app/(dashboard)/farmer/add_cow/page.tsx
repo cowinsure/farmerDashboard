@@ -15,6 +15,7 @@ import { TbArrowBadgeRightFilled } from "react-icons/tb";
 import MuzzleGuidlines from "@/components/new-ui/MuzzleGuidlines";
 import Link from "next/link";
 import { Stepper } from "@/components/new-ui/utils/Stepper";
+import { toast } from "sonner";
 
 const steps = ["Muzzel Detection", "Cow Details", "Attachments"];
 
@@ -93,7 +94,7 @@ export default function StepForm() {
           }
         } catch (error) {
           console.error("Error submitting form:", error);
-          alert(`Something went wrong. Please try again.\nError: ${error}`);
+          toast.error(`Something went wrong. Please try again.\nError: ${error}`);
         } finally {
           setIsLoading(false); // Hide loading spinner
         }

@@ -16,6 +16,7 @@ import CowIdentificationLoader from "@/component/modal/cow-identification-loader
 import PageHeading from "@/components/new-ui/utils/PageHeading";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 import CattleDetailsModal from "@/components/new-ui/ui/CattleDetailsModal";
+import { toast } from "sonner";
 // import { IoEye } from "react-icons/io5";
 // Importing cow image
 export interface Asset {
@@ -190,7 +191,7 @@ const FarmerPage: React.FC = () => {
         const data = await response.json();
         setErroMuzzleResponse(data);
         console.error("Error 400:", data.msg);
-        // alert(`Error: ${data.msg}`);
+        // toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -198,14 +199,14 @@ const FarmerPage: React.FC = () => {
         const data = await response.json();
         setErroMuzzleResponse(data);
         // console.error("Error 400:", data.msg);
-        // alert(`Error: ${data.msg}`);
+        // toast.error(`Error: ${data.msg}`);
         return;
       }
 
       if (response.status === 401) {
         const data = await response.json();
         console.error("Error 401:", data.msg);
-        alert(`Error: ${data.msg}`);
+        toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -221,7 +222,7 @@ const FarmerPage: React.FC = () => {
         }));
         setIsModalOpen(true);
         // Save the response data to state
-        // alert(data.msg);
+        // toast.error(data.msg);
         return;
       }
 
@@ -230,7 +231,7 @@ const FarmerPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error uploading video:", error);
-      alert("Something went wrong: " + error);
+      toast.error("Something went wrong: " + error);
     } finally {
       setIsUploading(false);
     }
@@ -421,7 +422,7 @@ const FarmerPage: React.FC = () => {
                 if (selectedFile) {
                   handleVideoUpload(selectedFile); // Call the upload function when the video is captured
                 } else {
-                  alert("Please select a video file before uploading.");
+                  toast.warning("Please select a video file before uploading.");
                 }
               }}
               className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded"

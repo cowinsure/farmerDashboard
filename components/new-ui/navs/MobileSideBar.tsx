@@ -9,8 +9,6 @@ import {
 import { PiFarm, PiFarmFill } from "react-icons/pi";
 import {
   MdLogout,
-  MdKeyboardArrowUp,
-  MdKeyboardArrowDown,
 } from "react-icons/md";
 import { PiShieldPlusBold, PiShieldPlusFill } from "react-icons/pi";
 import { VscChecklist } from "react-icons/vsc";
@@ -171,7 +169,7 @@ export default function MobileNavBar() {
       </div>
 
       {/* Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t z-50 flex justify-around items-center py-2">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-green-50 border-t z-50 flex justify-around items-center py-2 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
         {menuItems.map((item) => (
           <button
             key={item.name}

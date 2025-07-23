@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 const ForgetPassOtpPage: React.FC = () => {
    const router = useRouter();
@@ -65,11 +66,11 @@ const ForgetPassOtpPage: React.FC = () => {
                 //   console.log(data.data.message); // "OTP verified successfully."
                  // Navigate to the set password page
                 } else {
-                  alert('OTP Resend failed. Please try again.');
+                  toast.error('OTP Resend failed. Please try again.');
                 }
               } else {
                 console.error('Failed to Resend OTP');
-                alert('Failed to Resend OTP. Please try again.');
+                toast.error('Failed to Resend OTP. Please try again.');
               }
 
 
@@ -78,7 +79,7 @@ const ForgetPassOtpPage: React.FC = () => {
       // You can add an API call here to resend the OTP
     } catch (error) {
       console.error('Error resending OTP:', error);
-      alert('Failed to resend OTP. Please try again.');
+      toast.error('Failed to resend OTP. Please try again.');
     } finally {
       setIsResending(false);
     }
@@ -115,20 +116,20 @@ const ForgetPassOtpPage: React.FC = () => {
             // Navigate to the set password page
             router.push('/auth/forgetpass/setpasss');  
         } else {
-            alert('OTP verification failed. Please try again.');
+            toast.error('OTP verification failed. Please try again.');
           }
         } else {
           console.error('Failed to verify OTP');
-          alert('Failed to verify OTP. Please try again.');
+          toast.error('Failed to verify OTP. Please try again.');
         }
       } catch (error) {
         console.error('Error during OTP verification:', error);
-        alert('An error occurred. Please try again.');
+        toast.error('An error occurred. Please try again.');
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      alert('Please enter a valid 5-digit OTP.');
+      toast.warning('Please enter a valid 5-digit OTP.');
     }
   };
 

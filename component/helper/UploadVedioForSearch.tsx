@@ -5,6 +5,7 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Upload, Camera, ArrowLeft, RotateCcw, Square, RefreshCw } from "lucide-react"
 import { useCowRegistration } from "@/context/CowRegistrationContext";
+import { toast } from "sonner";
 
 export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCapture?: (file: File) => void }) {
     const {data, updateStep, validateStep, reset } = useCowRegistration();
@@ -46,7 +47,7 @@ export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCaptur
       if (file.type.startsWith("video/")) {
         handleFile(file)
       } else {
-        alert("Please upload a video file")
+        toast.warning("Please upload a video file")
       }
     }
   }
@@ -123,7 +124,7 @@ export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCaptur
         setFacingMode("environment")
         return
       } catch (err) {
-        console.log("Back camera failed, trying front camera")
+        console.log("Back camera failed, trying front camera", err)
       }
 
       // If back camera fails, try front camera
@@ -146,7 +147,7 @@ export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCaptur
       setFacingMode("user")
     } catch (error) {
       console.error("Error accessing camera:", error)
-      alert("Could not access camera. Please check permissions.")
+      toast.error("Could not access camera. Please check permissions.")
     }
   }
 
@@ -203,7 +204,7 @@ export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCaptur
       }
     } catch (error) {
       console.error("Error switching camera:", error)
-      alert("Could not switch camera. Please check permissions.")
+      toast.error("Could not switch camera. Please check permissions.")
     }
   }
 

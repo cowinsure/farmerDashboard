@@ -11,6 +11,7 @@ import { AuthProvider } from "../context/AuthContext";
 import { CowRegistrationProvider } from "@/context/CowRegistrationContext";
 import { FarmerRegistrationProvider } from "@/context/FarmerRegistrationContext";
 import { InsuranceApplicationProvider } from "@/context/InsuranceApplicationContext";
+import { Toaster } from "sonner";
 
 // const averia = Averia_Sans_Libre({
 //   subsets: ["latin"],
@@ -41,6 +42,13 @@ export default function RootLayout({
           <InsuranceApplicationProvider>
             <FarmerRegistrationProvider>
               <CowRegistrationProvider>
+                <Toaster
+                  position="bottom-right"
+                  richColors
+                  expand={true} 
+                  offset={32}
+                  visibleToasts={3}
+                />
                 {/* <RootLayoutCustom> */}
                 {children}
               </CowRegistrationProvider>

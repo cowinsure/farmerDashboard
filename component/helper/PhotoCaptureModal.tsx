@@ -22,6 +22,7 @@ import {
 } from "../ui/drawer";
 import { FaCamera } from "react-icons/fa";
 import { MdCloudUpload } from "react-icons/md";
+import { toast } from "sonner";
 
 interface PhotoCaptureModalProps {
   onPhotoCapture?: (file: File) => void;
@@ -73,7 +74,7 @@ export default function PhotoCaptureModal({
       if (file.type.startsWith("image/")) {
         handleFile(file);
       } else {
-        alert("Please upload an image file");
+        toast.warning("Please upload an image file");
       }
     }
   };
@@ -153,7 +154,7 @@ export default function PhotoCaptureModal({
       setFacingMode("user");
     } catch (error) {
       console.error("Error accessing camera:", error);
-      alert("Could not access camera. Please check permissions.");
+      toast.error("Could not access camera. Please check permissions.");
     }
   };
 
@@ -209,7 +210,7 @@ export default function PhotoCaptureModal({
       }
     } catch (error) {
       console.error("Error switching camera:", error);
-      alert("Could not switch camera. Please check permissions.");
+      toast.error("Could not switch camera. Please check permissions.");
     }
   };
 

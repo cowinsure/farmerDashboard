@@ -7,6 +7,7 @@ import InputField from "@/components/new-ui/ui/InputField";
 import SectionHeading from "@/components/new-ui/utils/SectionHeading";
 import { IoWalletOutline } from "react-icons/io5";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
+import { toast } from "sonner";
 
 interface FinancialInfoFormProps {
   onSubmit: (data: {
@@ -37,7 +38,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
     const fetchFinancialInfo = async () => {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-        alert("Access token is missing. Please log in again.");
+        toast.error("Access token is missing. Please log in again.");
         return;
       }
 
@@ -99,7 +100,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
     const accessToken = localStorage.getItem("accessToken");
 
     if (!accessToken) {
-      alert("Access token is missing. Please log in again.");
+      toast.error("Access token is missing. Please log in again.");
       return;
     }
 
@@ -133,7 +134,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert(`Something went wrong. Please try again.\nError: ${error}`);
+      toast.error(`Something went wrong. Please try again.\nError: ${error}`);
     } finally {
       setIsLoading(false); // Hide loading spinner
     }

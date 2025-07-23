@@ -26,7 +26,7 @@ export function BasicTable<T extends { id: string | number }>({
   isLoading,
 }: BasicTableProps<T>) {
   return (
-    <div className="rounded-lg shadow-md overflow-x-auto animate__animated animate__fadeIn">
+    <div className="rounded-lg shadow-md bg-white overflow-x-auto animate__animated animate__fadeIn">
       <div className="overflow-y-auto" style={{ height: maxHeight }}>
         <table className="w-full min-w-[900px] table-fixed">
           <thead className=" text-gray-700">
@@ -55,7 +55,7 @@ export function BasicTable<T extends { id: string | number }>({
               )}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white">
             {data.length ? (
               data.map((row) => (
                 <tr
@@ -76,7 +76,7 @@ export function BasicTable<T extends { id: string | number }>({
                         <td
                           key={String(col.key)}
                           className={`
-                            border border-gray-100 p-2
+                            border border-gray-100 p-2 break-words max-w-[150px]
                             ${
                               col.sticky === "left"
                                 ? "sticky left-0 z-20 bg-white"
@@ -113,8 +113,7 @@ export function BasicTable<T extends { id: string | number }>({
               <tr>
                 <td
                   colSpan={columns.length + (onView ? 1 : 0)}
-                  className="py-4 text-gray-600 bg-white text-center"
-                >
+                  className="py-4 text-gray-600 px-34 md:px-0 md:text-center">
                   {emptyMessage}
                 </td>
               </tr>

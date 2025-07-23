@@ -11,6 +11,7 @@ import InputField from "@/components/new-ui/ui/InputField";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
+import { toast } from "sonner";
 
 const PersonalInfo: React.FC = () => {
   // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -232,7 +233,7 @@ const PersonalInfo: React.FC = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert(`Something went wrong. Please try again.\nError: ${error}`);
+      toast.error(`Something went wrong. Please try again.\nError: ${error}`);
     } finally {
       setIsLoading(false); // Hide loading spinner
     }

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
 import { MdCloudUpload } from "react-icons/md";
+import { toast } from "sonner";
 
 export default function UploadVideo({
   onVideoCapture,
@@ -60,7 +61,7 @@ export default function UploadVideo({
       if (file.type.startsWith("video/")) {
         handleFile(file);
       } else {
-        alert("Please upload a video file");
+        toast.error("Please upload a video file");
       }
     }
   };
@@ -136,7 +137,7 @@ export default function UploadVideo({
         setFacingMode("environment");
         return;
       } catch (err) {
-        console.log("Back camera failed, trying front camera");
+        console.log("Back camera failed, trying front camera", err);
       }
 
       // If back camera fails, try front camera
@@ -159,7 +160,7 @@ export default function UploadVideo({
       setFacingMode("user");
     } catch (error) {
       console.error("Error accessing camera:", error);
-      alert("Could not access camera. Please check permissions.");
+      toast.error("Could not access camera. Please check permissions.");
     }
   };
 
@@ -216,7 +217,7 @@ export default function UploadVideo({
       }
     } catch (error) {
       console.error("Error switching camera:", error);
-      alert("Could not switch camera. Please check permissions.");
+      toast.error("Could not switch camera. Please check permissions.");
     }
   };
 
