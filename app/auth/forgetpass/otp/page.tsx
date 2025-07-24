@@ -1,20 +1,23 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
-import { toast } from 'sonner';
+"use client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
+import logo from "../../../../public/Logo-03.png";
+import { FaKey } from "react-icons/fa6";
 
 const ForgetPassOtpPage: React.FC = () => {
-   const router = useRouter();
-    
-  const [otp, setOtp] = useState<string>('');
+  const router = useRouter();
+
+  const [otp, setOtp] = useState<string>("");
   const [timer, setTimer] = useState<number>(20);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);
-  const [mobileNumber, setMobileNumber] = useState<string>('');
+  const [mobileNumber, setMobileNumber] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isResending, setIsResending] = useState<boolean>(false);
 
   useEffect(() => {
-    const storedMobileNumber = localStorage.getItem('mobile_number');
+    const storedMobileNumber = localStorage.getItem("mobile_number");
     if (storedMobileNumber) {
       setMobileNumber(storedMobileNumber);
     }
@@ -46,40 +49,41 @@ const ForgetPassOtpPage: React.FC = () => {
     setTimer(120);
     setIsResendDisabled(true);
     try {
-       
-        const requestBody = {
-            mobile_number:  localStorage.getItem('mobile_number'),
-        
-          };
+      const requestBody = {
+        mobile_number: localStorage.getItem("mobile_number"),
+      };
 
-        console.log(requestBody);
-        
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/request/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),});
-            if (response.ok) {
-                // const data = await response.json();
-                if (response.status == 200) {
-                //   console.log(data.data.message); // "OTP verified successfully."
-                 // Navigate to the set password page
-                } else {
-                  toast.error('OTP Resend failed. Please try again.');
-                }
-              } else {
-                console.error('Failed to Resend OTP');
-                toast.error('Failed to Resend OTP. Please try again.');
-              }
+      console.log(requestBody);
 
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/request/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+      if (response.ok) {
+        // const data = await response.json();
+        if (response.status == 200) {
+          //   console.log(data.data.message); // "OTP verified successfully."
+          // Navigate to the set password page
+        } else {
+          toast.error("OTP Resend failed. Please try again.");
+        }
+      } else {
+        console.error("Failed to Resend OTP");
+        toast.error("Failed to Resend OTP. Please try again.");
+      }
 
       // Logic to resend OTP goes here
-      console.log('OTP resent');
+      console.log("OTP resent");
       // You can add an API call here to resend the OTP
     } catch (error) {
-      console.error('Error resending OTP:', error);
-      toast.error('Failed to resend OTP. Please try again.');
+      console.error("Error resending OTP:", error);
+      toast.error("Failed to resend OTP. Please try again.");
     } finally {
       setIsResending(false);
     }
@@ -92,85 +96,150 @@ const ForgetPassOtpPage: React.FC = () => {
         const requestBody = {
           mobile_number: mobileNumber,
           otp: otp,
-         
         };
 
         console.log(requestBody);
-        
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/verify/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
-        });
-
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/forgot-password/verify/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
 
         console.log(response.ok);
 
         if (response.ok) {
-        //   const data = await response.json();
+          //   const data = await response.json();
           if (response.status == 200) {
             // console.log(data.data.message); // "OTP verified successfully."
             // Navigate to the set password page
-            router.push('/auth/forgetpass/setpasss');  
-        } else {
-            toast.error('OTP verification failed. Please try again.');
+            router.push("/auth/forgetpass/setpasss");
+          } else {
+            toast.error("OTP verification failed. Please try again.");
           }
         } else {
-          console.error('Failed to verify OTP');
-          toast.error('Failed to verify OTP. Please try again.');
+          console.error("Failed to verify OTP");
+          toast.error("Failed to verify OTP. Please try again.");
         }
       } catch (error) {
-        console.error('Error during OTP verification:', error);
-        toast.error('An error occurred. Please try again.');
+        console.error("Error during OTP verification:", error);
+        toast.error("An error occurred. Please try again.");
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      toast.warning('Please enter a valid 5-digit OTP.');
+      toast.warning("Please enter a valid 5-digit OTP.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen text-black bg-gray-100">
-      <div className="p-5 max-w-md w-full bg-white shadow-md rounded text-center">
-        <h1 className="text-2xl font-bold mb-4">Enter OTP</h1>
-        <p className="text-gray-600 mb-6">We have sent a 6-digit OTP to your registered mobile number.</p>
-        <input
-          type="text"
-          value={otp}
-          onChange={handleOtpChange}
-          placeholder="Enter OTP"
-          className="w-full p-2 text-lg border border-gray-300 rounded mb-4 text-center"
-        />
-        <button
-          onClick={handleSubmit}
-          className={`px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ${
-            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </button>
-        <div className="mt-6">
-          {isResendDisabled ? (
-            <p className="text-gray-500">
-              Resend OTP in {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, '0')}
-            </p>
-          ) : (
-            <button
-              onClick={handleResendOtp}
-              className={`px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 ${
-                isResending ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              disabled={isResending}
-            >
-              {isResending ? 'Resending...' : 'Resend OTP'}
-            </button>
-          )}
+    <div className="min-h-screen grid grid-rows-3 relative bg-[#f8fff9] overflow-hidden text-gray-700">
+      <div className="row-span-3 w-full flex items-center justify-center">
+        {/* Decorative Background Waves */}
+        <div>
+          <Image
+            src="/wavy1.png"
+            alt="Top Wave"
+            className="absolute -top-6 -right-14 scale-[250%] md:-top-24 md:-right-28 md:scale-[200%] lg:scale-100 lg:-top-64 lg:-right-54 w-1/3 z-0"
+            width={500}
+            height={500}
+            data-aos="fade-left"
+          />
+          <Image
+            src="/wavy1.png"
+            alt="Bottom Wave"
+            className="absolute -bottom-10 -left-10 scale-[220%] md:-bottom-24 md:-left-28 md:scale-[250%] lg:scale-100 lg:-bottom-64 lg:-left-50 w-1/3 z-0 opacity-60"
+            width={500}
+            height={500}
+            data-aos="fade-right"
+          />
         </div>
+
+        {/* Logo */}
+        <div className="absolute top-5 left-1 md:left-5 flex items-center space-x-2 z-10">
+          <div className="w-36 md:w-48 flex justify-center mb-6">
+            <Image
+              src={logo}
+              alt="Logo"
+              width={50}
+              height={50}
+              className="object-contain h-[60px] w-auto"
+              priority
+              unoptimized
+            />
+          </div>
+        </div>
+
+        {/* OTP Form */}
+        <div className="p-8 rounded w-full max-w-md z-10 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold underline text-green-800 mb-4">
+            Enter OTP
+          </h1>
+          <p className="text-gray-600 mb-6 text-sm md:text-base">
+            We have sent a 6-digit OTP to your registered mobile number.
+          </p>
+
+          <div className="relative mb-4">
+            <span className="absolute inset-y-0 top-1/2 -translate-y-1/2 left-3 text-green-800">
+              <FaKey />
+            </span>
+            <input
+              type="text"
+              value={otp}
+              onChange={handleOtpChange}
+              placeholder="Enter OTP"
+              className="w-full px-10 py-2 border-2 border-[#0E5829] rounded-md text-lg text-center bg-white font-semibold shadow-sm"
+              maxLength={6}
+              required
+            />
+          </div>
+
+          <button
+            onClick={handleSubmit}
+            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-800 hover:bg-green-700"
+            }`}
+            disabled={isSubmitting}
+            data-aos="fade-up"
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+
+          <div className="mt-6">
+            {isResendDisabled ? (
+              <p className="text-gray-500 text-sm">
+                Resend OTP in {Math.floor(timer / 60)}:
+                {String(timer % 60).padStart(2, "0")}
+              </p>
+            ) : (
+              <button
+                onClick={handleResendOtp}
+                className={`w-full mt-3 py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
+                  isResending
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-800 hover:bg-green-700"
+                }`}
+                disabled={isResending}
+              >
+                {isResending ? "Resending..." : "Resend OTP"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-6 text-xs font-medium text-gray-400 py-5 text-center">
+        <span className="bg-white/50 px-2 py-1 rounded-md backdrop-blur-xl">
+          © {new Date().getFullYear()} InsureCow. All rights reserved.
+        </span>
       </div>
     </div>
   );

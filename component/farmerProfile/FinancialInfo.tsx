@@ -235,7 +235,11 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
             value={account_number}
             onChange={(e) => setaccount_number(e.target.value)}
           />
-          {isShowSubmit && <ActionButton btnText="Submit" type="submit" />}
+          {isShowSubmit && (
+            <div>
+              <ActionButton btnText="Submit" type="submit" />
+            </div>
+          )}
         </div>
       </form>
       {/* Loading Spinner */}

@@ -92,7 +92,7 @@ const ProfilePage: React.FC = () => {
         />
       </div>
 
-      <div className="p-4 rounded bg-white shadow">{renderTabContent()}</div>
+      <div className="mb-20 md:p-4 rounded bg-white shadow">{renderTabContent()}</div>
     </div>
   );
 };

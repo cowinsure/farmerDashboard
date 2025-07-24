@@ -158,7 +158,7 @@ export default function InsuranceActivePolicy() {
                 className="text-green-700 hover:text-green-900 hover:bg-green-200"
               >
                 <Eye size={16} className="mr-1" />
-                View
+                <span className="hidden md:block">View</span>
               </Button>
             ),
           },
@@ -182,7 +182,7 @@ export default function InsuranceActivePolicy() {
                   className="text-green-700 border-green-700 hover:bg-green-200"
                 >
                   <FileText size={16} className="mr-1" />
-                  Claim
+                  <span className="hidden md:block">Claim</span>
                 </Button>
               ),
           },

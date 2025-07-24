@@ -157,7 +157,7 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           completedSteps={completedSteps}
         />
 
-        <div className=" overflow-y-auto max-h-[40vh] lg:max-h-[60vh] ">
+        <div className=" overflow-y-auto max-h-[80vh] lg:max-h-[60vh] ">
           {renderStepContent()}
 
           <div className="flex justify-between   bg-transparent p-4 shadow-md">

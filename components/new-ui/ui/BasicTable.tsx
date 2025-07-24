@@ -1,10 +1,10 @@
 import { Eye } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/Accordion";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "../ui/Accordion";
 import "aos/dist/aos.css";
 import "animate.css";
 import AOS from "aos";
@@ -38,6 +38,7 @@ export function BasicTable<T extends { id: string | number }>({
   useEffect(() => {
     AOS.init({ once: true });
   }, []);
+
   return (
     <>
       {/* Desktop Table View */}
@@ -140,75 +141,82 @@ export function BasicTable<T extends { id: string | number }>({
       </div>
 
       {/* Mobile Card View */}
-      <div className="block md:hidden space-y-3 mb-16">
+      <div className="block md:hidden space-y-4 max-h-[600px] overflow-auto py-8">
         {data.length ? (
-          <Accordion type="multiple" className="w-full space-y-3 ">
-            {data.map((row, index) => (
-              <AccordionItem
+          data.map((row) => {
+            // Check if there's a "view" column to use instead of onView
+            const viewColumn = columns.find(
+              (col) =>
+                col.key === "view" && col.sticky === "right" && col.render
+            );
+
+            // Other sticky right action buttons (excluding 'view' if already handled)
+            const rightActionColumns = columns.filter(
+              (col) =>
+                col.sticky === "right" && col.render && col.key !== "view"
+            );
+
+            return (
+              <div
                 key={row.id}
-                value={`item-${index}`}
-                data-aos="fade-up"
-                data-aos-delay={`${index * 100}`}
-                className="bg-white hover:bg-green-50 hover:border-green-500 border"
+                className="grid grid-cols-6 items-center justify-between p-3 rounded-xl shadow-md border bg-white hover:shadow-lg transition-shadow animate__animated animate__fadeIn"
               >
-                {/* Header Row */}
-                <div className="flex items-center justify-between p-2">
-                  <div className="flex items-start gap-3">
-                    <span className="font-semibold w-20 h-20 text-foreground text-sm">
-                      {columns[0]?.render
-                        ? columns[0].render(row)
-                        : (row[columns[0]?.key as keyof T] as string | number)}
-                    </span>
-                    <span className="font-semibold text-gray-600 animate__animated animate__fadeIn">
-                      {columns[1]?.header}:{" "}
+                {/* Left: Image + Basic Info */}
+                <div className="flex items-center gap-4 col-span-5 min-w-0">
+                  {/* Image - fixed size */}
+                  <div className="min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] w-14 h-14 rounded-md overflow-hidden flex items-center justify-center text-sm text-gray-600 font-medium flex-shrink-0">
+                    {columns[0]?.render ? (
+                      columns[0].render(row)
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        {(row[columns[0]?.key as keyof T] as string | number) ||
+                          ""}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Text Info - ellipsis */}
+                  <div className="flex flex-col overflow-hidden">
+                    <p className="text-sm font-semibold text-gray-800 truncate">
                       {columns[1]?.render
                         ? columns[1].render(row)
                         : (row[columns[1]?.key as keyof T] as string | number)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {onView && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onView(row);
-                        }}
-                        className="p-2 text-primary hover:text-primary/80 hover:bg-primary/10 rounded-md transition-colors"
-                      >
-                        <Eye size={16} />
-                      </button>
-                    )}
-                    {/* Move the dropdown icon after View button */}
-                    <AccordionTrigger className="p-2">
-                      {/* <ChevronDown className="h-4 w-4 transition-transform duration-200" /> */}
-                    </AccordionTrigger>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 truncate">
+                      {columns[2]?.header}:{" "}
+                      {columns[2]?.render
+                        ? columns[2].render(row)
+                        : (row[columns[2]?.key as keyof T] as string | number)}
+                    </p>
                   </div>
                 </div>
 
-                {/* Content */}
-                <AccordionContent>
-                  <div className="grid grid-cols-1 gap-3 px-2 animate__animated animate__fadeIn">
-                    {columns.slice(2).map((col) => (
-                      <div
-                        key={String(col.key)}
-                        className="flex justify-between items-center py-2 border-b border-border/50 last:border-0"
+                {/* Right: Buttons */}
+                <div className="flex flex-col items-center gap-2">
+                  {/* If a view column exists, render its button */}
+                  {viewColumn ? (
+                    <div>{viewColumn.render?.(row)}</div>
+                  ) : (
+                    // Otherwise, fallback to onView button if available
+                    onView && (
+                      <button
+                        onClick={() => onView(row)}
+                        className="p-2 rounded-full hover:bg-muted transition-colors"
+                        aria-label="View details"
                       >
-                        <span className="font-medium text-muted-foreground text-sm">
-                          {col.header}
-                        </span>
-                        <span className="text-foreground text-sm font-medium text-right max-w-[60%] break-words">
-                          {col.render
-                            ? col.render(row)
-                            : (row[col.key as keyof T] as string | number)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                        <Eye className="w-5 h-5 text-primary hover:text-primary/80" />
+                      </button>
+                    )
+                  )}
+
+                  {/* Render any additional action buttons */}
+                  {rightActionColumns.map((col) => (
+                    <div key={String(col.key)}>{col.render?.(row)}</div>
+                  ))}
+                </div>
+              </div>
+            );
+          })
         ) : (
           <div className="text-center py-12 bg-card rounded-lg border">
             <p className="text-muted-foreground animate__animated animate__fadeIn">
@@ -220,3 +228,84 @@ export function BasicTable<T extends { id: string | number }>({
     </>
   );
 }
+
+{
+  /* Mobile Card View */
+}
+// <div className="block md:hidden space-y-3 mb-16">
+//   {data.length ? (
+//     <Accordion type="multiple" className="w-full space-y-3 ">
+//       {data.map((row, index) => (
+//         <AccordionItem
+//           key={row.id}
+//           value={item-${index}}
+//           data-aos="fade-up"
+//           data-aos-delay={${index * 100}}
+//           className="bg-white hover:bg-green-50 hover:border-green-500 border"
+//         >
+//           {/* Header Row */}
+//           <div className="flex items-center justify-between p-2">
+//             <div className="flex items-start gap-3">
+//               <span className="font-semibold w-20 h-20 text-foreground text-sm">
+//                 {columns[0]?.render
+//                   ? columns[0].render(row)
+//                   : (row[columns[0]?.key as keyof T] as string | number)}
+//               </span>
+//               <span className="font-semibold text-gray-600">
+//                 {columns[1]?.header}:{" "}
+//                 {columns[1]?.render
+//                   ? columns[1].render(row)
+//                   : (row[columns[1]?.key as keyof T] as string | number)}
+//               </span>
+//             </div>
+
+//             <div className="flex items-center gap-2">
+//               {onView && (
+//                 <button
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     onView(row);
+//                   }}
+//                   className="p-2 text-primary hover:text-primary/80 hover:bg-primary/10 rounded-md transition-colors"
+//                 >
+//                   <Eye size={16} />
+//                 </button>
+//               )}
+//               {/* Move the dropdown icon after View button */}
+//               <AccordionTrigger className="p-2">
+//                 {/* <ChevronDown className="h-4 w-4 transition-transform duration-200" /> */}
+//               </AccordionTrigger>
+//             </div>
+//           </div>
+
+//           {/* Content */}
+//           <AccordionContent>
+//             <div className="grid grid-cols-1 gap-3 px-2 animate__animated animate__fadeIn">
+//               {columns.slice(2).map((col) => (
+//                 <div
+//                   key={String(col.key)}
+//                   className="flex justify-between items-center py-2 border-b border-border/50 last:border-0"
+//                 >
+//                   <span className="font-medium text-muted-foreground text-sm">
+//                     {col.header}
+//                   </span>
+//                   <span className="text-foreground text-sm font-medium text-right max-w-[60%] break-words">
+//                     {col.render
+//                       ? col.render(row)
+//                       : (row[col.key as keyof T] as string | number)}
+//                   </span>
+//                 </div>
+//               ))}
+//             </div>
+//           </AccordionContent>
+//         </AccordionItem>
+//       ))}
+//     </Accordion>
+//   ) : (
+//     <div className="text-center py-12 bg-card rounded-lg border">
+//       <p className="text-muted-foreground animate__animated animate__fadeIn">
+//         {emptyMessage}
+//       </p>
+//     </div>
+//   )}
+// </div>

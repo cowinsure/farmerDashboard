@@ -129,6 +129,16 @@ export default function CattleManagementPage() {
             key: "asset",
             header: "Asset",
             className: "w-44",
+            render: (row) => {
+              const fullValue = row.asset;
+              const shortValue = fullValue?.split(" - ")[0] ?? "Asset";
+              return (
+                <span className="text-gray-700 font-medium capitalize">
+                  <span className="block md:hidden">{shortValue}</span>
+                  <span className="hidden md:block">{fullValue}</span>
+                </span>
+              );
+            },
           },
           {
             key: "insurance_provider",
@@ -179,7 +189,7 @@ export default function CattleManagementPage() {
           {
             key: "view",
             header: "View",
-            sticky: "left",
+            sticky: "right",
             className: "w-32",
             render: (row) => (
               <Button
@@ -189,7 +199,7 @@ export default function CattleManagementPage() {
                 className="text-green-700 hover:text-green-900 hover:bg-green-200 whitespace-nowrap"
               >
                 <Eye size={16} className="mr-1" />
-                View
+                <span className="hidden md:block">View</span>
               </Button>
             ),
           },
@@ -206,7 +216,7 @@ export default function CattleManagementPage() {
                 className="text-green-700 border-green-700 hover:bg-green-200 whitespace-nowrap"
               >
                 <FileText size={16} className="mr-1" />
-                Claim
+                <span className="hidden md:block">Claim</span>
               </Button>
             ),
           },

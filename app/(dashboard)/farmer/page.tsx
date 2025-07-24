@@ -267,7 +267,7 @@ const FarmerPage: React.FC = () => {
         )}
 
         <button
-          className={`bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold rounded-md px-5 py-2 custom-hover hover:scale-[103%] active:scale-95`}
+          className={`bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold rounded-md px-2 md:px-5 py-2 custom-hover hover:scale-[103%] active:scale-95`}
           // onClick={() => { setIsModalOpen(true) }}
         >
           <Link
@@ -275,11 +275,11 @@ const FarmerPage: React.FC = () => {
             className="flex flex-row items-center justify-center"
           >
             <IoAddCircleOutline size={26} className="mr-2" />
-            <span>Add Cow</span>
+            <span className="text-sm md:text-base">Add Cow</span>
           </Link>
         </button>
         <button
-          className={`border-2 border-green-700 hover:bg-green-900 hover:text-white cursor-pointer text-green-700 font-semibold rounded-md px-4 py-2 custom-hover hover:scale-[103%] active:scale-95`}
+          className={`border-2 border-green-700 hover:bg-green-900 hover:text-white cursor-pointer text-green-700 font-semibold rounded-md px-2 md:px-4 py-2 custom-hover hover:scale-[103%] active:scale-95`}
           // onClick={() => { setIsModalOpen(true) }}
         >
           <div
@@ -289,7 +289,7 @@ const FarmerPage: React.FC = () => {
             className="flex flex-row items-center justify-center"
           >
             <IoSearch size={24} className="mr-2" />
-            <span>Search Cow</span>
+            <span className="text-sm md:text-base">Search Cow</span>
           </div>
         </button>
       </div>
@@ -365,12 +365,6 @@ const FarmerPage: React.FC = () => {
             )}
           </tbody>
         </table> */}
-      {/* <CattleTable
-          data={assetList}
-          onView={handleViewDetails}
-          maxHeight="600px"
-          isLoading={isLoading}
-        /> */}
       {/* </div> */}
       <BasicTable
         data={assetList}
@@ -394,7 +388,11 @@ const FarmerPage: React.FC = () => {
           { key: "age_in_months", header: "Age" },
           { key: "weight_kg", header: "Weight" },
           { key: "height", header: "Height" },
-          { key: "gender", header: "Gender" },
+          {
+            key: "gender",
+            header: "Gender",
+            render: (row) => (row.gender ? row.gender : "N/A"),
+          },
           { key: "vaccination_status", header: "Vaccination " },
           { key: "deworming_status", header: "Deworming " },
         ]}
