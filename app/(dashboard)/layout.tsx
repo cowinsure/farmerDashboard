@@ -1,55 +1,64 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import {  useRouter } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext';
-import LargeSidebar from '@/component/ui/LargeSidebar';
-import Sidebar from '@/component/ui/Sidebar';
-import Navbar from '@/component/ui/Navbar';
-import Loader from '@/component/helper/Loader';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation"; // ✅ ADD usePathname
+import { useAuth } from "@/context/AuthContext";
+import Loader from "@/component/helper/Loader";
+import Sidebar from "@/components/new-ui/navs/SideBar";
+import MobileSidebar from "@/components/new-ui/navs/MobileSideBar";
+import Navbar from "@/components/new-ui/navs/Navbar";
 
+const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const auth = useAuth();
+  const router = useRouter();
+  const pathname = usePathname(); // ✅ Track route path changes
+  const [loading, setLoading] = useState(true);
+  const [routeLoading, setRouteLoading] = useState(false); // ✅ ADD new loader state
 
-const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const auth = useAuth()
-    const router = useRouter()
-    const [loading, setLoading] = useState(true)  // Track loading state
-
-    useEffect(() => {
-      const accesstoken =    localStorage.getItem("accessToken");
-    console.log("dasboard layout \n" +auth?.accessToken +"local storage= \n"+ localStorage.getItem('accessToken') );
-
-      if (!accesstoken) {
-        console.log('No userId found, redirecting to login...');
-        setLoading(false)
-        router.push('/auth/login')  // Set loading to false before redirecting
-        // router.replace('/auth/login')  // Redirect to login if no token
-      } else {
-        //  router.push('/home')
-        setLoading(false)  // Set loading to false after auth check
-      }
-    }, [auth, router])  // Run effect when auth or router changes
-  
-    if (loading) {
-      return <Loader/>  // Or show a loading spinner bg-[#2e5e3a]
-    }
-
-    return (
-        <div>
-                    <div className="flex h-screen  bg-white">
-                        <div className="w-auto hidden lg:block ">
-                            <LargeSidebar />
-                        </div>
-                        <div className="lg:hidden ">
-                            <Sidebar />
-                        </div>
-                        <div className="flex-1 overflow-y-auto h-screen">
-                            <Navbar />
-                            <div className=" h-auto m-2 rounded-md">
-                                {children}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  useEffect(() => {
+    const accesstoken = localStorage.getItem("accessToken");
+    console.log(
+      "dasboard layout \n" +
+        auth?.accessToken +
+        "local storage= \n" +
+        localStorage.getItem("accessToken")
     );
+
+    if (!accesstoken) {
+      console.log("No userId found, redirecting to login...");
+      setLoading(false);
+      router.push("/auth/login");
+    } else {
+      setLoading(false);
+    }
+  }, [auth, router]);
+
+  useEffect(() => {
+    if (!loading) {
+      // setRouteLoading(true);
+      const timer = setTimeout(() => setRouteLoading(false), 400);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, loading]);
+
+  return (
+    <div>
+      <div className="flex h-screen  bg-[#F8FFF9]">
+        <div className="z-50">
+          <Sidebar />
+          <MobileSidebar />
+        </div>
+        <div className="flex-1 overflow-y-auto h-screen">
+          <Navbar />
+          <div className=" h-auto m-2 rounded-md w-[95%] mx-auto">
+            {loading || (routeLoading && <Loader />)}
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default DashboardLayout;

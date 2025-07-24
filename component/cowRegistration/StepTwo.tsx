@@ -1,9 +1,12 @@
-'use client'
+"use client";
 
+import InputField from "@/components/new-ui/ui/InputField";
+import SectionHeading from "@/components/new-ui/utils/SectionHeading";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
 
 import React, { useEffect, useState } from "react";
-
+import { IoMdArrowDropdown } from "react-icons/io";
+import { MdOutlineCalendarToday } from "react-icons/md";
 
 interface FormData {
   hasDisease: boolean;
@@ -46,7 +49,6 @@ interface VaccinationStatus {
   description: string | null;
 }
 
-
 interface DewormingStatus {
   id: number;
   name: string;
@@ -63,10 +65,13 @@ export default function StepTwo() {
 
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const [colors, setColors] = useState<Color[]>([]);
-  const [vaccinationStatuses, setVaccinationStatuses] = useState<VaccinationStatus[]>([]); // State for vaccination statuses
-  const [dewormingStatuses, setDewormingStatuses] = useState<DewormingStatus[]>([]);
+  const [vaccinationStatuses, setVaccinationStatuses] = useState<
+    VaccinationStatus[]
+  >([]); // State for vaccination statuses
+  const [dewormingStatuses, setDewormingStatuses] = useState<DewormingStatus[]>(
+    []
+  );
   const [assetTypes, setAssetTypes] = useState<AssetType[]>([]);
-
 
   const [formData, setFormData] = useState<FormData>({
     hasDisease: false,
@@ -101,13 +106,16 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/assets-type/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/assets-type/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         const result = await response.json();
 
@@ -135,13 +143,16 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/breeds/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // Include the token in the Authorization header
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/breeds/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the token in the Authorization header
+            },
+          }
+        );
 
         const result = await response.json();
 
@@ -156,8 +167,6 @@ export default function StepTwo() {
       }
     };
 
-
-
     fetchBreeds();
   }, []);
 
@@ -171,13 +180,16 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/colors/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/colors/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         const result = await response.json();
 
@@ -195,7 +207,6 @@ export default function StepTwo() {
     fetchColors();
   }, []);
 
-
   // Fetch vaccination statuses from the API
   useEffect(() => {
     const fetchVaccinationStatuses = async () => {
@@ -206,18 +217,24 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vaccination-status/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/vaccination-status/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         const result = await response.json();
 
         if (response.ok) {
-          console.log("Vaccination statuses fetched successfully:", result.data.results);
+          console.log(
+            "Vaccination statuses fetched successfully:",
+            result.data.results
+          );
           setVaccinationStatuses(result.data.results); // Update the vaccinationStatuses state with API data
         } else {
           console.error("Failed to fetch vaccination statuses:", result);
@@ -240,18 +257,24 @@ export default function StepTwo() {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/deworming-status/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/deworming-status/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
         const result = await response.json();
 
         if (response.ok) {
-          console.log("Deworming statuses fetched successfully:", result.data.results);
+          console.log(
+            "Deworming statuses fetched successfully:",
+            result.data.results
+          );
           setDewormingStatuses(result.data.results); // Update the dewormingStatuses state with API data
         } else {
           console.error("Failed to fetch deworming statuses:", result);
@@ -264,9 +287,9 @@ export default function StepTwo() {
     fetchDewormingStatuses();
   }, []);
 
-  console.log(formData, "form data from step two");
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -289,9 +312,14 @@ export default function StepTwo() {
   }, [data]);
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Cow Details</h2>
-      {/* <div className="mb-4">
+    <div className="lg:w-[80%] mx-auto mt-8">
+      <SectionHeading
+        marginBottom="8"
+        sectionTitle="Cattle Details"
+        description="Add detailed information about the animal"
+      />
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8">
+        <div className="">
               <label className="block mb-2" htmlFor="dateOfBirth">Date of Birth</label>
               <input
                 type="date"
@@ -302,288 +330,425 @@ export default function StepTwo() {
                 placeholder="Date of Birth"
                 className="w-full p-2 border rounded"
               />
-            </div> */}
-      <div className="mb-4">
-        <label className="block mb-2">Asset Type</label>
-        <select
-          name="asset_type"
-          value={formData.asset_type}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-          defaultValue=""
-        >
-          <option value="" >
-            Select Asset Type
-          </option>
-          {assetTypes.map((type) => (
-            <option key={type.id} value={type.id}>
-              {type.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Age in Month</label>
-        <input
-          type="number"
-          name="age_in_months"
-          value={formData.age_in_months}
-          onChange={handleInputChange}
-          placeholder="Age in Months"
-          className="w-full p-2 border rounded mb-4"
-        />
-
-      </div>
-
-      <select
-        name="gender"
-        value={formData.gender}
-        onChange={handleInputChange}
-        className="w-full p-2 border rounded mb-4"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Select Sex
-        </option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-      <select
-        name="breed"
-        value={formData.breed}
-        onChange={handleInputChange}
-        className="w-full p-2 border rounded mb-4"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Select Cattle Type
-        </option>
-        {breeds.map((breed) => (
-          <option key={breed.id} value={breed.id}>
-            {breed.name}
-          </option>
-        ))}
-      </select>
-
-      <select
-        name="color"
-        value={formData.color}
-        onChange={handleInputChange}
-        className="w-full p-2 border rounded mb-4"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Select Cattle Color
-        </option>
-        {colors.map((color) => (
-          <option key={color.id} value={color.id}>
-            {color.name}
-          </option>
-        ))}
-      </select>
-      <div className="mb-4">
-        <label className="block mb-2">Weight in Kg</label>
-        <input
-          type="text"
-          name="weight_kg"
-          value={formData.weight_kg}
-          onChange={handleInputChange}
-          placeholder="weight kg"
-          className="w-full p-2 border rounded mb-4"
-        />
-      </div>
-
-                    <div className="mb-4">
-<label className="block mb-2">Height in feet</label>
-
-
-      <input
-        type="text"
-        name="height"
-        value={formData.height}
-        onChange={handleInputChange}
-        placeholder="Height"
-        className="w-full p-2 border rounded mb-4"
-      />
-</div>
-                    <div className="mb-4">
-<label className="block mb-2">Purchase Amount</label>
-
-
-      <input
-        type="text"
-        name="purchase_amount"
-        value={formData.purchase_amount}
-        onChange={handleInputChange}
-        placeholder="Purchase Amount"
-        className="w-full p-2 border rounded mb-4"
-      />
-</div>
-      <div className="mb-4">
-        <label className="block mb-2" htmlFor="dateOfBirth">Purchase From</label>
-        <input
-          type="text"
-          id="purchase_from"
-          name="purchase_from"
-          value={formData.purchase_from}
-          onChange={handleInputChange}
-          placeholder="Purchase From"
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2" htmlFor="dateOfBirth">Purchase Date</label>
-        <input
-          type="date"
-          id="purchase_date"
-          name="purchase_date"
-          value={formData.purchase_date}
-          onChange={handleInputChange}
-          placeholder="Purchase Date"
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Vaccination Status</label>
-        <select
-          name="vaccination_status"
-          value={formData.vaccination_status}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded mb-4"
-          defaultValue=""
-        >
-          <option value="" disabled>
-            Select Vaccination Status
-          </option>
-          {vaccinationStatuses.map((status) => (
-            <option key={status.id} value={status.id}>
-              {status.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2" htmlFor="dateOfBirth">Last Vaccinated Date</label>
-        <input
-          type="date"
-          id="last_vaccination_date"
-          name="last_vaccination_date"
-          value={formData.last_vaccination_date}
-          onChange={handleInputChange}
-          placeholder="Date of Birth"
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">deworming_status</label>
-        <select
-          name="deworming_status"
-          value={formData.deworming_status}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-          defaultValue=""
-        >
-          <option value="" disabled>
-            Select Deworming Status
-          </option>
-          {dewormingStatuses.map((status) => (
-            <option key={status.id} value={status.id}>
-              {status.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2" htmlFor="dateOfBirth">Last Deworming Date</label>
-        <input
-          type="date"
-          id="last_deworming_date"
-          name="last_deworming_date"
-          value={formData.last_deworming_date}
-          onChange={handleInputChange}
-          placeholder="Last Dewormed Date"
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2">Has Disease?</label>
-        <select
-          name="hasDisease"
-          value={String(formData.hasDisease)}
-          onChange={handleInputChange}
-          className="w-full p-2 border rounded"
-          defaultValue=""
-        >
-          <option value="" disabled>
-            Select
-          </option>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-      {formData.hasDisease && (
-                            <div className="mb-4">
-<label className="block mb-2">Disease Name</label>
- <input
-          type="text"
-          name="health_issues"
-          value={formData.health_issues}
-          onChange={handleInputChange}
-          placeholder="Disease Name"
-          className="w-full p-2 border rounded mb-4"
-        />
-</div>
-       
-      )}
-
-      {formData.gender === "female" && (
-        <>
-          <div className="mb-4">
-            <label className="block mb-2" htmlFor="isPregnant">Is Pregnant?</label>
-            <select
-              name="isPregnant"
-              value={String(formData.isPregnant)}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select
-              </option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </div>
-          {formData.isPregnant && (
-            <>
-             <div className="mb-4">
-            <label className="block mb-2" >Pregnancy Status</label>
-            
-             <input
-                type="text"
-                name="pregnancy_status"
-                value={formData.pregnancy_status}
-                onChange={handleInputChange}
-                placeholder="Pregnancy Stage"
-                className="w-full p-2 border rounded mb-4"
-              />
             </div>
-             
-              <div className="mb-4">
-                <label className="block mb-2" htmlFor="dateOfBirth">Date of Last Calving</label>
-                <input
-                  type="date"
-                  name="last_date_of_calving"
-                  value={formData.last_date_of_calving}
+      </div> */}
+
+      {/* Input Fields */}
+      <div className="flex flex-col gap-5 *:p-4" data-aos="zoom-in">
+        {/* Basic */}
+        <div className="border border-[#19A14B] rounded-lg bg-green-50">
+          <h1 className="font-bold text-xl text-green-600 mb-8 md:mb-0">
+            Basic Information
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-8 md:p-6">
+            {/* Asset Type */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Asset Type
+              </label>
+
+              <select
+                id="gender"
+                name="asset_type"
+                value={formData.asset_type}
+                onChange={handleInputChange}
+                required
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="">Select Asset Type</option>
+                {assetTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            <InputField
+              id="age"
+              label="Age in Month"
+              name="age_in_months"
+              onChange={handleInputChange}
+              value={formData.age_in_months}
+              placeholder="Enter age"
+              type="number"
+            />
+
+            {/* Gender */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Gender
+              </label>
+
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled className="text-sm text-gray-400">
+                  Select gender
+                </option>
+                <option value="male" className="text-sm text-gray-700">
+                  Male
+                </option>
+                <option value="female" className="text-sm text-gray-700">
+                  Female
+                </option>
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            {/* Breed */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Cattle Breed
+              </label>
+
+              <select
+                id="breed"
+                name="breed"
+                value={formData.breed}
+                onChange={handleInputChange}
+                required
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled>
+                  Select Cattle Type
+                </option>
+                {breeds.map((breed) => (
+                  <option key={breed.id} value={breed.id}>
+                    {breed.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            {/* Color */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Cattle Color
+              </label>
+
+              <select
+                id="color"
+                name="color"
+                value={formData.color}
+                onChange={handleInputChange}
+                required
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled>
+                  Select Cattle Color
+                </option>
+                {colors.map((color) => (
+                  <option key={color.id} value={color.id}>
+                    {color.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            <InputField
+              id="weight"
+              label="Weight in Kg"
+              name="weight_kg"
+              onChange={handleInputChange}
+              value={formData.weight_kg}
+              placeholder="Enter weight"
+              type="text"
+            />
+
+            <InputField
+              id="height"
+              label="Height in feet"
+              name="height"
+              onChange={handleInputChange}
+              value={formData.height}
+              placeholder="Enter Height"
+              type="text"
+            />
+          </div>
+        </div>
+
+        {/* Purchase */}
+        <div className="border border-[#19A14B] rounded-lg bg-green-50">
+          <h1 className="font-bold text-xl text-green-600 mb-8 md:mb-0">
+            Purchase Information
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-8 md:p-6">
+            <InputField
+              id="age"
+              label="Purchase Amount"
+              type="text"
+              name="purchase_amount"
+              value={formData.purchase_amount}
+              onChange={handleInputChange}
+              placeholder="Purchase Amount"
+            />
+            <InputField
+              label="Purchase From"
+              type="text"
+              id="purchase_from"
+              name="purchase_from"
+              value={formData.purchase_from}
+              onChange={handleInputChange}
+              placeholder="Purchase From"
+            />
+            <div className="relative w-full">
+              <InputField
+                label="Purchase Date"
+                type="date"
+                id="purchase_date"
+                name="purchase_date"
+                value={formData.purchase_date}
+                onChange={handleInputChange}
+                placeholder="Purchase Date"
+              />
+              <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
+                <MdOutlineCalendarToday className="text-lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Vaccination */}
+        <div className="border border-[#19A14B] rounded-lg bg-green-50">
+          <h1 className="font-bold text-xl text-green-600 mb-8 md:mb-0">
+            Vaccination Information
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-8 md:p-6">
+            {/*   Vaccination Status */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Vaccination Status
+              </label>
+
+              <select
+                name="vaccination_status"
+                value={formData.vaccination_status}
+                onChange={handleInputChange}
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled>
+                  Select Vaccination Status
+                </option>
+                {vaccinationStatuses.map((status) => (
+                  <option key={status.id} value={status.id}>
+                    {status.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            <div className="relative w-full">
+              <InputField
+                label="Last Vaccinated Date"
+                type="date"
+                id="last_vaccination_date"
+                name="last_vaccination_date"
+                value={formData.last_vaccination_date}
+                onChange={handleInputChange}
+                placeholder="Date of Birth"
+              />
+              <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
+                <MdOutlineCalendarToday className="text-lg" />
+              </div>
+            </div>
+
+            {/*  Deworming Status */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Deworming Status
+              </label>
+
+              <select
+                name="deworming_status"
+                value={formData.deworming_status}
+                onChange={handleInputChange}
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled>
+                  Select Deworming Status
+                </option>
+                {dewormingStatuses.map((status) => (
+                  <option key={status.id} value={status.id}>
+                    {status.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            <div className="relative w-full">
+              <InputField
+                label="Last Deworming Date"
+                type="date"
+                id="last_deworming_date"
+                name="last_deworming_date"
+                value={formData.last_deworming_date}
+                onChange={handleInputChange}
+                placeholder="Last Dewormed Date"
+              />
+              <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
+                <MdOutlineCalendarToday className="text-lg" />
+              </div>
+            </div>
+
+            {/*  Diseases */}
+            <div className="relative w-full flex flex-col">
+              <label
+                htmlFor="gender"
+                className="mb-1 text-sm font-bold text-gray-600"
+              >
+                Has Disease?
+              </label>
+
+              <select
+                name="hasDisease"
+                value={String(formData.hasDisease)}
+                onChange={handleInputChange}
+                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+
+              {/* Custom dropdown icon */}
+              <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                <IoMdArrowDropdown className="text-xl" />
+              </div>
+            </div>
+
+            {formData.hasDisease && (
+              <div className="">
+                <InputField
+                  label="Disease Name"
+                  id="diseases_name"
+                  type="text"
+                  name="health_issues"
+                  value={formData.health_issues}
                   onChange={handleInputChange}
-                  placeholder="Date of Last Calving"
-                  className="w-full p-2 border rounded mb-4"
+                  placeholder="Disease Name"
                 />
               </div>
-            </>
-          )}
-        </>
-      )}
+            )}
+
+            {formData.gender === "female" && (
+              <>
+                {/*  Is Pregnant? */}
+                <div className="relative w-full flex flex-col">
+                  <label
+                    htmlFor="gender"
+                    className="mb-1 text-sm font-bold text-gray-600"
+                  >
+                    Is Pregnant?
+                  </label>
+
+                  <select
+                    name="isPregnant"
+                    value={String(formData.isPregnant)}
+                    onChange={handleInputChange}
+                    className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                  >
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+
+                  {/* Custom dropdown icon */}
+                  <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
+                    <IoMdArrowDropdown className="text-xl" />
+                  </div>
+                </div>
+                {formData.isPregnant && (
+                  <>
+                    <div className="">
+                      <InputField
+                        label="Pregnancy Status"
+                        id=""
+                        type="text"
+                        name="pregnancy_status"
+                        value={formData.pregnancy_status}
+                        onChange={handleInputChange}
+                        placeholder="Pregnancy Stage"
+                      />
+                    </div>
+
+                    <div className="relative w-full">
+                      <InputField
+                        label="Date of Last Calving"
+                        id=""
+                        type="date"
+                        name="last_date_of_calving"
+                        value={formData.last_date_of_calving}
+                        onChange={handleInputChange}
+                        placeholder="Date of Last Calving"
+                      />
+                      <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
+                        <MdOutlineCalendarToday className="text-lg" />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

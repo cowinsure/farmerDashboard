@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 
 const ForgetPassPhonePage: React.FC = () => {
@@ -49,9 +50,9 @@ const ForgetPassPhonePage: React.FC = () => {
             console.log('forgetpass otp send successful');
             router.push('/auth/forgetpass/otp'); // Navigate to OTP page
             } else if (response.status === 404) {
-            alert('forgetpass otp send failed: The requested resource was not found.');
+            toast.error('forgetpass otp send failed: The requested resource was not found.');
             } else {
-            alert(`forgetpass otp send failed: ${responseData.data.message || 'Unknown error'}`); // Use parsed response data
+            toast.error(`forgetpass otp send failed: ${responseData.data.message || 'Unknown error'}`); // Use parsed response data
             console.error('forgetpass otp send failed');
             }
         } catch (error) {

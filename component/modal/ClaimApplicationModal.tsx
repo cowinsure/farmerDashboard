@@ -9,6 +9,7 @@ import logo from '../../public/Logo-03.png'; // Importing logo
 import { useInsuranceApplication } from "@/context/InsuranceApplicationContext";
 import { useRouter } from "next/navigation";
 import ModalGeneral from "./DialogGeneral";
+import { toast } from "sonner";
 
 interface InsuranceData {
   id: number;
@@ -93,7 +94,7 @@ const ClaimApplicationModal: React.FC<ModalProps> = ({ isOpen, onClose , insuran
           }
         } catch (error) {
           console.error("Error submitting form:", error);
-          alert(`Something went wrong. Please try again.\nError: ${error}`);
+          toast.error(`Something went wrong. Please try again.\nError: ${error}`);
         } finally {
           setIsLoading(false); // Hide loading spinner
         }

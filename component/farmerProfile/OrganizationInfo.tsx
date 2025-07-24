@@ -6,8 +6,8 @@ import ModalGeneral from '../modal/DialogGeneral';
 import logo from '../../public/Logo-03.png';
 
 import PhotoCaptureModal from '../helper/PhotoCaptureModal';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'sonner';
 
 
 const OrganizationInfo: React.FC = () => {
@@ -43,7 +43,7 @@ const OrganizationInfo: React.FC = () => {
         const fetchOrganizationInfo = async () => {
             const accessToken = localStorage.getItem('accessToken');
             if (!accessToken) {
-                alert('Access token is missing. Please log in again.');
+                toast.error('Access token is missing. Please log in again.');
                 return;
             }
 

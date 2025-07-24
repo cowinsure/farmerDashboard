@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 
@@ -9,6 +10,7 @@ import { Upload, X, Eye, File, } from "lucide-react";
 import UploadVideo from "@/component/helper/UploadVedio";
 // import ModalGeneral from "@/component/modal/DialogGeneral";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
+import { toast } from "sonner";
 // import Image from "next/image";
 
 interface MuzzleResponse {
@@ -139,14 +141,14 @@ export default function CattleVerification({
         const data = await response.json();
         // setErrorModalOpen(true)
         console.error("Error 400:", data.msg);
-        alert(`Error: ${data.msg}`);
+        toast.error(`Error: ${data.msg}`);
         return;
       }
 
       if (response.status === 401) {
         const data = await response.json();
         console.error("Error 401:", data.msg);
-        alert(`Error: ${data.msg}`);
+        toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -154,7 +156,7 @@ export default function CattleVerification({
         const data = await response.json();
         setErroMuzzleResponse(data);
         console.error("Error 401:", data.msg);
-        // alert(`Error: ${data.msg}`);
+        // toast.error(`Error: ${data.msg}`);
         return;
       }
 
@@ -168,7 +170,7 @@ export default function CattleVerification({
           ...prev,
           reference_id: data.matched_id
         })); // Save the response data to state
-        // alert(data.msg);
+        // toast.error(data.msg);
         return;
       }
 
@@ -177,7 +179,7 @@ export default function CattleVerification({
       }
     } catch (error) {
       console.error("Error uploading video:", error);
-      alert("Something went wrong: " + error);
+      toast.error("Something went wrong: " + error);
     } finally {
       setIsUploading(false);
     }
@@ -367,7 +369,7 @@ export default function CattleVerification({
                   if (selectedFile) {
                     handleVideoUpload(selectedFile); // Call the upload function when the video is captured
                   } else {
-                    alert("Please select a video file before uploading.");
+                    toast.error("Please select a video file before uploading.");
                   }
 
                 }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
