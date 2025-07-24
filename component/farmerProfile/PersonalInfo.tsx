@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import PhotoCaptureModal from "../helper/PhotoCaptureModal";
 import ModalGeneral from "../modal/DialogGeneral";
 import Image from "next/image";
@@ -12,12 +12,14 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 const PersonalInfo: React.FC = () => {
   // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
   //     setState(e.target.value);
   // };
   const router = useRouter();
+  const { phoneNumber } = useAuth();
   const [sessionExpired, setSessionExpired] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -134,6 +136,7 @@ const PersonalInfo: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+    
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -293,15 +296,15 @@ const PersonalInfo: React.FC = () => {
           </div>
 
           {/* User Type */}
-          <InputField
+           <InputField
             placeholder=""
-            label="User Type"
+            label="Phone Number"
             id="userType"
             name="userType"
-            value={formData.userType || ""}
+            value={phoneNumber || ""}
             onChange={handleInputChange}
             disabled
-          />
+          /> 
 
           {/* First & Last Name */}
           <InputField
