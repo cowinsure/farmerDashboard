@@ -279,8 +279,8 @@ const PersonalInfo: React.FC = () => {
               </div>
             )}
             {profileImageUrl && (
-              <div className="mt-2 text-center">
-                <h3 className="text-sm font-medium mb-1">Profile Image</h3>
+              <div className="mt-2 text-center flex items-center justify-center">
+                {/* <h3 className="text-sm font-medium mb-1">Profile Image</h3> */}
                 <Image
                   src={profileImageUrl}
                   alt="Profile Image"
@@ -392,8 +392,8 @@ const PersonalInfo: React.FC = () => {
               title="Capture NID Front"
             />
             {(nidFront || nidFrontUrl) && (
-              <div className="mt-2 text-center">
-                <h3 className="text-sm font-medium mb-1">NID Front</h3>
+              <div className="mt-2 text-center flex items-center justify-center">
+                {/* <h3 className="text-sm font-medium mb-1">NID Front</h3> */}
                 <Image
                   src={
                     nidFront ? URL.createObjectURL(nidFront) : nidFrontUrl || ""
@@ -420,8 +420,8 @@ const PersonalInfo: React.FC = () => {
               title="Capture NID Back"
             />
             {(nidBack || nidBackUrl) && (
-              <div className="mt-2 text-center">
-                <h3 className="text-sm font-medium mb-1">NID Back</h3>
+              <div className="mt-2 text-center flex items-center justify-center">
+                {/* <h3 className="text-sm font-medium mb-1">NID Back</h3> */}
                 <Image
                   src={
                     nidBack ? URL.createObjectURL(nidBack) : nidBackUrl || ""
@@ -495,7 +495,7 @@ const PersonalInfo: React.FC = () => {
           />
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 mt-10 md:mt-8">
           <ActionButton btnText="Save Information" type="submit" />
         </div>
       </form>

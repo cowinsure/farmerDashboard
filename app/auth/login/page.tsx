@@ -3,17 +3,19 @@
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../public/Logo-03.png";
 import { useRouter } from "next/navigation";
 import { FaMobile, FaUnlockAlt } from "react-icons/fa";
 import { toast } from "sonner"; // ✅ Import toast from sonner
 import AOS from "aos"; // ✅
 import "aos/dist/aos.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const Login: React.FC = () => {
   const router = useRouter();
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -79,18 +81,18 @@ const Login: React.FC = () => {
           <Image
             src="/wavy1.png"
             alt="Top Wave"
-            className="absolute -top-6 -right-14 scale-[250%] md:-top-24 md:-right-28 md:scale-[300%] lg:scale-100 lg:-top-64 lg:-right-54 w-1/3 z-0"
+            className="absolute -top-6 -right-14 scale-[250%] md:-top-24 md:-right-28 md:scale-[200%] lg:scale-100 lg:-top-40 lg:-right-44 xl:-top-64 xl:-right-54 w-1/3 z-0"
             width={500}
             height={500}
-            data-aos="fade-left"
+            // data-aos="fade-left"
           />
           <Image
             src="/wavy1.png"
             alt="Bottom Wave"
-            className="absolute -bottom-10 -left-10 scale-[220%] md:-bottom-24 md:-left-28 md:scale-[280%] lg:scale-100 lg:-bottom-64 lg:-left-50 w-1/3 z-0 opacity-60"
+            className="absolute -bottom-10 -left-5 scale-[220%] md:-bottom-24 md:-left-28 md:scale-[200%] lg:scale-100 lg:-bottom-40 lg:-left-44 xl:-bottom-64 xl:-left-50 w-1/3 z-0 opacity-60"
             width={500}
             height={500}
-            data-aos="fade-up"
+
           />
         </div>
 
@@ -150,13 +152,19 @@ const Login: React.FC = () => {
                 <FaUnlockAlt />
               </span>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 required
                 className="mt-1 w-full px-9 py-2 border-2 border-[#0E5829] rounded-md bg-white font-semibold text-base shadow-md"
                 placeholder="Enter your password"
               />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-11.5 right-3 text-green-700 cursor-pointer"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
             </div>
 
             <button
@@ -169,7 +177,11 @@ const Login: React.FC = () => {
             </button>
           </form>
 
-          <div className="space-y-3 lg:space-y-9" data-aos="fade-in" data-aos-delay="400">
+          <div
+            className="space-y-3 lg:space-y-9"
+            data-aos="fade-in"
+            data-aos-delay="400"
+          >
             <div className="mt-4 text-center">
               <Link
                 href="/auth/forgetpass/phone"
