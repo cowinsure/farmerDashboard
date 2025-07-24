@@ -104,7 +104,7 @@ export default function CattleDetailsModal({
                 <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3 md:col-span-2 shadow-xs md:sticky md:top-0 md:self-start">
                   <div className="flex flex-col gap-8 items-center h-full">
                     {/* Image */}
-                    <div className="w-full bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
+                    <div className="w-64 bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
                       {cattle.left_side_image ? (
                         <Image
                           src={cattle.left_side_image}
