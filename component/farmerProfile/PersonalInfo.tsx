@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PhotoCaptureModal from "../helper/PhotoCaptureModal";
 import ModalGeneral from "../modal/DialogGeneral";
 import Image from "next/image";
