@@ -9,13 +9,13 @@ const LayeredWaves = () => {
         {/* Back wave – soft creamy white */}
         <div className="absolute bottom-0 w-full z-0">
           <Wave
-            fill="rgba(255, 255, 240, 0.3)" // ivory/cream with 30% opacity
+            fill={"var(--firstWave-color)"} 
             paused={false}
             options={{
-              height: 20,
-              amplitude: 10,
+              height: 6,
+              amplitude: 40,
               speed: 0.08,
-              points: 3,
+              points: 8,
             }}
           />
         </div>
@@ -23,13 +23,13 @@ const LayeredWaves = () => {
         {/* Middle wave – light beige */}
         <div className="absolute bottom-0 w-full z-10">
           <Wave
-            fill="rgba(245, 235, 220, 0.5)" // light beige with 50% opacity
+            fill={"var(--middleWave-color)"}
             paused={false}
             options={{
               height: 25,
-              amplitude: 15,
+              amplitude: 25,
               speed: 0.1,
-              points: 4,
+              points: 5,
             }}
           />
         </div>
@@ -37,13 +37,13 @@ const LayeredWaves = () => {
         {/* Front wave – subtle greenish white tint */}
         <div className="absolute bottom-0 w-full z-20">
           <Wave
-            fill="rgba(230, 255, 240, 0.6)" // mint-cream style with 60% opacity
+            fill={"var(--backWave-color)"}
             paused={false}
             options={{
               height: 30,
-              amplitude: 20,
+              amplitude: 50,
               speed: 0.12,
-              points: 5,
+              points: 4,
             }}
           />
         </div>

@@ -80,6 +80,15 @@
 
   /* new ui */
   --base-color: #005921;
+  --firstWave-color: #c9f0e2cc; /* Pale minty aqua with soft transparency */
+  --middleWave-color: #a3e3d2b3; /* Gentle seafoam green */
+  --backWave-color: #7ccac29e; /* Muted teal for deeper depth */
+
+  /* waves 2nd color option */
+  /* --firstWave-color: #e1faf0aa;
+  --middleWave-color: #c3f0e1aa;
+  --backWave-color: #a8d8ceaa; */
+
   /* new ui */
 }
 
@@ -154,4 +163,15 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #066412; /* darker green on hover */
+}
+
+/* Wave color codes */
+.backWave {
+  background-color: #005921;
+}
+.middleWave {
+  background-color: #1b9146;
+}
+.frontWave {
+  background-color: #7dbf95;
 }
