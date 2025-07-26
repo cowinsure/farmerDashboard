@@ -98,6 +98,7 @@ export default function InsuranceActivePolicy() {
     setIsClaimForm(true);
   };
 
+  console.log(insuranceData);
   return (
     <div className=" mx-auto py-8 px-4">
       <div className="mb-10">
@@ -155,9 +156,9 @@ export default function InsuranceActivePolicy() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleViewDetails(row)}
-                className="text-green-700 hover:text-green-900 hover:bg-green-200"
+                className="text-green-700 hover:text-green-900 hover:bg-green-200 flex items-center justify-end"
               >
-                <Eye size={16} className="mr-1" />
+                <Eye size={16} className="md:mr-1" />
                 <span className="hidden md:block">View</span>
               </Button>
             ),
@@ -179,10 +180,10 @@ export default function InsuranceActivePolicy() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleClaim(row)}
-                  className="text-green-700 border-green-700 hover:bg-green-200"
+                  className="text-green-700 hover:bg-green-200"
                 >
-                  <FileText size={16} className="mr-1" />
-                  <span className="hidden md:block">Claim</span>
+                  <FileText size={16} className="md:mr-1" />
+                  <span className="hidden md:block">Buy</span>
                 </Button>
               ),
           },

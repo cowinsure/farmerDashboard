@@ -8,7 +8,9 @@ import { Eye } from "lucide-react";
 import "aos/dist/aos.css";
 import "animate.css";
 import AOS from "aos";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Helix } from "ldrs/react";
+import "ldrs/react/Helix.css";
 
 export interface TableColumn<T> {
   key: keyof T | string;
@@ -35,6 +37,21 @@ export function BasicTable<T extends { id: string | number }>({
   maxHeight = "auto",
   isLoading,
 }: BasicTableProps<T>) {
+  const [showEmptyMessage, setShowEmptyMessage] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    if (isLoading) {
+      setShowEmptyMessage(false); // Reset when loading starts
+      timeoutId = setTimeout(() => {
+        setShowEmptyMessage(true);
+      }, 2000); // Wait 2 seconds
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [isLoading]);
+
   useEffect(() => {
     AOS.init({ once: true });
   }, []);
@@ -44,14 +61,14 @@ export function BasicTable<T extends { id: string | number }>({
       {/* Desktop Table View */}
       <div className="hidden md:block rounded-lg shadow-md overflow-x-auto animate__animated animate__fadeIn">
         <div className="overflow-y-auto" style={{ height: maxHeight }}>
-          <table className="w-full min-w-[900px] table-fixed">
-            <thead className=" text-gray-700">
+          <table className="w-full min-w-[900px] h-full table-fixed relative">
+            <thead className=" text-green-400">
               <tr>
                 {columns.map((col) => (
                   <th
                     key={String(col.key)}
                     className={`
-                      p-3 text-center font-semibold sticky top-0 z-10 bg-gray-200
+                      p-3 text-center font-semibold sticky top-0 z-10 bg-green-950
                       ${col.sticky === "left" ? "sticky left-0 z-20" : ""}
                       ${
                         col.sticky === "right"
@@ -71,78 +88,83 @@ export function BasicTable<T extends { id: string | number }>({
                 )}
               </tr>
             </thead>
-            <tbody>
-              {data.length ? (
-                data.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="bg-white text-center text-[#3d3d3d] font-medium"
-                    data-aos="fade-up"
-                  >
-                    {isLoading ? (
-                      <td
-                        colSpan={columns.length + (onView ? 1 : 0)}
-                        className="p-4"
-                      >
-                        Loading...
-                      </td>
-                    ) : (
-                      <>
-                        {columns.map((col) => (
-                          <td
-                            key={String(col.key)}
-                            className={`
-                              border border-gray-100 p-2
-                              ${
-                                col.sticky === "left"
-                                  ? "sticky left-0 z-20 bg-white"
-                                  : ""
-                              }
-                              ${
-                                col.sticky === "right"
-                                  ? "sticky right-0 z-20 bg-green-50"
-                                  : ""
-                              }
-                              ${col.className || ""}
-                            `}
-                          >
-                            {col.render
-                              ? col.render(row)
-                              : (row[col.key as keyof T] as string | number)}
-                          </td>
-                        ))}
-                        {onView && (
-                          <td className="border border-gray-100 p-2 sticky right-0 bg-green-50 z-10 min-w-[80px]">
-                            <button
-                              onClick={() => onView(row)}
-                              className="text-green-600 hover:text-green-900 flex items-center justify-center gap-1 cursor-pointer py-2 w-[70%] mx-auto rounded-lg"
-                            >
-                              <Eye size={16} />
-                            </button>
-                          </td>
-                        )}
-                      </>
-                    )}
-                  </tr>
-                ))
-              ) : (
-                <tr>
+            {isLoading ? (
+              <tbody className="h-full ">
+                <tr className="h-full">
                   <td
                     colSpan={columns.length + (onView ? 1 : 0)}
-                    className="py-4 text-gray-600 bg-white text-center"
+                    className="h-full py-8 bg-white text-center align-middle"
                   >
-                    {emptyMessage}
+                    <div className="flex justify-center items-center h-full min-h-[300px]">
+                      <Helix size="60" speed="2" color="green" />
+                    </div>
                   </td>
                 </tr>
-              )}
-            </tbody>
+              </tbody>
+            ) : (
+              <tbody>
+                {data.length ? (
+                  data.map((row) => (
+                    <tr
+                      key={row.id}
+                      className="bg-white text-center text-[#3d3d3d] font-medium animate__animated animate__fadeInUp"
+                    >
+                      {columns.map((col) => (
+                        <td
+                          key={String(col.key)}
+                          className={`
+                border border-gray-100 p-2
+                ${col.sticky === "left" ? "sticky left-0 z-20 bg-white" : ""}
+                ${
+                  col.sticky === "right"
+                    ? "sticky right-0 z-20 bg-green-50"
+                    : ""
+                }
+                ${col.className || ""}
+              `}
+                        >
+                          {col.render
+                            ? col.render(row)
+                            : (row[col.key as keyof T] as string | number)}
+                        </td>
+                      ))}
+                      {onView && (
+                        <td className="border border-gray-100 p-2 sticky right-0 bg-green-50 z-10 min-w-[80px]">
+                          <button
+                            onClick={() => onView(row)}
+                            className="text-green-600 hover:text-green-900 flex items-center justify-center gap-1 cursor-pointer py-2 w-[70%] mx-auto rounded-lg"
+                          >
+                            <Eye size={16} />
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))
+                ) : showEmptyMessage ? (
+                  <tr>
+                    <td
+                      colSpan={columns.length + (onView ? 1 : 0)}
+                      className="py-4 text-gray-600 bg-white text-center"
+                    >
+                      {emptyMessage}
+                    </td>
+                  </tr>
+                ) : null}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
 
       {/* Mobile Card View */}
-      <div className="block md:hidden space-y-4 max-h-[600px] overflow-auto py-8">
-        {data.length ? (
+      <div className="block md:hidden space-y-4 max-h-[600px] overflow-auto py-4 mb-16">
+        {isLoading ? (
+          <div className="h-full py-8 text-center align-middle">
+            <div className="flex justify-center items-center h-full min-h-[300px]">
+              <Helix size="60" speed="2" color="green" />
+            </div>
+          </div>
+        ) : data.length ? (
           data.map((row) => {
             // Check if there's a "view" column to use instead of onView
             const viewColumn = columns.find(
@@ -159,7 +181,7 @@ export function BasicTable<T extends { id: string | number }>({
             return (
               <div
                 key={row.id}
-                className="grid grid-cols-6 items-center justify-between p-3 rounded-xl shadow-md border bg-white hover:shadow-lg transition-shadow animate__animated animate__fadeIn"
+                className="grid grid-cols-6 items-center justify-between p-3 rounded-xl shadow-md border bg-white hover:shadow-lg transition-shadow animate__animated animate__fadeIn animate__faster"
               >
                 {/* Left: Image + Basic Info */}
                 <div className="flex items-center gap-4 col-span-5 min-w-0">
@@ -177,22 +199,38 @@ export function BasicTable<T extends { id: string | number }>({
 
                   {/* Text Info - ellipsis */}
                   <div className="flex flex-col overflow-hidden">
-                    <p className="text-sm font-semibold text-gray-800 truncate">
+                    <p className="text-sm font-bold text-gray-800 truncate">
                       {columns[1]?.render
                         ? columns[1].render(row)
                         : (row[columns[1]?.key as keyof T] as string | number)}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1 truncate">
+                    <p className="text-xs mt-1 truncate font-medium text-gray-400">
                       {columns[2]?.header}:{" "}
                       {columns[2]?.render
                         ? columns[2].render(row)
                         : (row[columns[2]?.key as keyof T] as string | number)}
                     </p>
+                    {(row as { reference_id?: string }).reference_id && (
+                      <p className="text-xs mt-1 truncate font-medium text-gray-400">
+                        {(row as { reference_id?: string }).reference_id ??
+                          "N/A"}
+                      </p>
+                    )}
+                    {(row as { insurance_status?: string })
+                      .insurance_status && (
+                      <p className="text-xs mt-1 truncate font-medium text-gray-400">
+                        Status:{" "}
+                        <span className="uppercase">
+                          {(row as { insurance_status?: string })
+                            .insurance_status ?? "N/A"}
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 {/* Right: Buttons */}
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-end md:items-center gap-2">
                   {/* If a view column exists, render its button */}
                   {viewColumn ? (
                     <div>{viewColumn.render?.(row)}</div>
@@ -201,10 +239,10 @@ export function BasicTable<T extends { id: string | number }>({
                     onView && (
                       <button
                         onClick={() => onView(row)}
-                        className="p-2 rounded-full hover:bg-muted transition-colors"
+                        className="p-2 bg-green-100 rounded-full hover:bg-muted transition-colors"
                         aria-label="View details"
                       >
-                        <Eye className="w-5 h-5 text-primary hover:text-primary/80" />
+                        <Eye className="text-green-600" size={18} />
                       </button>
                     )
                   )}
@@ -218,11 +256,13 @@ export function BasicTable<T extends { id: string | number }>({
             );
           })
         ) : (
-          <div className="text-center py-12 bg-card rounded-lg border">
-            <p className="text-muted-foreground animate__animated animate__fadeIn">
-              {emptyMessage}
-            </p>
-          </div>
+          showEmptyMessage && (
+            <div className="text-center py-12 bg-card rounded-lg border">
+              <p className="text-muted-foreground animate__animated animate__fadeIn">
+                {emptyMessage}
+              </p>
+            </div>
+          )
         )}
       </div>
     </>

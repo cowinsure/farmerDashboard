@@ -160,14 +160,18 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <div className=" overflow-y-auto max-h-[80vh] lg:max-h-[60vh] ">
           {renderStepContent()}
 
-          <div className="flex justify-between   bg-transparent p-4 shadow-md">
+          <div
+            className={`flex ${
+              currentStep === 0 ? "justify-end" : "justify-between"
+            } bg-transparent p-4 shadow-md`}
+          >
             <button
               onClick={handlePrev}
-              disabled={currentStep === 0}
+              // disabled={currentStep === 0}
               className={`px-4 py-2 rounded-lg flex items-center justify-center gap-1 ${
                 currentStep === 0
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "border cursor-pointer hover:bg-gray-200"
+                  ? "hidden"
+                  : "block border cursor-pointer hover:bg-gray-200 border-green-600 text-green-800 font-semibold"
               }`}
             >
               <IoIosArrowBack /> Prev

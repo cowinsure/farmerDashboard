@@ -712,7 +712,7 @@ export default function DashboardPage() {
 
   // New UI
   return (
-    <div className="flex w-full flex-col gap-20 pt-14 pb-16 md:pb-0 md:pt-0">
+    <div className="flex w-full flex-col gap-7 lg:gap-20 pt-8 pb-16 md:pb-0 md:pt-0">
       {/* Page Heading */}
 
       <div className="flex flex-col items-center justify-center gap-4">

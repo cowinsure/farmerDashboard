@@ -6,6 +6,7 @@ import Loader from "@/component/helper/Loader";
 import Sidebar from "@/components/new-ui/navs/SideBar";
 import MobileSidebar from "@/components/new-ui/navs/MobileSideBar";
 import Navbar from "@/components/new-ui/navs/Navbar";
+import LayeredWaves from "@/components/new-ui/ui/WaveAnimation";
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -14,7 +15,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   const pathname = usePathname(); // ✅ Track route path changes
   const [loading, setLoading] = useState(true);
-  const [routeLoading, setRouteLoading] = useState(false); // ✅ ADD new loader state
+  const [routeLoading, setRouteLoading] = useState(false);
 
   useEffect(() => {
     const accesstoken = localStorage.getItem("accessToken");
@@ -44,7 +45,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <div>
-      <div className="flex h-screen  bg-[#F8FFF9]">
+      <div className="flex h-screen bg-[#F8FFF9]">
         <div className="z-50">
           <Sidebar />
           <MobileSidebar />
@@ -56,6 +57,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
             {children}
           </div>
         </div>
+        {pathname === "/home" && <LayeredWaves />}
       </div>
     </div>
   );

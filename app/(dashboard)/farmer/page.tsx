@@ -243,7 +243,6 @@ const FarmerPage: React.FC = () => {
   };
 
   console.log(userId, "userId from context");
-
   return (
     <div className="p-2 md:px-6">
       <PageHeading
@@ -376,11 +375,16 @@ const FarmerPage: React.FC = () => {
             header: "Image",
             render: (row) => (
               <img
-                src={row.left_side_image || "/placeholder.svg"}
-                alt="cow"
-                className="w-full h-full md:w-12 md:h-12 rounded mx-auto"
+                src={row.left_side_image}
+                alt="Animal"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/placeholder.png";
+                }}
+                className="w-16 h-16 object-cover rounded-md "
               />
             ),
+            className: "w-28 *:w-[80%] *:mx-auto *:drop-shadow-xs",
           },
           { key: "asset_type", header: "Type" },
           { key: "breed", header: "Breed" },

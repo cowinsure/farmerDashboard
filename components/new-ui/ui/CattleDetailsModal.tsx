@@ -1,4 +1,3 @@
-// CattleDetailsModal.tsx
 "use client";
 
 import {
@@ -13,7 +12,6 @@ import { IoClose } from "react-icons/io5";
 import { FaCalendarAlt, FaMoneyBillAlt, FaUser } from "react-icons/fa";
 // import { PiGenderFemaleBold, PiGenderMaleBold } from "react-icons/pi";
 import { MdOutlineLocationOn } from "react-icons/md";
-import Image from "next/image";
 import { FaRegHeart } from "react-icons/fa";
 import { RxIdCard } from "react-icons/rx";
 import { FaDollarSign } from "react-icons/fa6";
@@ -22,6 +20,8 @@ import { IoColorPaletteSharp } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { TfiRuler } from "react-icons/tfi";
 import { LiaWeightSolid } from "react-icons/lia";
+import { LuSyringe } from "react-icons/lu";
+import FallbackImage from "../utils/FallBackImage";
 interface CattleData {
   id: number;
   owner: string;
@@ -106,9 +106,9 @@ export default function CattleDetailsModal({
                     {/* Image */}
                     <div className="w-64 bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
                       {cattle.left_side_image ? (
-                        <Image
-                          src={cattle.left_side_image}
-                          alt="Left side"
+                        <FallbackImage
+                          src={cattle.left_side_image as string}
+                          alt={"Image" as string}
                           width={256}
                           height={256}
                           className="object-cover w-full h-full"
@@ -154,23 +154,27 @@ export default function CattleDetailsModal({
                         label="Age"
                         value={cattle.age_in_months}
                         text="months"
+                        className="text-green-700 bg-green-200"
                       />
                       <DetailsSection
                         icon={<LiaWeightSolid size={25} />}
                         label="Weight"
                         value={cattle.weight_kg}
                         text="kg"
+                        className="text-blue-700 bg-blue-200"
                       />
                       <DetailsSection
                         icon={<TfiRuler size={20} />}
                         label="Height"
                         value={cattle.height}
                         text="ft"
+                        className="text-purple-700 bg-purple-200"
                       />
                       <DetailsSection
                         icon={<IoColorPaletteSharp />}
                         label="Color"
                         value={cattle.color}
+                        className="text-yellow-700 bg-yellow-200"
                       />
                     </div>
                   </div>
@@ -187,27 +191,32 @@ export default function CattleDetailsModal({
                           icon={<IoMdInformationCircleOutline size={25} />}
                           label="Health Status"
                           value={cattle.health_status || "N/A"}
+                          className="text-green-700 bg-green-200"
                         />
                       </div>
                       <DetailsSection
-                        icon={<IoMdInformationCircleOutline size={25} />}
+                        icon={<LuSyringe size={20} />}
                         label="Vaccination"
                         value={cattle.vaccination_status || "N/A"}
+                        className="text-blue-700 bg-blue-200"
                       />
                       <DetailsSection
-                        icon={<IoMdInformationCircleOutline size={25} />}
+                        icon={<LuSyringe size={20} />}
                         label="Last Vaccination"
                         value={cattle.last_vaccination_date || "N/A"}
+                        className="text-red-700 bg-red-200"
                       />
                       <DetailsSection
                         icon={<IoMdInformationCircleOutline size={25} />}
                         label="Deworming"
                         value={cattle.deworming_status || "N/A"}
+                        className="text-blue-700 bg-blue-200"
                       />
                       <DetailsSection
                         icon={<IoMdInformationCircleOutline size={25} />}
                         label="Last Deworming"
                         value={cattle.last_deworming_date || "N/A"}
+                        className="text-red-700 bg-red-200"
                       />
                     </div>
                   </div>
@@ -232,7 +241,7 @@ export default function CattleDetailsModal({
                       <DetailsSection
                         label="Purchase Date"
                         value={cattle.purchase_date}
-                        icon={<FaCalendarAlt />}
+                        icon={<FaCalendarAlt size={15} />}
                         className="text-blue-700 bg-blue-200"
                       />
                       <DetailsSection
@@ -244,8 +253,8 @@ export default function CattleDetailsModal({
                       <DetailsSection
                         label="Owner"
                         value={cattle.owner}
-                        icon={<FaUser />}
-                        className="text-yellow-700 bg-yellow-200"
+                        icon={<FaUser size={15} />}
+                        className="text-yellow-700 bg-yellow-200 "
                       />
                     </div>
                   </div>
@@ -273,12 +282,12 @@ export default function CattleDetailsModal({
                             {label}
                           </span>
                           {url ? (
-                            <Image
+                            <FallbackImage
                               src={url as string}
                               alt={label as string}
                               width={200}
                               height={140}
-                              className="rounded-md object-cover border w-full h-32"
+                              className="rounded-md object-cover border w-full h-48"
                             />
                           ) : (
                             <span className="text-gray-400 text-sm">
@@ -347,15 +356,17 @@ const DetailsSection = ({
 }: DetailsProps) => {
   return (
     <div className="flex items-center gap-2">
-      {icon && (
-        <span
-          className={` w-8 h-8 rounded-full flex items-center justify-center ${
-            className ? className : "text-gray-600 bg-gray-100"
-          }`}
-        >
-          {icon}
-        </span>
-      )}
+      <div>
+        {icon && (
+          <span
+            className={` w-8 h-8 rounded-full flex items-center justify-center text-lg ${
+              className ? className : "text-gray-600 bg-gray-100"
+            }`}
+          >
+            {icon}
+          </span>
+        )}
+      </div>
       <div className="flex flex-col justify-between w-full">
         <label className="text-sm text-gray-500">{label}</label>
         <span className="font-bold text-[#4e4e4e]">

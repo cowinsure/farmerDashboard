@@ -187,10 +187,10 @@ export default function Sidebar() {
               href={item.href}
               onClick={() => setActiveMenu(item.name)}
               className={`relative flex items-center gap-3 group
-          ${isOpen ? "w-[70%]" : "w-full"} p-2 transition-all duration-300
+          ${isOpen ? "w-[95%]" : "w-full"} p-2 transition-all duration-300
           ${
             activeMenu === item.name
-              ? `font-bold text-white ${
+              ? `font-bold text-green-300 ${
                   isOpen ? (item.name === "Insurance" ? "pl-3" : "pl-6") : ""
                 }`
               : "text-gray-500 font-semibold pl-3 hover:bg-[#87ce8d] rounded-r-2xl"
@@ -199,7 +199,7 @@ export default function Sidebar() {
             >
               {/* Animated background */}
               <span
-                className={`absolute left-0 top-0 h-full bg-[#0A7D1B] rounded-r-2xl z-0 transition-all duration-500 ease-in-out
+                className={`absolute left-0 top-0 h-full bg-green-950 rounded-r-2xl z-0 transition-all duration-500 ease-in-out
             ${activeMenu === item.name ? "w-full" : "w-0"}
           `}
               ></span>
@@ -208,7 +208,7 @@ export default function Sidebar() {
               <span
                 className={`z-10 ${
                   activeMenu === item.name
-                    ? "text-green-600 bg-white"
+                    ? "text-green-900 bg-green-200"
                     : "bg-gray-500 text-white group-hover:text-green-600 group-hover:bg-white"
                 } p-1 rounded-full transition-all duration-300`}
               >

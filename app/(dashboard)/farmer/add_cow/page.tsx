@@ -94,7 +94,9 @@ export default function StepForm() {
           }
         } catch (error) {
           console.error("Error submitting form:", error);
-          toast.error(`Something went wrong. Please try again.\nError: ${error}`);
+          toast.error(
+            `Something went wrong. Please try again.\nError: ${error}`
+          );
         } finally {
           setIsLoading(false); // Hide loading spinner
         }
@@ -184,8 +186,8 @@ export default function StepForm() {
             onClick={handlePrev}
             className={`px-4 py-2 rounded-lg flex items-center justify-center gap-1 ${
               currentStep === 0
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "border cursor-pointer hover:bg-gray-200"
+                ? "hidden"
+                : "block border cursor-pointer hover:bg-gray-200 border-green-600 text-green-800 font-semibold"
             }`}
           >
             <IoIosArrowBack /> Prev

@@ -7,9 +7,7 @@ import {
   RiUserFill,
 } from "react-icons/ri";
 import { PiFarm, PiFarmFill } from "react-icons/pi";
-import {
-  MdLogout,
-} from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import { PiShieldPlusBold, PiShieldPlusFill } from "react-icons/pi";
 import { VscChecklist } from "react-icons/vsc";
 import { LuFileCheck2 } from "react-icons/lu";
@@ -169,7 +167,7 @@ export default function MobileNavBar() {
       </div>
 
       {/* Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-green-50 border-t z-50 flex justify-around items-center py-2 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-green-950 border-t z-50 flex justify-around items-center py-2 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
         {menuItems.map((item) => (
           <button
             key={item.name}
@@ -189,7 +187,7 @@ export default function MobileNavBar() {
             <div
               className={`rounded-2xl custom-hover ${
                 activeMenu === item.name
-                  ? " text-green-700 mb-1"
+                  ? " text-green-400 mb-1"
                   : "text-gray-400"
               }`}
             >
@@ -199,7 +197,7 @@ export default function MobileNavBar() {
               <span
                 className={`${
                   activeMenu === item.name
-                    ? "font-bold text-green-900"
+                    ? "font-bold text-green-400"
                     : "font-semibold text-gray-500"
                 }`}
               >
