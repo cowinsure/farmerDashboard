@@ -210,7 +210,7 @@ export function PaymentDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-green-700">
-          <Check /> <span className="hidden md:block">Submit</span>
+          <Check /> <span className="hidden md:block">Buy</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
