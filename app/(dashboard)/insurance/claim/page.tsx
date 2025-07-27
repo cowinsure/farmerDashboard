@@ -53,6 +53,9 @@ export default function CattleManagementPage() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+
 
   // Fetch insurance data from the API
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function CattleManagementPage() {
         console.error("Access token is missing. Please log in again.");
         return;
       }
-
+      setIsLoading(true);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-list/`,
@@ -78,6 +81,7 @@ export default function CattleManagementPage() {
         const result = await response.json();
 
         if (response.ok) {
+          setIsLoading(false);
           const validStatuses = ["claim_pending"];
           const filteredData: InsuranceData[] = result.data.results.filter(
             (item: InsuranceData) => validStatuses.includes(item.claim_status)
@@ -122,6 +126,7 @@ export default function CattleManagementPage() {
       </div>
 
       <BasicTable
+        isLoading={isLoading}
         data={insuranceData}
         emptyMessage="No active policy found"
         columns={[
