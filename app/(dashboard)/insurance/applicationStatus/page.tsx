@@ -41,6 +41,7 @@ export default function ApplciationStatus() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   console.log(insuranceData);
@@ -53,6 +54,7 @@ export default function ApplciationStatus() {
         console.error("Access token is missing. Please log in again.");
         return;
       }
+      setIsLoading(true);
 
       try {
         const response = await fetch(
@@ -70,6 +72,7 @@ export default function ApplciationStatus() {
         console.log(result);
 
         if (response.ok) {
+          setIsLoading(false);
           // console.log("Insurance data fetched successfully:", result.data.results);
           const validStatuses = [
             "pending",
@@ -121,6 +124,7 @@ export default function ApplciationStatus() {
       </div>
 
       <BasicTable
+      isLoading={isLoading}
         data={insuranceData}
         emptyMessage="No active policy found"
         maxHeight="600px"
@@ -159,7 +163,7 @@ export default function ApplciationStatus() {
           {
             key: "insurance_status",
             header: "Status",
-            className: "w-32",
+            className: "w-64",
           },
           {
             key: "created_by",
@@ -200,6 +204,7 @@ export default function ApplciationStatus() {
                   insuranceId={row.id.toString()}
                   insuranceNumber={row.insurance_number.toString()}
                 />
+                
               ) : (
                 <Button
                   disabled={row.insurance_status !== "active"}
@@ -344,22 +349,22 @@ export default function ApplciationStatus() {
                   </span>
                   <p className="font-semibold text-base">Coverage Summary</p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
+                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
                   <div>
                     <p className="text-gray-500 text-sm">Type</p>
                     <p className="font-semibold text-base mt-1">Livestock</p>
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Premium</p>
-                    <p className="font-semibold text-base mt-1">Annual</p>
+                    <p className="font-semibold text-base mt-1">Monthly</p>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="text-gray-500 text-sm">Deductible</p>
                     <p className="font-semibold text-base mt-1">$500</p>
-                  </div>
+                  </div> */}
                   <div>
                     <p className="text-gray-500 text-sm">Coverage</p>
-                    <p className="font-semibold text-base mt-1">Full</p>
+                    <p className="font-semibold text-base mt-1">90%</p>
                   </div>
                 </div>
               </div>
