@@ -386,7 +386,7 @@ const FarmerPage: React.FC = () => {
             ),
             className: "w-28 *:w-[80%] *:mx-auto *:drop-shadow-xs",
           },
-          { key: "asset_type", header: "Type" },
+          { key: "reference_id", header: "Cow ID",className: "w-48", },
           { key: "breed", header: "Breed" },
           { key: "color", header: "Color" },
           { key: "age_in_months", header: "Age" },
