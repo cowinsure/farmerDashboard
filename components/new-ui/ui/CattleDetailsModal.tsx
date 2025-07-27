@@ -28,6 +28,7 @@ interface CattleData {
   asset_type: string;
   breed: string;
   color?: string;
+  reference_id?: string;
   age_in_months?: number;
   weight_kg?: string;
   height?: string;
@@ -121,6 +122,11 @@ export default function CattleDetailsModal({
                     </div>
 
                     <div className="w-full space-y-3">
+                      <CowCardData
+                        // icon={<MdCategory size={20} />}
+                        label="Cow ID"
+                        value={cattle.reference_id}
+                      />
                       <CowCardData
                         // icon={<MdCategory size={20} />}
                         label="Asset Type"
