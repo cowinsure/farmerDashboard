@@ -210,6 +210,7 @@ export default function CattleManagementPage() {
             className: "w-32",
             render: (row) => (
               <Button
+                disabled={row.claim_status === "claim_pending"}
                 variant="outline"
                 size="sm"
                 onClick={() => handleClaim(row)}
@@ -351,22 +352,22 @@ export default function CattleManagementPage() {
                   </span>
                   <p className="font-semibold text-base">Coverage Summary</p>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
                   <div>
                     <p className="text-gray-500 text-sm">Type</p>
                     <p className="font-semibold text-base mt-1">Livestock</p>
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">Premium</p>
-                    <p className="font-semibold text-base mt-1">Annual</p>
+                    <p className="font-semibold text-base mt-1">Monthly</p>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="text-gray-500 text-sm">Deductible</p>
                     <p className="font-semibold text-base mt-1">$500</p>
-                  </div>
+                  </div> */}
                   <div>
                     <p className="text-gray-500 text-sm">Coverage</p>
-                    <p className="font-semibold text-base mt-1">Full</p>
+                    <p className="font-semibold text-base mt-1">90%</p>
                   </div>
                 </div>
               </div>
