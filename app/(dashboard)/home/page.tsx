@@ -721,7 +721,7 @@ export default function DashboardPage() {
           data-aos="fade-in"
           data-aos-duration="3000"
         >
-          Welcome to <span className="text-[var(--base-color)]">Company</span>
+          Welcome to <span className="text-[var(--base-color)]">InsureCow</span>
         </h1>
         <p
           className="text-gray-500/80 md:text-lg font-medium md:w-[70%] lg:w-[40%] mx-auto text-center"
