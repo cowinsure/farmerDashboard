@@ -175,7 +175,7 @@ const FarmerPage: React.FC = () => {
 
     try {
       setIsUploading(true);
-      const response = await fetch("https://ai.insurecow.com/claim", {
+      const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/claim", {
         method: "POST",
         body: formData,
         headers: {

@@ -72,7 +72,7 @@ export default function StepOne() {
 
     try {
       setIsUploading(true);
-      const response = await fetch("https://ai.insurecow.com/register", {
+      const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/register", {
         method: "POST",
         body: formData,
         headers: {
