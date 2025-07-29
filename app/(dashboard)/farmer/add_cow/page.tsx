@@ -137,7 +137,7 @@ export default function StepForm() {
     }
   };
   return (
-    <div className="p-2 md:px-6">
+    <div className="p-2 mb-20 md:px-6">
       <div className="mb-5">
         <div className="flex items-center gap-3">
           <Link
@@ -168,7 +168,7 @@ export default function StepForm() {
         {currentStep === 0 && (
           <button
             onClick={() => setIsGuidanceModal(true)}
-            className="text-green-600 font-bold underline hover:text-green-800 custom-hover hover:underline-offset-2 cursor-pointer mt-6"
+            className="text-green-600 font-bold underline hover:text-green-800 custom-hover hover:underline-offset-2 cursor-pointer md:mt-6"
           >
             View Guidelines
           </button>
@@ -216,7 +216,7 @@ export default function StepForm() {
             {currentStep === steps.length - 1 ? "Submit" : "Next"}
             <IoIosArrowForward className="font-bold" />
           </button>
-        )}
+        )}  
       </div>
       {/* Loading Spinner */}
       {isLoading && (
