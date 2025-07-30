@@ -103,7 +103,7 @@ const AddCattleForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col rounded-lg mx-auto p-6 py-8">
+    <div className="bg-white flex flex-col rounded-lg mx-auto p-2 md:p-6 py-8 max-h-[60vh] overflow-y-auto">
       <div>
         <h1 className="font-medium mb-3">Add Cattle</h1>
         <div className="relative flex flex-col mb-4">
@@ -132,18 +132,18 @@ const AddCattleForm: React.FC = () => {
 
       {/* Display selected cattle details */}
       {selectedAsset && (
-        <div className="flex flex-row items-center border border-gray-300 rounded-lg p-4 mb-4 shadow-md">
+        <div className="flex flex-col md:flex-row border border-gray-300 rounded-lg p-4 mb-4 shadow-md">
           {/* Left side: Owner image */}
-          <div className="w-1/3">
+          <div className="w-full md:w-1/3 mb-4 md:mb-0">
             <img
               src={selectedAsset.image_with_owner || "/placeholder-image.png"}
               alt="Owner"
-              className="w-full h-auto rounded-lg object-cover"
+              className="w-full h-60 md:h-auto rounded-lg object-contain md:object-cover"
             />
           </div>
 
           {/* Right side: Cattle details */}
-          <div className="w-2/3 pl-4">
+          <div className="w-full md:w-2/3 md:pl-4">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">
               {selectedAsset.asset_type} - {selectedAsset.breed}
             </h2>
@@ -169,7 +169,7 @@ const AddCattleForm: React.FC = () => {
                 htmlFor="sumInsured"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Sum Insured Amount:
+                <strong>Sum Insured Amount:</strong>
               </label>
               <input
                 type="number"

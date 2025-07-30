@@ -41,7 +41,7 @@ export default function ApplciationStatus() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   console.log(insuranceData);
@@ -124,7 +124,7 @@ export default function ApplciationStatus() {
       </div>
 
       <BasicTable
-      isLoading={isLoading}
+        isLoading={isLoading}
         data={insuranceData}
         emptyMessage="No active policy found"
         maxHeight="600px"
@@ -186,7 +186,7 @@ export default function ApplciationStatus() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleViewDetails(row)}
-                className="text-green-700 hover:text-green-900 hover:bg-green-200"
+                className="text-green-700 hover:text-green-900 hover:bg-green-200 cursor-pointer"
               >
                 <Eye size={16} className="mr-1" />
                 <span className="hidden md:block">View</span>
@@ -204,14 +204,13 @@ export default function ApplciationStatus() {
                   insuranceId={row.id.toString()}
                   insuranceNumber={row.insurance_number.toString()}
                 />
-                
               ) : (
                 <Button
                   disabled={row.insurance_status !== "active"}
                   variant="outline"
                   size="sm"
                   onClick={() => handleClaim(row)}
-                  className="text-green-700 border-green-700 hover:bg-green-200"
+                  className="text-green-700 border-green-700 hover:bg-green-200 cursor-pointer"
                 >
                   <FileText size={16} className="mr-1" />
                   <span className="hidden md:block">Claim</span>
@@ -243,7 +242,7 @@ export default function ApplciationStatus() {
                     </h2>
                     <p className="text-gray-500 text-sm">Protected Asset</p>
                   </div>
-                  <div className="flex flex-col md:flex-row gap-2">
+                  <div className="flex flex-col lg:flex-row text-center gap-2">
                     <span
                       className={`${
                         selectedCow.insurance_status === "active"
@@ -349,7 +348,7 @@ export default function ApplciationStatus() {
                   </span>
                   <p className="font-semibold text-base">Coverage Summary</p>
                 </div>
-                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
                   <div>
                     <p className="text-gray-500 text-sm">Type</p>
                     <p className="font-semibold text-base mt-1">Livestock</p>
@@ -364,7 +363,7 @@ export default function ApplciationStatus() {
                   </div> */}
                   <div>
                     <p className="text-gray-500 text-sm">Coverage</p>
-                    <p className="font-semibold text-base mt-1">90%</p>
+                    <p className="font-semibold text-base mt-1">Upto 90%</p>
                   </div>
                 </div>
               </div>

@@ -41,7 +41,7 @@ export default function InsuranceActivePolicy() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -120,7 +120,7 @@ export default function InsuranceActivePolicy() {
       </div>
 
       <BasicTable
-      isLoading={isLoading}
+        isLoading={isLoading}
         data={insuranceData}
         emptyMessage="No active policy found"
         columns={[
@@ -160,7 +160,7 @@ export default function InsuranceActivePolicy() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleViewDetails(row)}
-                className="text-green-700 hover:text-green-900 hover:bg-green-200 flex items-center justify-end"
+                className="text-green-700 hover:text-green-900 hover:bg-green-200 flex items-center justify-end cursor-pointer"
               >
                 <Eye size={16} className="md:mr-1" />
                 <span className="hidden md:block">View</span>
@@ -184,7 +184,7 @@ export default function InsuranceActivePolicy() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleClaim(row)}
-                  className="text-green-700 hover:bg-green-200"
+                  className="text-green-700 hover:bg-green-200 cursor-pointer"
                 >
                   <FileText size={16} className="md:mr-1" />
                   <span className="hidden md:block">Claim</span>
@@ -322,7 +322,7 @@ export default function InsuranceActivePolicy() {
                   </span>
                   <p className="font-semibold text-base">Coverage Summary</p>
                 </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 *:bg-gray-100 *:p-2 *:rounded-md *:text-center">
                   <div>
                     <p className="text-gray-500 text-sm">Type</p>
                     <p className="font-semibold text-base mt-1">Livestock</p>

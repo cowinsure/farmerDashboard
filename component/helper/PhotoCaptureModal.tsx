@@ -20,7 +20,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
-import { FaCamera } from "react-icons/fa";
+// import { FaCamera } from "react-icons/fa";
 import { MdCloudUpload } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -475,7 +475,7 @@ export default function PhotoCaptureModal({
     return (
       <Drawer open={open} onOpenChange={handleOpenChange}>
         <DrawerTrigger asChild>
-          <button className=" border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium">
+          <button className=" border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium ">
             <MdCloudUpload className="text-4xl text-gray-600" />
             {triggerText}
           </button>
@@ -493,7 +493,7 @@ export default function PhotoCaptureModal({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium">
+        <button className="border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium cursor-pointer hover:border-green-400 custom-hover">
           <MdCloudUpload className="text-4xl text-gray-600" />
           {triggerText}
         </button>

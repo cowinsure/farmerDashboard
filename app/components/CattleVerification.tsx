@@ -1,12 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 // import PhotoCaptureModal from "@/component/helper/PhotoCaptureModal";
-import { Upload, X, Eye, File, } from "lucide-react";
+import { Upload, X, Eye, File } from "lucide-react";
 import UploadVideo from "@/component/helper/UploadVedio";
 // import ModalGeneral from "@/component/modal/DialogGeneral";
 import CowIdentificationLoader from "@/component/modal/cow-identification-loader";
@@ -42,8 +46,8 @@ interface CattleVerificationProps {
 //   msg: string;
 //   matched_id:string
 // }
-const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c"
-
+const jwt =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
 
 export default function CattleVerification({
   isOpen,
@@ -62,11 +66,13 @@ export default function CattleVerification({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // const [isMuzzleUploading, setIsMuzzleUploading] = useState(false);
   // const [muzzleUploadSuccess, setMuzzleUploadSuccess] = useState(false);
-  const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(null);
-  const [erromuzzleResponse, setErroMuzzleResponse] = useState<MuzzleResponse | null>(null);
+  const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(
+    null
+  );
+  const [erromuzzleResponse, setErroMuzzleResponse] =
+    useState<MuzzleResponse | null>(null);
   const [claimerror, setClaimError] = useState<string | null>(null);
   // const [verificationError, setVerificationError] = useState<string | null>(null);
-
 
   // const [accessToken , setAccessToken] = useState(jwt)
 
@@ -75,24 +81,21 @@ export default function CattleVerification({
   // const [isModalErrorOpen, setErrorModalOpen] = useState(false);
   // const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
 
-
-
   // const [isModalOpen, setModalOpen] = useState(false);
-
 
   const handleDocumentsChange = (files: FileList | null) => {
     if (files) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        claim_documents: [...prev.claim_documents, ...Array.from(files)]
+        claim_documents: [...prev.claim_documents, ...Array.from(files)],
       }));
     }
   };
 
   const removeDocument = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      claim_documents: prev.claim_documents.filter((_, i) => i !== index)
+      claim_documents: prev.claim_documents.filter((_, i) => i !== index),
     }));
   };
 
@@ -113,29 +116,27 @@ export default function CattleVerification({
 
     const formData = new FormData();
     formData.append("video", file); // Append the video file to the form data
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      claim_muzzle: file
+      claim_muzzle: file,
     }));
-
-
-
-
 
     try {
       setIsUploading(true);
-      const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/claim", {
-        method: "POST",
-        body: formData,
-        headers: {
-          // "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const response = await fetch(
+        "https://rd1wmswr9eqhqh-8000.proxy.runpod.net/claim",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
       // 3.110.218.87:8000
 
       // console.log(await response.json());
-
 
       if (response.status === 400) {
         const data = await response.json();
@@ -166,9 +167,9 @@ export default function CattleVerification({
         setMuzzleResponse(data);
         // setResponseData(data);
         // setModalOpen(true)
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          reference_id: data.matched_id
+          reference_id: data.matched_id,
         })); // Save the response data to state
         // toast.error(data.msg);
         return;
@@ -186,14 +187,12 @@ export default function CattleVerification({
   };
 
   useEffect(() => {
-    setErroMuzzleResponse(null)
-    setMuzzleResponse(null)
-
-  }, [])
-
+    setErroMuzzleResponse(null);
+    setMuzzleResponse(null);
+  }, []);
 
   const handleSubmit = async () => {
-    setClaimError(null)
+    setClaimError(null);
     if (!selectedCow) return;
     setIsSubmitting(true);
 
@@ -216,19 +215,20 @@ export default function CattleVerification({
 
       // console.log(formDataToObject(formDataToSend));
 
-
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-claim/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          // 01300820884 habib
-        },
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/insurance-claim/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            // 01300820884 habib
+          },
+          body: formDataToSend,
+        }
+      );
 
       console.log(response.status);
-
 
       if (response.ok) {
         onClose();
@@ -241,7 +241,11 @@ export default function CattleVerification({
         if (data.status === "error" && data.message) {
           // Handle the first response body format
           errorMessage += data.message;
-        } else if (data.statusCode === "400" && data.data && data.data.details) {
+        } else if (
+          data.statusCode === "400" &&
+          data.data &&
+          data.data.details
+        ) {
           // Handle the second response body format
           // const details = data.data.details;
           // for (const [field, errors] of Object.entries(details)) {
@@ -256,10 +260,8 @@ export default function CattleVerification({
 
         setClaimError(errorMessage);
 
-
         console.log(errorMessage);
       }
-
     } catch (error) {
       console.error("Error submitting claim:", error);
     } finally {
@@ -328,12 +330,12 @@ export default function CattleVerification({
 
   return (
     <>
-
-
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="">
           <DialogHeader>
-            <DialogTitle className="text-green-700">Submit Insurance Claim</DialogTitle>
+            <DialogTitle className="text-green-700">
+              Submit Insurance Claim
+            </DialogTitle>
           </DialogHeader>
           {selectedCow && (
             <div className="space-y-4 mt-4 max-h-[500px] lg:h-auto overflow-y-auto">
@@ -348,11 +350,15 @@ export default function CattleVerification({
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Insurance status:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.claim_status}</p>
+                  <p className="p-2 bg-gray-100 rounded">
+                    {selectedCow.claim_status}
+                  </p>
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Sum Insured:</p>
-                  <p className="p-2 bg-gray-100 rounded">{selectedCow.sum_insured}</p>
+                  <p className="p-2 bg-gray-100 rounded">
+                    {selectedCow.sum_insured}
+                  </p>
                 </div>
               </div>
 
@@ -365,29 +371,39 @@ export default function CattleVerification({
                     setSelectedFile(file); // Save the selected file to state
                   }}
                 />
-                <button onClick={() => {
-                  if (selectedFile) {
-                    handleVideoUpload(selectedFile); // Call the upload function when the video is captured
-                  } else {
-                    toast.error("Please select a video file before uploading.");
-                  }
-
-                }} className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded">
+                <button
+                  onClick={() => {
+                    if (selectedFile) {
+                      handleVideoUpload(selectedFile); // Call the upload function when the video is captured
+                    } else {
+                      toast.error(
+                        "Please select a video file before uploading."
+                      );
+                    }
+                  }}
+                  className="w-full mb-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-4 rounded cursor-pointer"
+                >
                   {isUploading ? "Uploading..." : "Claim Cow"}
                 </button>
               </div>
 
-
               {muzzleResponse && (
                 <div className="mt-6">
                   <div className="flex flex-col items-center justify-between gap-2">
-                    <p className="text-center text-green-500">  Muzzel Detection Successful</p>
+                    <p className="text-center text-green-500">
+                      {" "}
+                      Muzzel Detection Successful
+                    </p>
                     {muzzleResponse?.matched_id}
                     {muzzleResponse?.segmentation_image && (
                       <div className="flex flex-col items-center gap-2">
-                        <span className="text-sm font-medium">Processed Image</span>
-                        <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
-                          {muzzleResponse?.segmentation_image?.startsWith('data:image') && (
+                        <span className="text-sm font-medium">
+                          Processed Image
+                        </span>
+                        <div className="w-40 h-40 border rounded-lg overflow-hidden border-red-200">
+                          {muzzleResponse?.segmentation_image?.startsWith(
+                            "data:image"
+                          ) && (
                             <img
                               src={muzzleResponse.segmentation_image}
                               alt="Segmentation Preview"
@@ -404,15 +420,20 @@ export default function CattleVerification({
               {erromuzzleResponse && (
                 <div className="mt-6">
                   <div className="flex flex-col items-center justify-between gap-2">
-                                                <p className="text-center text-red-500">  {erromuzzleResponse.msg}</p>
-
+                    <p className="text-center text-red-500">
+                      {" "}
+                      {erromuzzleResponse.msg}
+                    </p>
 
                     {erromuzzleResponse?.segmentation_image && (
                       <div className="flex flex-col items-center gap-2">
-                        <span className="text-sm font-medium">Processed Image</span>
-                        <div className='w-40 h-40 border rounded-lg overflow-hidden border-red-200'>
-
-                          {erromuzzleResponse?.segmentation_image?.startsWith('data:image') && (
+                        <span className="text-sm font-medium">
+                          Processed Image
+                        </span>
+                        <div className="w-40 h-40 border rounded-lg overflow-hidden border-red-200">
+                          {erromuzzleResponse?.segmentation_image?.startsWith(
+                            "data:image"
+                          ) && (
                             <img
                               src={erromuzzleResponse.segmentation_image}
                               alt="Segmentation Preview"
@@ -428,11 +449,18 @@ export default function CattleVerification({
 
               <div className="space-y-4 mt-6">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Claim Reason</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Claim Reason
+                  </label>
                   <select
                     className="w-full p-2 border border-gray-300 rounded-md"
                     value={formData.reason}
-                    onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        reason: e.target.value,
+                      }))
+                    }
                   >
                     <option value="">Select reason</option>
                     <option value="death">Death</option>
@@ -452,19 +480,27 @@ export default function CattleVerification({
                   />
                 </div> */}
 
-
                 <div>
-                  <label className="block text-sm font-medium mb-1">Claim Description</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Claim Description
+                  </label>
                   <textarea
                     className="w-full p-2 border border-gray-300 rounded-md h-24"
                     placeholder="Provide details about the claim..."
                     value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Supporting Documents</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Supporting Documents
+                  </label>
                   <div className="border border-dashed border-gray-300 rounded-md p-4 text-center">
                     <input
                       type="file"
@@ -479,7 +515,9 @@ export default function CattleVerification({
                       className="cursor-pointer flex flex-col items-center justify-center gap-2"
                     >
                       <Upload className="h-8 w-8 text-gray-400" />
-                      <span className="text-sm text-gray-500">Upload Supporting Documents</span>
+                      <span className="text-sm text-gray-500">
+                        Upload Supporting Documents
+                      </span>
                     </label>
 
                     {formData.claim_documents.length > 0 && (
@@ -491,7 +529,9 @@ export default function CattleVerification({
                           >
                             <div className="flex items-center space-x-2 truncate">
                               <File className="h-4 w-4 text-gray-400" />
-                              <span className="text-sm truncate">{doc.name}</span>
+                              <span className="text-sm truncate">
+                                {doc.name}
+                              </span>
                             </div>
                             <div className="flex items-center space-x-1">
                               <button
@@ -526,7 +566,7 @@ export default function CattleVerification({
                     Cancel
                   </Button>
                   <Button
-                    className="bg-green-700 hover:bg-green-800"
+                    className="bg-green-700 hover:bg-green-800 cursor-pointer"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                   >
@@ -539,21 +579,13 @@ export default function CattleVerification({
         </DialogContent>
       </Dialog>
 
-
-    
-
-
-    
-
-
       {isUploading && (
         <Dialog open={!!isUploading} onOpenChange={() => {}}>
           <DialogContent className="max-w-4xl">
-            <DialogHeader>
-            </DialogHeader>
-             <div className="max-h-[80vh] overflow-y-auto p-4">
-        <CowIdentificationLoader />
-      </div>
+            <DialogHeader></DialogHeader>
+            <div className="max-h-[80vh] overflow-y-auto p-4">
+              <CowIdentificationLoader />
+            </div>
           </DialogContent>
         </Dialog>
       )}
@@ -566,8 +598,12 @@ export default function CattleVerification({
               <DialogTitle>Document Preview</DialogTitle>
             </DialogHeader>
             <div className="mt-4">
-              {previewUrl.startsWith('data:image') ? (
-                <img src={previewUrl} alt="Preview" className="max-w-full h-auto" />
+              {previewUrl.startsWith("data:image") ? (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="max-w-full h-auto"
+                />
               ) : (
                 <iframe src={previewUrl} className="w-full h-[600px]" />
               )}
@@ -576,22 +612,20 @@ export default function CattleVerification({
         </Dialog>
       )}
 
-
       {claimerror && (
         <Dialog open={!!claimerror} onOpenChange={() => setClaimError(null)}>
           <DialogContent className="max-w-4xl">
             <DialogHeader>
-              <DialogTitle className="text-center">Submission Failed</DialogTitle>
+              <DialogTitle className="text-center">
+                Submission Failed
+              </DialogTitle>
             </DialogHeader>
             <div className="flex flex-col items-center justify-center gap-2">
-              <p className="text-center text-red-500">  {claimerror}</p>
+              <p className="text-center text-red-500"> {claimerror}</p>
             </div>
           </DialogContent>
         </Dialog>
       )}
-
-
-
     </>
   );
-} 
+}
