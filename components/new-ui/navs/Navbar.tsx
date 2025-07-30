@@ -13,9 +13,9 @@ const Navbar: React.FC = () => {
               size={25}
               className="cursor-pointer group-hover:rotate-12 transition-transform duration-200"
             />
-            <span className="absolute top-2 right-2 bg-[#FF9500] text-white rounded-full w-5 h-5 flex items-center justify-center font-bold text-sm">
+            {/* <span className="absolute top-2 right-2 bg-[#FF9500] text-white rounded-full w-5 h-5 flex items-center justify-center font-bold text-sm">
               2
-            </span>
+            </span> */}
           </div>
 
           {/* Dropdown */}

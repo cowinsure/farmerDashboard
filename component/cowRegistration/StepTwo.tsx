@@ -312,7 +312,7 @@ export default function StepTwo() {
   }, [data]);
 
   return (
-    <div className="lg:w-[80%] mx-auto mt-8">
+    <div className="w-full lg:w-[80%] mx-auto mt-8 ">
       <SectionHeading
         marginBottom="8"
         sectionTitle="Cattle Details"

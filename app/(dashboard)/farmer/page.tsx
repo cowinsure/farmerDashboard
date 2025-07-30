@@ -175,14 +175,17 @@ const FarmerPage: React.FC = () => {
 
     try {
       setIsUploading(true);
-      const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/claim", {
-        method: "POST",
-        body: formData,
-        headers: {
-          // "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      const response = await fetch(
+        "https://rd1wmswr9eqhqh-8000.proxy.runpod.net/claim",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
       // 3.110.218.87:8000
 
       // console.log(await response.json());
@@ -241,7 +244,7 @@ const FarmerPage: React.FC = () => {
     setSelectedCow(cow);
     setIsCowDetails(true);
   };
-
+  console.log(assetList);
   console.log(userId, "userId from context");
   return (
     <div className="p-2 md:px-6">
@@ -368,7 +371,6 @@ const FarmerPage: React.FC = () => {
       <BasicTable
         data={assetList}
         onView={handleViewDetails}
-        maxHeight="500px"
         columns={[
           {
             key: "left_side_image",
@@ -386,7 +388,7 @@ const FarmerPage: React.FC = () => {
             ),
             className: "w-28 *:w-[80%] *:mx-auto *:drop-shadow-xs",
           },
-          { key: "reference_id", header: "Cow ID",className: "w-48", },
+          { key: "reference_id", header: "Cow ID", className: "w-48" },
           { key: "breed", header: "Breed" },
           { key: "color", header: "Color" },
           { key: "age_in_months", header: "Age" },
