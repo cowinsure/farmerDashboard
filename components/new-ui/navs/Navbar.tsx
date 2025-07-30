@@ -8,15 +8,15 @@ const Navbar: React.FC = () => {
       <div className="h-full flex items-center justify-end px-2">
         <div className="relative group z-50">
           {/* Bell Icon */}
-          <div className="p-4 relative flex items-center text-[var(--base-color)] cursor-pointer">
+          {/* <div className="p-4 relative flex items-center text-[var(--base-color)] cursor-pointer">
             <FaBell
               size={25}
               className="cursor-pointer group-hover:rotate-12 transition-transform duration-200"
-            />
+            /> */}
             {/* <span className="absolute top-2 right-2 bg-[#FF9500] text-white rounded-full w-5 h-5 flex items-center justify-center font-bold text-sm">
               2
             </span> */}
-          </div>
+          {/* </div> */}
 
           {/* Dropdown */}
           <div
