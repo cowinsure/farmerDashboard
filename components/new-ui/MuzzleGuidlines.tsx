@@ -17,7 +17,7 @@ const MuzzleGuidlines = ({ close }: GuidlineProps) => {
       icon: MdOutlineAccessTime,
       title: "Keep it short",
       description:
-        "Record a 3-second video. Make sure the video is short and clear.",
+        "Record a 15-second video. Make sure the video is short and clear.",
     },
     {
       icon: MdPhoneIphone,
