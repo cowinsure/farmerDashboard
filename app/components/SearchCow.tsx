@@ -1,43 +1,45 @@
 "use client";
+import CattleDetailsModal from "@/components/new-ui/ui/CattleDetailsModal";
+import { on } from "events";
 import React, { useState, useEffect } from "react";
 interface Cow {
-  id: number;
-  reference_id: string;
-  owner_name: string;
-  breed_name: string;
-  color_name: string;
-  age_in_months: number;
-  weight_kg: number;
-  height: number;
-  vaccination_status_name: string;
-  last_vaccination_date: string;
-  deworming_status_name: string;
-  last_deworming_date: string;
-  health_issues: string;
-  pregnancy_status: string;
-  last_date_of_calving: string | null;
-  purchase_date: string;
-  purchase_from: string;
-  purchase_amount: number;
+    id: number;
+  owner: string;
+  asset_type: string;
+  breed: string;
+  color?: string;
+  reference_id?: string;
+  age_in_months?: number;
+  weight_kg?: string;
+  height?: string;
+  vaccination_status?: string;
+  last_vaccination_date?: string;
+  deworming_status?: string;
+  last_deworming_date?: string;
+  health_status?: string;
   gender: string;
-  remarks: string;
-  created_at: string;
-  updated_at: string;
-  is_active: boolean;
-  muzzle_video: string;
-  left_side_image: string;
-  right_side_image: string;
-  challan_paper: string;
-  vet_certificate: string;
-  chairman_certificate: string;
-  image_with_owner: string;
+  muzzle_video?: string;
+  left_side_image?: string;
+  right_side_image?: string;
+  challan_paper?: string;
+  vet_certificate?: string;
+  chairman_certificate?: string;
+  special_mark?: string;
+  image_with_owner?: string;
+  purchase_date?: string;
+  purchase_from?: string;
+  purchase_amount?: string;
 }
 
 interface SearchCowProps {
   reference_id: string;
+   isOpen: boolean;
+  onClose: () => void;
 }
 
-const CowDetails = ({ reference_id }: SearchCowProps) => {
+const CowDetails = ({ reference_id,isOpen, onClose, }: SearchCowProps) => {
+
+    const [isCowDetails, setIsCowDetails] = useState(true);
   // State to store the cowdata data
   const [cowData, setCowData] = useState<Cow>();
   // State to store any error that might occur
@@ -67,6 +69,8 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
         }
 
         const data = await response.json();
+        console.log(data);
+        
         setCowData(data);
       } catch (error) {
         // setError(error.message);
@@ -87,137 +91,13 @@ const CowDetails = ({ reference_id }: SearchCowProps) => {
 
   // Render the cowdata data here
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Cow Details</h1>
-      <ul className="overflow-y-auto max-h-96 border border-gray-300 rounded-lg p-4">
-        <li
-          key={cowData.id}
-          className="border-b border-gray-300 pb-4 mb-4 last:border-b-0"
-        >
-          <h2 className="text-xl font-semibold mb-2">{cowData.reference_id}</h2>
-          <p className="mb-1">Owner Name: {cowData.owner_name}</p>
-          <p className="mb-1">Breed Name: {cowData.breed_name}</p>
-          <p className="mb-1">Color Name: {cowData.color_name}</p>
-          <p className="mb-1">Age in Months: {cowData.age_in_months}</p>
-          <p className="mb-1">Weight (kg): {cowData.weight_kg}</p>
-          <p className="mb-1">Height: {cowData.height}</p>
-          <p className="mb-1">
-            Vaccination Status: {cowData.vaccination_status_name}
-          </p>
-          <p className="mb-1">
-            Last Vaccination Date: {cowData.last_vaccination_date}
-          </p>
-          <p className="mb-1">
-            Deworming Status: {cowData.deworming_status_name}
-          </p>
-          <p className="mb-1">
-            Last Deworming Date: {cowData.last_deworming_date}
-          </p>
-          <p className="mb-1">Health Issues: {cowData.health_issues}</p>
-          <p className="mb-1">Pregnancy Status: {cowData.pregnancy_status}</p>
-          <p className="mb-1">
-            Last Date of Calving:{" "}
-            {cowData.last_date_of_calving !== null
-              ? cowData.last_date_of_calving
-              : "N/A"}
-          </p>
-          <p className="mb-1">Purchase Date: {cowData.purchase_date}</p>
-          <p className="mb-1">Purchase From: {cowData.purchase_from}</p>
-          <p className="mb-1">Purchase Amount: {cowData.purchase_amount}</p>
-          <p className="mb-1">Gender: {cowData.gender}</p>
-          <p className="mb-1">Remarks: {cowData.remarks}</p>
-          <p className="mb-1">Created At: {cowData.created_at}</p>
-          <p className="mb-1">Updated At: {cowData.updated_at}</p>
-          <p className="mb-1">Is Active: {cowData.is_active ? "Yes" : "No"}</p>
-          <p className="mb-1">
-            Muzzle Video:{" "}
-            <a
-              href={cowData.muzzle_video}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View Video
-            </a>
-          </p>
-
-          <p className="text-md w-full text-center font-bold my-5">
-            {" "}
-            Attachments below
-          </p>
-          <p className="mb-1">
-            Challan Paper:{" "}
-            <a
-              href={cowData.challan_paper}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View Paper
-            </a>
-          </p>
-          <p className="mb-1">
-            Vet Certificate:{" "}
-            <a
-              href={cowData.vet_certificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View Certificate
-            </a>
-          </p>
-          <p className="mb-1">
-            Chairman Certificate:{" "}
-            <a
-              href={cowData.chairman_certificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View Certificate
-            </a>
-          </p>
-
-          <p className="mb-1">
-            Left Side Image:
-            {/* <Image src={cowdata.left_side_image} alt="Left Side" className="w-50 h-auto" /> */}
-            {cowData?.left_side_image && (
-              <img
-                src={cowData.left_side_image}
-                alt="Segmentation Preview"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </p>
-          <p className="mb-1">
-            Right Side Image:
-            {/* <Image src={cowdata.right_side_image} alt="Right Side" className="w-50 h-auto" /> */}
-            {cowData?.right_side_image && (
-              <img
-                src={cowData.right_side_image}
-                alt="Segmentation Preview"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </p>
-
-          <p className="mb-1">
-            Image with Owner:
-            {/* <Image src={cowdata.image_with_owner} alt="With Owner" className="w-50 h-auto" /> */}
-            {cowData?.image_with_owner && (
-              <img
-                src={cowData.image_with_owner}
-                alt="Segmentation Preview"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </p>
-        </li>
-      </ul>
-      {/* {error && <p className="text-red-500 mt-4">Error: {error}</p>} */}
-    </div>
-  );
+  <CattleDetailsModal
+              cattle={cowData}
+              isOpen={isOpen}
+              onClose={() => {
+               onClose();
+              }}></CattleDetailsModal>)
+  
 };
 
 export default CowDetails;

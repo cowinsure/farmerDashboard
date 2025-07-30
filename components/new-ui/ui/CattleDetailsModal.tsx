@@ -192,14 +192,14 @@ export default function CattleDetailsModal({
                       header="Health Information"
                     />
                     <div className="grid sm:grid-cols-2 gap-8">
-                      <div className="sm:col-span-2">
+                      {/* <div className="sm:col-span-2">
                         <DetailsSection
                           icon={<IoMdInformationCircleOutline size={25} />}
                           label="Health Status"
                           value={cattle.health_status || "N/A"}
                           className="text-green-700 bg-green-200"
                         />
-                      </div>
+                      </div> */}
                       <DetailsSection
                         icon={<LuSyringe size={20} />}
                         label="Vaccination"

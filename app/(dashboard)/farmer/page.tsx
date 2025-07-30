@@ -447,7 +447,10 @@ const FarmerPage: React.FC = () => {
           setIsModalOpen(false);
         }}
       >
-        <SearchCow reference_id={formData.reference_id} />
+        <SearchCow reference_id={formData.reference_id} 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        />
       </ModalGeneral>
 
       <ModalGeneral

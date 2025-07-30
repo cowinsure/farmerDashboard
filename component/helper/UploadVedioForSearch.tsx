@@ -404,7 +404,7 @@ export default function UploadVedioForSearch({ onVideoCapture }: { onVideoCaptur
       {recordedVideo ? (
         <div className="mb-4">
           <div className="relative border rounded-md overflow-hidden">
-            <video src={recordedVideo} className="w-full h-auto" controls />
+            <video src={recordedVideo} className="w-[400px] h-[400px]" controls />
           </div>
 
           {/* Retry button */}
