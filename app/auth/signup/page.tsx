@@ -23,7 +23,6 @@ const SignupPage: React.FC = () => {
     setLoading(true);
     console.log(phone);
 
-    // Map account type to role_id
     const role_id = 1;
 
     const requestBody = {
@@ -48,22 +47,27 @@ const SignupPage: React.FC = () => {
         }
       );
 
-      const responseData = await response.json(); // Parse the response body once
+      const responseData = await response.json();
       console.log(responseData);
 
       if (response.ok) {
-        console.log("Signup successful");
-        router.push("/auth/otp"); // Navigate to OTP page
+        toast.success("OTP sent to your phone");
+
+        // Optional short delay to show toast before redirect
+        setTimeout(() => {
+          router.push("/auth/otp");
+        }, 1000);
       } else if (response.status === 404) {
         toast.error("Signup failed: The requested resource was not found.");
       } else {
         toast.error(
-          `Signup failed: ${responseData.data.message || "Unknown error"}`
-        ); // Use parsed response data
+          `Signup failed: ${responseData?.data?.message || "Unknown error"}`
+        );
         console.error("Signup failed");
       }
     } catch (error) {
       console.error("Error during signup:", error);
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -210,8 +214,6 @@ const SignupPage: React.FC = () => {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-800 hover:bg-green-700"
               }`}
-              data-aos="fade-in"
-              data-aos-delay="300"
             >
               {loading ? "Submitting..." : "Next"}
             </button>

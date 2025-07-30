@@ -201,7 +201,7 @@ export default function CattleManagementPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleViewDetails(row)}
-                className="text-green-700 hover:text-green-900 hover:bg-green-200 whitespace-nowrap"
+                className="text-green-700 hover:text-green-900 hover:bg-green-200 whitespace-nowrap cursor-pointer"
               >
                 <Eye size={16} className="mr-1" />
                 <span className="hidden md:block">View</span>

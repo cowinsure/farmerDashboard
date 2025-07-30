@@ -209,7 +209,7 @@ export function PaymentDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-green-700">
+        <Button className="bg-green-700 cursor-pointer">
           <Check /> <span className="hidden md:block">Buy</span>
         </Button>
       </DialogTrigger>
@@ -426,7 +426,7 @@ export function PaymentDialog({
             >
               Cancel
             </Button>
-            <Button className="bg-green-700" type="submit" disabled={isLoading}>
+            <Button className="bg-green-700 cursor-pointer" type="submit" disabled={isLoading}>
               {isLoading ? "Submitting..." : "Submit Payment"}
             </Button>
           </DialogFooter>

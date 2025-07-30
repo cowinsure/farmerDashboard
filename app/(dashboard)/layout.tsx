@@ -6,7 +6,7 @@ import Loader from "@/component/helper/Loader";
 import Sidebar from "@/components/new-ui/navs/SideBar";
 import MobileSidebar from "@/components/new-ui/navs/MobileSideBar";
 import Navbar from "@/components/new-ui/navs/Navbar";
-import LayeredWaves from "@/components/new-ui/ui/WaveAnimation";
+// import LayeredWaves from "@/components/new-ui/ui/WaveAnimation";
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -57,7 +57,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
             {children}
           </div>
         </div>
-        {pathname === "/home" && <LayeredWaves />}
+        {/* {pathname === "/home" && <LayeredWaves />} */}
       </div>
     </div>
   );

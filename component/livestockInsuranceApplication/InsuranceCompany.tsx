@@ -156,7 +156,7 @@ const InsuranceCompany: React.FC = () => {
     "https://d2jhcfgvzjqsa8.cloudfront.net/storage/2022/04/download.png";
 
   return (
-    <div className="flex flex-col gap-4 py-8 p-6">
+    <div className="flex flex-col gap-4 py-8 p-2 md:p-6">
       <h1 className="font-medium">Select Insurance Company</h1>
       {insuranceCompanies.map((company) => (
         <div key={company.id}>

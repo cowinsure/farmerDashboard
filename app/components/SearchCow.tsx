@@ -3,7 +3,7 @@ import CattleDetailsModal from "@/components/new-ui/ui/CattleDetailsModal";
 
 import React, { useState, useEffect } from "react";
 interface Cow {
-    id: number;
+  id: number;
   owner: string;
   asset_type: string;
   breed: string;
@@ -33,13 +33,11 @@ interface Cow {
 
 interface SearchCowProps {
   reference_id: string;
-   isOpen: boolean;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const CowDetails = ({ reference_id,isOpen, onClose, }: SearchCowProps) => {
-
-
+const CowDetails = ({ reference_id, isOpen, onClose }: SearchCowProps) => {
   // State to store the cowdata data
   const [cowData, setCowData] = useState<Cow>();
   // State to store any error that might occur
@@ -70,7 +68,7 @@ const CowDetails = ({ reference_id,isOpen, onClose, }: SearchCowProps) => {
 
         const data = await response.json();
         console.log(data);
-        
+
         setCowData(data);
       } catch (error) {
         // setError(error.message);
@@ -91,13 +89,14 @@ const CowDetails = ({ reference_id,isOpen, onClose, }: SearchCowProps) => {
 
   // Render the cowdata data here
   return (
-  <CattleDetailsModal
-              cattle={cowData}
-              isOpen={isOpen}
-              onClose={() => {
-               onClose();
-              }}></CattleDetailsModal>)
-  
+    <CattleDetailsModal
+      cattle={cowData}
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+      }}
+    ></CattleDetailsModal>
+  );
 };
 
 export default CowDetails;

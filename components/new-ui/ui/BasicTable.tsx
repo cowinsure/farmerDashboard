@@ -239,7 +239,7 @@ export function BasicTable<T extends { id: string | number }>({
                     onView && (
                       <button
                         onClick={() => onView(row)}
-                        className="p-2 bg-green-100 rounded-full hover:bg-muted transition-colors"
+                        className="p-2 bg-green-100 rounded-full hover:bg-muted transition-colors cursor-pointer"
                         aria-label="View details"
                       >
                         <Eye className="text-green-600" size={18} />

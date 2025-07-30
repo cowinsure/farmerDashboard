@@ -9,7 +9,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineCalendarToday } from "react-icons/md";
 
 interface FormData {
-  hasDisease: boolean;
+  hasDisease: string | boolean;
   isPregnant: boolean;
   asset_type: string;
   gender: string;
@@ -643,7 +643,7 @@ export default function StepTwo() {
               </div>
             </div>
 
-            {/*  Diseases */}
+            {/* Diseases */}
             <div className="relative w-full flex flex-col">
               <label
                 htmlFor="gender"
@@ -671,8 +671,9 @@ export default function StepTwo() {
               </div>
             </div>
 
-            {formData.hasDisease && (
-              <div className="">
+            {/* Conditionally render the disease name input */}
+            {formData.hasDisease === "true" && (
+              <div>
                 <InputField
                   label="Disease Name"
                   id="diseases_name"
