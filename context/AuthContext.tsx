@@ -38,12 +38,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedPhoneNumber = localStorage.getItem("phoneNumber");
     const storedAccessToken = localStorage.getItem("accessToken");
 
-    console.log(
-      storedUserId,
-      storedPhoneNumber,
-      storedAccessToken,
-      "stored data"
-    );
+    // console.log(
+    //   storedUserId,
+    //   storedPhoneNumber,
+    //   storedAccessToken,
+    //   "stored data"
+    // );
 
     if (storedUserId && storedPhoneNumber && storedAccessToken) {
       setUserId(storedUserId);

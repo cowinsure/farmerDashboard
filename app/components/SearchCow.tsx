@@ -1,6 +1,6 @@
 "use client";
 import CattleDetailsModal from "@/components/new-ui/ui/CattleDetailsModal";
-import { on } from "events";
+
 import React, { useState, useEffect } from "react";
 interface Cow {
     id: number;
@@ -39,7 +39,7 @@ interface SearchCowProps {
 
 const CowDetails = ({ reference_id,isOpen, onClose, }: SearchCowProps) => {
 
-    const [isCowDetails, setIsCowDetails] = useState(true);
+
   // State to store the cowdata data
   const [cowData, setCowData] = useState<Cow>();
   // State to store any error that might occur
