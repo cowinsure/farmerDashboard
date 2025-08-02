@@ -392,10 +392,10 @@ const CowCardData = ({ icon, label, value }: DetailsProps) => {
         </span>
       )}
       <div className="flex justify-between items-center w-full px-1">
-        <label className="text-sm font-medium text-gray-500">{label}</label>
+        <label className="text-sm font-medium text-gray-500">{label ? label : "-"}</label>
         <span className="font-semibold text-gray-700">
           <span className="px-3 py-1 border border-gray-200 rounded-full">
-            {value}
+            {value ? value : "N/A"}
           </span>
         </span>
       </div>
