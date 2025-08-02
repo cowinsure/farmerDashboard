@@ -158,7 +158,7 @@ export default function StepForm() {
       <div className=" bg-white rounded-xl flex flex-col justify-center">
         {/* Step bar container */}
         <Stepper
-          steps={["Cattle Info", "Attachments", "Owner Info"]}
+          steps={["Cattle Info","Owner Info" ,"Attachments"]}
           currentStep={currentStep}
           completedSteps={completedSteps}
         />
