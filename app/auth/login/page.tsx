@@ -11,13 +11,13 @@ import { toast } from "sonner"; // ✅ Import toast from sonner
 import AOS from "aos"; // ✅
 import "aos/dist/aos.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import useApi from "@/hook/use_api";
+
 
 const Login: React.FC = () => {
   const router = useRouter();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const { get, post, loading, error } = useApi();
+  // const { get, post, loading, error } = useApi();
 
   useEffect(() => {
     AOS.init({
@@ -46,46 +46,15 @@ const Login: React.FC = () => {
     }
 
     // Use the post method from useApi hook
-    try {
-      const response = await post("/auth/public/login/", {
-        mobile_number: phoneInput,
-        password: passwordInput,
-      });
-      console.log("Login response:", response);
-      
-      const data = await response.data;
-      const { role: userId, access_token: accessToken } = data;
-
-      login(userId, phoneInput, accessToken);
-      toast.success("Login successful!"); // ✅ sonner success
-      router.push("/profile");
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Login failed. Please check your credentials and try again."); // ✅
-      return;
-    }
-
     // try {
-    //   const response = await fetch(
-    //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/login/`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         mobile_number: phoneInput,
-    //         password: passwordInput,
-    //       }),
-    //     }
-    //   );
-
-    //   if (!response.ok) {
-    //     throw new Error("Login failed");
-    //   }
-
-    //   const data = await response.json();
-    //   const { role: userId, access_token: accessToken } = data.data;
+    //   const response = await post("/auth/public/login/", {
+    //     mobile_number: phoneInput,
+    //     password: passwordInput,
+    //   });
+    //   console.log("Login response:", response);
+      
+    //   const data = await response.data;
+    //   const { role: userId, access_token: accessToken } = data;
 
     //   login(userId, phoneInput, accessToken);
     //   toast.success("Login successful!"); // ✅ sonner success
@@ -93,7 +62,38 @@ const Login: React.FC = () => {
     // } catch (error) {
     //   console.error("Login failed:", error);
     //   toast.error("Login failed. Please check your credentials and try again."); // ✅
+    //   return;
     // }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/public/login/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mobile_number: phoneInput,
+            password: passwordInput,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      const { role: userId, access_token: accessToken } = data.data;
+
+      login(userId, phoneInput, accessToken);
+      toast.success("Login successful!"); // ✅ sonner success
+      router.push("/profile");
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Login failed. Please check your credentials and try again."); // ✅
+    }
   };
 
   return (
