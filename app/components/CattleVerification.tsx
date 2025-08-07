@@ -124,7 +124,7 @@ export default function CattleVerification({
     try {
       setIsUploading(true);
       const response = await fetch(
-        "https://dgckxjmt32u888-8000.proxy.runpod.net/claim",
+        "https://gtbmh1115k5v44-8000.proxy.runpod.net/claim",
         {
           method: "POST",
           body: formData,
