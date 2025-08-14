@@ -73,7 +73,7 @@ export default function StepOne() {
     try {
       setIsUploading(true);
       // const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/register", {
-      const response = await fetch("https://gtbmh1115k5v44-8000.proxy.runpod.net/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`, {
         method: "POST",
         body: formData,
         headers: {
