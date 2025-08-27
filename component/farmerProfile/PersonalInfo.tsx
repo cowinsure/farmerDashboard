@@ -13,6 +13,7 @@ import { MdOutlineCalendarToday } from "react-icons/md";
 import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
+import { AIChatWidget } from "../ui/ai-chat-widget";
 
 const PersonalInfo: React.FC = () => {
   // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -577,6 +578,8 @@ const PersonalInfo: React.FC = () => {
           </div>
         </div>
       </ModalGeneral>
+
+      <AIChatWidget/>
     </div>
   );
 };
