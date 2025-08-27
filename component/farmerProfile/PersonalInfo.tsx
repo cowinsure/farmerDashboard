@@ -579,7 +579,14 @@ const PersonalInfo: React.FC = () => {
         </div>
       </ModalGeneral>
 
-      <AIChatWidget/>
+      <AIChatWidget onFormStateChange={(state)=>{
+        console.log("Form state changed:", state);
+        // Update formData with the new state from AI chat widget
+        setFormData(prevData => ({
+          ...prevData,
+          ...state
+        }));
+      }}/>
     </div>
   );
 };

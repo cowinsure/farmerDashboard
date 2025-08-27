@@ -70,7 +70,11 @@ interface ApiResponse {
   conversation_done: boolean;
 }
 
-export function AIChatWidget() {
+interface AIChatWidgetProps {
+  onFormStateChange?: (formState: FormState) => void;
+}
+
+export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -87,6 +91,8 @@ export function AIChatWidget() {
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const recognitionRef = useRef<SpeechRecognition | null>(null)
+  // const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
@@ -120,6 +126,13 @@ export function AIChatWidget() {
     }
   }, [])
 
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [messages])
+
   const toggleVoiceInput = () => {
     if (!recognitionRef.current) return
 
@@ -134,11 +147,17 @@ export function AIChatWidget() {
 
   // Define the form schema
   const formSchema: FormSchema = {
-    user: "The full name of the user.",
-    date_of_birth: "The desired check-in date in YYYY-MM-DD format.",
-    address: "address.",
-    phone_number: "valid phone number preferbly with country extension.",
-    customer_type: "Types of customer (vip, normal)."
+    first_name: "First name of the farmer",
+    last_name: "Last name of the farmer",
+    nid: "National ID number of the farmer",
+    date_of_birth: "Date of birth in YYYY-MM-DD format",
+    gender: "Gender of the farmer (Male/Female/Other)",
+    tin: "Tax Identification Number of the farmer",
+    thana: "Thana (Police Station) of the farmer's address",
+    upazila: "Upazila (Sub-district) of the farmer's address",
+    zilla: "Zilla (District) of the farmer's address",
+    union: "Union (Local administrative unit) of the farmer's address",
+    village: "Village name of the farmer's address"
   };
 
   const handleSendMessage = async () => {
@@ -185,6 +204,9 @@ export function AIChatWidget() {
       
       // Update state with API response
       setFormState(data.form_state);
+      if (onFormStateChange) {
+        onFormStateChange(data.form_state);
+      }
       setConversationHistory(data.conversation_history);
       
       // Add AI response to chat
@@ -251,6 +273,7 @@ export function AIChatWidget() {
                   </div>
                 ))}
               </div>
+              <div ref={messagesEndRef} />
             </ScrollArea>
             <div className="p-4 border-t">
               <div className="flex gap-2">
