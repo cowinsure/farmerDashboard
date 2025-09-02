@@ -460,7 +460,6 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
     gender: "Gender of the farmer (Male/Female/Other)",
     tin: "Tax Identification Number of the farmer",
     thana: "Thana (Police Station) of the farmer's address",
-    upazila: "Upazila (Sub-district) of the farmer's address",
     zilla: "Zilla (District) of the farmer's address",
     union: "Union (Local administrative unit) of the farmer's address",
     village: "Village name of the farmer's address"
