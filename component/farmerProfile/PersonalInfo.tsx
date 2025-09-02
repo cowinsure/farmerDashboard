@@ -14,6 +14,7 @@ import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { AIChatWidget } from "../ui/ai-chat-widget";
+import { AIInterface } from "../ui/ai-interface";
 
 const PersonalInfo: React.FC = () => {
   // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -587,6 +588,8 @@ const PersonalInfo: React.FC = () => {
           ...state
         }));
       }}/>
+
+      {/* <AIInterface onClose={()=>{}} /> */}
     </div>
   );
 };
