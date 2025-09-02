@@ -1,6 +1,12 @@
 "use client";
+
 import { useInsuranceApplication } from "@/context/InsuranceApplicationContext";
-import { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
 
@@ -34,7 +40,7 @@ interface InsuranceCompanyData {
   insurance_categories: InsuranceCategory[];
 }
 
-const InsuranceCompany: React.FC = () => {
+const InsuranceCompany = forwardRef((props, ref) => {
   const { updateInsuranceApplication } = useInsuranceApplication();
 
   const [insuranceCompanies, setInsuranceCompanies] = useState<
@@ -45,6 +51,9 @@ const InsuranceCompany: React.FC = () => {
     number | null
   >(null);
   const [selectedPeriod, setSelectedPeriod] = useState<number | null>(null);
+
+  const [companyError, setCompanyError] = useState(false);
+  const [insuranceTypeError, setInsuranceTypeError] = useState(false);
 
   useEffect(() => {
     const fetchInsuranceCompanies = async () => {
@@ -69,7 +78,6 @@ const InsuranceCompany: React.FC = () => {
         const result = await response.json();
 
         if (response.ok) {
-          console.log("Insurance companies fetched successfully:", result.data);
           setInsuranceCompanies(result.data);
         } else {
           console.error("Failed to fetch insurance companies:", result);
@@ -82,6 +90,23 @@ const InsuranceCompany: React.FC = () => {
     fetchInsuranceCompanies();
   }, []);
 
+  // ✅ Expose validation method
+  useImperativeHandle(ref, () => ({
+    validateFields: () => {
+      let isValid = true;
+
+      if (!selectedCompany) {
+        setCompanyError(true);
+        isValid = false;
+      } else if (!selectedInsuranceType) {
+        setInsuranceTypeError(true);
+        isValid = false;
+      }
+
+      return isValid;
+    },
+  }));
+
   const handleCompanySelection = (companyId: number) => {
     const selectedCompanyData = insuranceCompanies.find(
       (company) => company.id === companyId
@@ -89,21 +114,17 @@ const InsuranceCompany: React.FC = () => {
     setSelectedCompany(companyId);
     setSelectedInsuranceType(null);
     setSelectedPeriod(null);
-    console.log(selectedCompanyData);
+
+    setCompanyError(false);
+    setInsuranceTypeError(false);
 
     if (
       selectedCompanyData &&
       selectedCompanyData.insurance_categories.length > 0
     ) {
-      const category = selectedCompanyData.insurance_categories[0];
-      const premium =
-        selectedCompanyData.insurance_categories[0].insurance_types[0]
-          .periods[0].id; // Get the first category
       updateInsuranceApplication({
         insurance_provider: companyId.toString(),
         insuranc_company: selectedCompanyData.name,
-        // insurance_product:premium.toString()
-        // Add category ID to context
       });
     }
   };
@@ -121,6 +142,7 @@ const InsuranceCompany: React.FC = () => {
 
     setSelectedInsuranceType(typeId);
     setSelectedPeriod(null);
+    setInsuranceTypeError(false);
 
     if (selectedType) {
       updateInsuranceApplication({
@@ -142,7 +164,6 @@ const InsuranceCompany: React.FC = () => {
     const selectedPremium = selectedPeriodData?.premiums[0];
 
     setSelectedPeriod(periodId);
-    console.log(periodId);
 
     if (selectedPeriodData) {
       updateInsuranceApplication({
@@ -158,9 +179,14 @@ const InsuranceCompany: React.FC = () => {
   return (
     <div className="flex flex-col gap-4 py-8 p-2 md:p-6">
       <h1 className="font-medium">Select Insurance Company</h1>
+      {companyError && (
+        <p className="text-red-600 font-semibold">
+          Please select an insurance company
+        </p>
+      )}
+
       {insuranceCompanies.map((company) => (
         <div key={company.id}>
-          {/* Hidden checkbox for peer */}
           <input
             type="checkbox"
             id={`checkbox-${company.id}`}
@@ -169,17 +195,19 @@ const InsuranceCompany: React.FC = () => {
             onChange={() => handleCompanySelection(company.id)}
           />
           <label
-            key={company.id}
             htmlFor={`checkbox-${company.id}`}
-            className={`
-      border hover:border-green-600 custom-hover p-4 rounded-xl hover:shadow-md peer-checked:shadow-md cursor-pointer transition-all
-      peer-checked:border-green-600 peer-checked:bg-[#EDF1EF]
-      bg-[#fefffe] border-gray-300 block
-    `}
+            className={`border p-4 rounded-xl transition-all cursor-pointer block
+              ${
+                selectedCompany === company.id
+                  ? "border-green-600 bg-[#EDF1EF] shadow-md"
+                  : "border-gray-300 hover:border-green-600 hover:shadow-md"
+              }
+              ${companyError ? "!border-red-600 border-2" : ""}
+            `}
           >
             <div className="flex justify-between items-center">
-              <div className="flex flex-row gap-5 justify-center items-center">
-                {/*eslint-disable-next-line @next/next/no-img-element*/}
+              <div className="flex flex-row gap-5 items-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={company.logo || fallbackUrl}
                   alt={company.name}
@@ -187,7 +215,7 @@ const InsuranceCompany: React.FC = () => {
                   height={48}
                   className="w-12 h-12 object-cover border rounded-full"
                   onError={(e) => {
-                    e.currentTarget.onerror = null; // Prevent infinite loop
+                    e.currentTarget.onerror = null;
                     e.currentTarget.src = fallbackUrl;
                   }}
                 />
@@ -195,8 +223,6 @@ const InsuranceCompany: React.FC = () => {
                   {company.name}
                 </span>
               </div>
-
-              {/* You can optionally hide this checkbox since clicking label selects it */}
               <div className="w-5 h-5 flex justify-center items-center">
                 {selectedCompany === company.id && (
                   <FaCircleCheck className="text-green-600" />
@@ -204,14 +230,14 @@ const InsuranceCompany: React.FC = () => {
               </div>
             </div>
 
+            {/* Expandable Section */}
             <div
               className={`transition-all duration-500 overflow-hidden 
-    ${
-      selectedCompany === company.id
-        ? "max-h-[500px] opacity-100 mt-4"
-        : "max-h-0 opacity-0"
-    }
-  `}
+                ${
+                  selectedCompany === company.id
+                    ? "max-h-[500px] opacity-100 mt-4"
+                    : "max-h-0 opacity-0"
+                }`}
             >
               {company.insurance_categories[0] && (
                 <>
@@ -221,13 +247,18 @@ const InsuranceCompany: React.FC = () => {
                       Insurance Types:
                     </strong>
                     <select
-                      className="appearance-none w-full border border-gray-300 bg-white rounded-md p-2 pr-10 text-gray-600 text-sm cursor-pointer"
+                      className={`appearance-none w-full border rounded-md p-2 pr-10 text-sm cursor-pointer 
+                        ${
+                          insuranceTypeError
+                            ? "border-red-600 text-red-600"
+                            : "border-gray-300 text-gray-600"
+                        }`}
                       value={selectedInsuranceType || ""}
                       onChange={(e) =>
                         handleInsuranceTypeSelection(Number(e.target.value))
                       }
                     >
-                      <option value="" disabled className="text-sm">
+                      <option value="" disabled>
                         Select Insurance Type
                       </option>
                       {company.insurance_categories[0].insurance_types.map(
@@ -239,18 +270,21 @@ const InsuranceCompany: React.FC = () => {
                       )}
                     </select>
 
-                    {/* Custom dropdown icon */}
                     <div className="pointer-events-none absolute inset-y-0 top-7 right-2 flex items-center text-gray-400">
                       <IoMdArrowDropdown />
                     </div>
+
+                    {insuranceTypeError && (
+                      <p className="text-red-600 font-semibold mt-1">
+                        Please select an insurance type
+                      </p>
+                    )}
                   </div>
 
                   {/* Periods */}
                   {selectedInsuranceType && (
                     <div className="mt-4 relative">
                       <strong className="block text-gray-700">Periods:</strong>
-
-                      {/* Custom styled select */}
                       <select
                         className="appearance-none w-full border border-gray-300 bg-white rounded-md p-2 pr-10 text-gray-600 cursor-pointer text-sm"
                         value={selectedPeriod || ""}
@@ -258,7 +292,7 @@ const InsuranceCompany: React.FC = () => {
                           handlePeriodSelection(Number(e.target.value))
                         }
                       >
-                        <option value="" disabled className="text-sm">
+                        <option value="" disabled>
                           Select Period
                         </option>
                         {company.insurance_categories[0].insurance_types
@@ -269,8 +303,6 @@ const InsuranceCompany: React.FC = () => {
                             </option>
                           ))}
                       </select>
-
-                      {/* Custom arrow icon */}
                       <div className="pointer-events-none absolute inset-y-0 top-6 right-2 flex items-center text-gray-400">
                         <IoMdArrowDropdown />
                       </div>
@@ -284,6 +316,7 @@ const InsuranceCompany: React.FC = () => {
       ))}
     </div>
   );
-};
+});
 
+InsuranceCompany.displayName = "InsuranceCompany";
 export default InsuranceCompany;
