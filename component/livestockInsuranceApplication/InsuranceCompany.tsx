@@ -54,6 +54,7 @@ const InsuranceCompany = forwardRef((props, ref) => {
 
   const [companyError, setCompanyError] = useState(false);
   const [insuranceTypeError, setInsuranceTypeError] = useState(false);
+  const [insurancePeriod, setInsurancePeriod] = useState(false);
 
   useEffect(() => {
     const fetchInsuranceCompanies = async () => {
@@ -100,6 +101,9 @@ const InsuranceCompany = forwardRef((props, ref) => {
         isValid = false;
       } else if (!selectedInsuranceType) {
         setInsuranceTypeError(true);
+        isValid = false;
+      } else if (!selectedPeriod) {
+        setInsurancePeriod(true);
         isValid = false;
       }
 
@@ -164,6 +168,7 @@ const InsuranceCompany = forwardRef((props, ref) => {
     const selectedPremium = selectedPeriodData?.premiums[0];
 
     setSelectedPeriod(periodId);
+    setInsurancePeriod(false);
 
     if (selectedPeriodData) {
       updateInsuranceApplication({
@@ -273,20 +278,24 @@ const InsuranceCompany = forwardRef((props, ref) => {
                     <div className="pointer-events-none absolute inset-y-0 top-7 right-2 flex items-center text-gray-400">
                       <IoMdArrowDropdown />
                     </div>
-
-                    {insuranceTypeError && (
-                      <p className="text-red-600 font-semibold mt-1">
-                        Please select an insurance type
-                      </p>
-                    )}
                   </div>
+                  {insuranceTypeError && (
+                    <p className="text-red-600 font-semibold mt-1">
+                      Please select an insurance type
+                    </p>
+                  )}
 
                   {/* Periods */}
                   {selectedInsuranceType && (
                     <div className="mt-4 relative">
                       <strong className="block text-gray-700">Periods:</strong>
                       <select
-                        className="appearance-none w-full border border-gray-300 bg-white rounded-md p-2 pr-10 text-gray-600 cursor-pointer text-sm"
+                        className={`appearance-none w-full border rounded-md p-2 pr-10 text-sm cursor-pointer 
+                        ${
+                          insurancePeriod
+                            ? "border-red-600 text-red-600"
+                            : "border-gray-300 text-gray-600"
+                        }`}
                         value={selectedPeriod || ""}
                         onChange={(e) =>
                           handlePeriodSelection(Number(e.target.value))
@@ -307,6 +316,11 @@ const InsuranceCompany = forwardRef((props, ref) => {
                         <IoMdArrowDropdown />
                       </div>
                     </div>
+                  )}
+                  {insurancePeriod && (
+                    <p className="text-red-600 font-semibold mt-1">
+                      Please select an insurance period
+                    </p>
                   )}
                 </>
               )}
