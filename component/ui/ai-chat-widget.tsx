@@ -166,9 +166,15 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
         },
         body: JSON.stringify({
           text: text,
-          voice: "nova",
+          voice: "alloy",
         }),
       });
+// alloy (default)
+// echo
+// fable
+// onyx
+// nova
+// shimme
 
       if (!response.ok || !response.body) {
         console.error("Failed to fetch audio");
@@ -418,7 +424,9 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
       const filename = `output.${extension}`;
       
       const formData = new FormData();
+      formData.append('language', "bn");
       formData.append('file', audioBlob, filename);
+      
 
       const response = await fetch('http://localhost:8000/api/v1/transcribe', {
         method: 'POST',
@@ -453,10 +461,10 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
 
   // Define the form schema
   const formSchema: FormSchema = {
-    first_name: "First name of the farmer",
-    last_name: "Last name of the farmer",
+    first_name: "First name of the farmer , first name convert to english and first name can have more then one word",
+    last_name: "Last name of the farmer,Last name convert to english and Last name can have more then one word",
     nid: "National ID number of the farmer",
-    date_of_birth: "Date of birth in YYYY-MM-DD format",
+    date_of_birth: "Date of birth in DD-MM-YYYY format",
     gender: "Gender of the farmer (Male/Female/Other)",
     tin: "Tax Identification Number of the farmer",
     thana: "Thana (Police Station) of the farmer's address",
