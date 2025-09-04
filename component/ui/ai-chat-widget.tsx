@@ -72,9 +72,10 @@ interface ApiResponse {
 
 interface AIChatWidgetProps {
   onFormStateChange?: (formState: FormState) => void;
+  formSchema: FormSchema;
 }
 
-export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
+export function AIChatWidget({ onFormStateChange, formSchema }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -459,19 +460,6 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
     }
   };
 
-  // Define the form schema
-  const formSchema: FormSchema = {
-    first_name: "First name of the farmer , first name convert to english and first name can have more then one word",
-    last_name: "Last name of the farmer,Last name convert to english and Last name can have more then one word",
-    nid: "National ID number of the farmer",
-    date_of_birth: "Date of birth in DD-MM-YYYY format",
-    gender: "Gender of the farmer (Male/Female/Other)",
-    tin: "Tax Identification Number of the farmer",
-    thana: "Thana (Police Station) of the farmer's address",
-    zilla: "Zilla (District) of the farmer's address",
-    union: "Union (Local administrative unit) of the farmer's address",
-    village: "Village name of the farmer's address"
-  };
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return
