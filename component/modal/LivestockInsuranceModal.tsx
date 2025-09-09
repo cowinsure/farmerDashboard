@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/Modal.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddCattleForm from "../livestockInsuranceApplication/AddCattleForm";
 import InsuranceCompany from "../livestockInsuranceApplication/InsuranceCompany";
 import Confirmation from "../livestockInsuranceApplication/Confirmation";
@@ -33,6 +34,9 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>("");
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const insuranceRef = useRef<any>(null);
+  const addCattleRef = useRef<any>(null);
+
   useEffect(() => {
     AOS.init({ duration: 600, once: true });
   }, []);
@@ -107,9 +111,9 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
-        return <InsuranceCompany />;
+        return <InsuranceCompany ref={insuranceRef} />;
       case 1:
-        return <AddCattleForm />;
+        return <AddCattleForm ref={addCattleRef} />;
 
       case 2:
         return <Confirmation />;
@@ -119,7 +123,18 @@ const LivestockInsuranceModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleNext = () => {
-    setCompletedSteps((prev) => new Set(prev).add(currentStep)); // Mark current step as completed
+    if (currentStep === 0 && insuranceRef.current) {
+      const isValid = insuranceRef.current.validateFields();
+      if (!isValid) return;
+    }
+
+    if (currentStep === 1 && addCattleRef.current) {
+      // assuming you have a ref for AddCattleForm too; you can create a new ref
+      const isValid = addCattleRef.current.validateFields();
+      if (!isValid) return;
+    }
+
+    setCompletedSteps((prev) => new Set(prev).add(currentStep));
     if (currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     }

@@ -29,12 +29,17 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   // Fetch nominee info on component mount
@@ -94,8 +99,34 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     fetchNomineeInfo();
   }, []);
 
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.nominee_name.trim())
+      newErrors.nominee_name = "Nominee name is required";
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    else if (!/^\+?\d{7,15}$/.test(formData.phone.trim()))
+      newErrors.phone = "Invalid phone number";
+
+    if (!formData.nid.trim()) newErrors.nid = "NID is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email.trim()))
+      newErrors.email = "Invalid email address";
+
+    if (!formData.relationship.trim())
+      newErrors.relationship = "Relationship is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please provide the informations correctly");
+      return;
+    }
     setIsLoading(true);
     console.log("Form Data:", formData);
     const authToken = localStorage.getItem("accessToken");
@@ -123,7 +154,9 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
         })
         .catch((error) => {
           console.error("Error submitting form:", error);
-          toast.error(`Something went wrong. Please try again.\nError: ${error}`);
+          toast.error(
+            `Something went wrong. Please try again.\nError: ${error}`
+          );
         });
     } finally {
       setIsLoading(false); // Hide loading spinner
@@ -148,7 +181,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             name="nominee_name"
             value={formData.nominee_name}
             onChange={handleChange}
-            required
+            error={errors.nominee_name}
           />
           <InputField
             placeholder="Enter phone no."
@@ -158,7 +191,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             type="tel"
             value={formData.phone}
             onChange={handleChange}
-            required
+            error={errors.phone}
           />
           <InputField
             placeholder="Enter NID number"
@@ -168,7 +201,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             type="text"
             value={formData.nid}
             onChange={handleChange}
-            required
+            error={errors.nid}
           />
           <InputField
             placeholder="Enter email"
@@ -178,7 +211,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            required
+            error={errors.email}
           />
           <div className="relative w-full flex flex-col">
             <label
@@ -193,28 +226,16 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
               name="relationship"
               value={formData.relationship}
               onChange={handleChange}
-              required
-              className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              className={`appearance-none w-full border rounded-md p-2 pr-10 font-semibold cursor-pointer
+    focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50
+    hover:bg-green-50 hover:border-green-300
+    ${errors.relationship ? "border-red-600" : "border-gray-300"}`}
             >
-              <option value="" disabled className="text-sm text-gray-400">
-                Select Relationship
-              </option>
-              <option value="male" className="text-sm text-gray-700">
-                Parent
-              </option>
-              <option value="female" className="text-sm text-gray-700">
-                Spouse
-              </option>
-              <option value="other" className="text-sm text-gray-700">
-                Child
-              </option>
-              <option value="other" className="text-sm text-gray-700">
-                Sibling
-              </option>
-              <option value="other" className="text-sm text-gray-700">
-                Other
-              </option>
+              {/* options */}
             </select>
+            {errors.relationship && (
+              <p className="text-red-600 text-sm mt-1">{errors.relationship}</p>
+            )}
 
             {/* Custom dropdown icon */}
             <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">

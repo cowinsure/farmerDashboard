@@ -35,6 +35,8 @@ const PersonalInfo: React.FC = () => {
   const [nidFrontUrl, setNidFrontUrl] = useState<string | null>(null);
   const [nidBackUrl, setNidBackUrl] = useState<string | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   // const [firstName, setFirstName] = useState<string>('');
   //   const [formData, setFormData] = useState({
   //     userType: localStorage.getItem("userId") || "",
@@ -134,15 +136,53 @@ const PersonalInfo: React.FC = () => {
 
   console.log(formData);
 
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.first_name.trim())
+      newErrors.first_name = "First name is required";
+    if (!formData.last_name.trim())
+      newErrors.last_name = "Last name is required";
+    if (!formData.nid.trim()) newErrors.nid = "NID number is required";
+    if (formData.nid.length !== 10) newErrors.nid = "NID must be 10 digits";
+    if (!formData.date_of_birth)
+      newErrors.date_of_birth = "Date of birth is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
+
+    if (!formData.thana.trim()) newErrors.thana = "Thana is required";
+    if (!formData.village.trim()) newErrors.village = "Village is required";
+    if (!formData.union.trim()) newErrors.union = "Union is required";
+    if (!formData.zilla.trim()) newErrors.zilla = "Zilla is required";
+
+    // Image validations
+    if (!profileImage && !profileImageUrl)
+      newErrors.profile_image = "Profile image is required";
+    if (!nidFront && !nidFrontUrl)
+      newErrors.nid_front = "NID front image is required";
+    if (!nidBack && !nidBackUrl)
+      newErrors.nid_back = "NID back image is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (newErrors[name]) {
+        delete newErrors[name];
+      }
+      return newErrors;
+    });
   };
 
   const handlePhotoCapture = (
@@ -178,6 +218,13 @@ const PersonalInfo: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const isValid = validateForm();
+    if (!isValid) {
+      toast.error("Please provide the informations correctly.");
+      return;
+    }
+
     setIsLoading(true); // Show loading spinner
     setSuccessMessage(null); // Reset success message
 
@@ -256,7 +303,7 @@ const PersonalInfo: React.FC = () => {
           data-aos-delay="400"
           className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8"
         >
-          {/* Profile Image Column */}
+          {/* Profile Image */}
           <div className="flex flex-col w-full">
             <label
               htmlFor="userType"
@@ -271,9 +318,13 @@ const PersonalInfo: React.FC = () => {
               triggerText="Capture profile Image"
               title="Capture profile Image"
             />
+            {errors.profile_image && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.profile_image}
+              </p>
+            )}
             {profileImage && (
               <div className="mt-2 text-center">
-                <h3 className="text-sm font-medium mb-1">Profile Image</h3>
                 <Image
                   src={URL.createObjectURL(profileImage)}
                   alt="Profile Image"
@@ -285,7 +336,6 @@ const PersonalInfo: React.FC = () => {
             )}
             {profileImageUrl && (
               <div className="mt-2 text-center flex items-center justify-center">
-                {/* <h3 className="text-sm font-medium mb-1">Profile Image</h3> */}
                 <Image
                   src={profileImageUrl}
                   alt="Profile Image"
@@ -297,8 +347,8 @@ const PersonalInfo: React.FC = () => {
             )}
           </div>
 
-          {/* User Type */}
-           <InputField
+          {/* Phone Number (Read-only) */}
+          <InputField
             placeholder=""
             label="Phone Number"
             id="userType"
@@ -306,27 +356,29 @@ const PersonalInfo: React.FC = () => {
             value={phoneNumber || ""}
             onChange={handleInputChange}
             disabled
-          /> 
+          />
 
           {/* First & Last Name */}
           <InputField
             placeholder="Enter first name"
+            type="text"
             label="First Name"
             id="first_name"
             name="first_name"
             value={formData.first_name}
             onChange={handleInputChange}
-            required
+            error={errors.first_name}
           />
 
           <InputField
             placeholder="Enter last name"
+            type="text"
             label="Last Name"
             id="last_name"
             name="last_name"
             value={formData.last_name}
             onChange={handleInputChange}
-            required
+            error={errors.last_name}
           />
 
           {/* Gender */}
@@ -337,14 +389,14 @@ const PersonalInfo: React.FC = () => {
             >
               Gender
             </label>
-
             <select
               id="gender"
               name="gender"
               value={formData.gender}
               onChange={handleInputChange}
-              required
-              className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+              className={`appearance-none w-full border bg-gray-50 rounded-md p-2 pr-10 font-semibold cursor-pointer
+          focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50
+          ${errors.gender ? "border-red-600" : "border-gray-300"}`}
             >
               <option value="" disabled className="text-sm text-gray-400">
                 Select gender
@@ -359,14 +411,15 @@ const PersonalInfo: React.FC = () => {
                 Other
               </option>
             </select>
-
-            {/* Custom dropdown icon */}
             <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
               <IoMdArrowDropdown className="text-xl" />
             </div>
+            {errors.gender && (
+              <p className="text-red-600 text-sm mt-1">{errors.gender}</p>
+            )}
           </div>
 
-          {/* Date of Birth  */}
+          {/* Date of Birth */}
           <div className="relative w-full">
             <InputField
               label="Date of Birth"
@@ -375,10 +428,8 @@ const PersonalInfo: React.FC = () => {
               type="date"
               value={formData.date_of_birth}
               onChange={handleInputChange}
-              required
+              error={errors.date_of_birth}
             />
-
-            {/* Custom calendar icon */}
             <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
               <MdOutlineCalendarToday className="text-lg" />
             </div>
@@ -396,9 +447,11 @@ const PersonalInfo: React.FC = () => {
               triggerText="Click to upload front image"
               title="Capture NID Front"
             />
+            {errors.nid_front && (
+              <p className="text-red-600 text-sm mt-1">{errors.nid_front}</p>
+            )}
             {(nidFront || nidFrontUrl) && (
               <div className="mt-2 text-center flex items-center justify-center">
-                {/* <h3 className="text-sm font-medium mb-1">NID Front</h3> */}
                 <Image
                   src={
                     nidFront ? URL.createObjectURL(nidFront) : nidFrontUrl || ""
@@ -419,14 +472,16 @@ const PersonalInfo: React.FC = () => {
             </label>
             <PhotoCaptureModal
               onPhotoCapture={(file) =>
-                handlePhotoCapture(file, "nidBackFile", setnidBack)
+                handlePhotoCapture(file, "nid_back", setnidBack)
               }
               triggerText="Click to upload back image"
               title="Capture NID Back"
             />
+            {errors.nid_back && (
+              <p className="text-red-600 text-sm mt-1">{errors.nid_back}</p>
+            )}
             {(nidBack || nidBackUrl) && (
               <div className="mt-2 text-center flex items-center justify-center">
-                {/* <h3 className="text-sm font-medium mb-1">NID Back</h3> */}
                 <Image
                   src={
                     nidBack ? URL.createObjectURL(nidBack) : nidBackUrl || ""
@@ -440,7 +495,7 @@ const PersonalInfo: React.FC = () => {
             )}
           </div>
 
-          {/* NID number */}
+          {/* NID Number */}
           <InputField
             placeholder="Enter NID number"
             label="NID (10 digit number)"
@@ -450,7 +505,7 @@ const PersonalInfo: React.FC = () => {
             maxLength={10}
             value={formData.nid}
             onChange={handleInputChange}
-            required
+            error={errors.nid}
           />
 
           {/* Address Fields */}
@@ -461,6 +516,7 @@ const PersonalInfo: React.FC = () => {
             name="tin"
             value={formData.tin}
             onChange={handleInputChange}
+            error={errors.tin}
           />
 
           <InputField
@@ -470,6 +526,7 @@ const PersonalInfo: React.FC = () => {
             name="thana"
             value={formData.thana}
             onChange={handleInputChange}
+            error={errors.thana}
           />
 
           <InputField
@@ -479,6 +536,7 @@ const PersonalInfo: React.FC = () => {
             name="village"
             value={formData.village}
             onChange={handleInputChange}
+            error={errors.village}
           />
 
           <InputField
@@ -488,6 +546,7 @@ const PersonalInfo: React.FC = () => {
             name="union"
             value={formData.union}
             onChange={handleInputChange}
+            error={errors.union}
           />
 
           <InputField
@@ -497,9 +556,11 @@ const PersonalInfo: React.FC = () => {
             name="zilla"
             value={formData.zilla}
             onChange={handleInputChange}
+            error={errors.zilla}
           />
         </div>
 
+        {/* Submit Button */}
         <div className="lg:col-span-2 mt-10 md:mt-8">
           <ActionButton btnText="Save Information" type="submit" />
         </div>

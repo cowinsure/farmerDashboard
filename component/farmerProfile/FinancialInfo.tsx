@@ -32,6 +32,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Fetch financial info on component mount
   useEffect(() => {
@@ -87,8 +88,29 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
     fetchFinancialInfo();
   }, []);
 
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!bank_name.trim()) newErrors.bank_name = "Bank name is required";
+    if (!branch_name.trim()) newErrors.branch_name = "Branch name is required";
+    if (!account_name.trim())
+      newErrors.account_name = "Account name is required";
+    if (!account_number.trim())
+      newErrors.account_number = "Account number is required";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0; // valid if no errors
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please provide the informations correctly.");
+      return;
+    }
+
     onSubmit({ bank_name, branch_name, account_name, account_number });
     const financialData = {
       bank_name,
@@ -137,6 +159,33 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
       toast.error(`Something went wrong. Please try again.\nError: ${error}`);
     } finally {
       setIsLoading(false); // Hide loading spinner
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Update corresponding state
+    switch (name) {
+      case "bank_name":
+        setBankName(value);
+        break;
+      case "branch_name":
+        setbranch_name(value);
+        break;
+      case "account_name":
+        setaccount_name(value);
+        break;
+      case "account_number":
+        setaccount_number(value);
+        break;
+      default:
+        break;
+    }
+
+    // Clear error for the field if any
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -208,7 +257,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
             id="bank_name"
             name="bank_name"
             value={bank_name}
-            onChange={(e) => setBankName(e.target.value)}
+            onChange={handleChange}
+            error={errors.bank_name}
           />
           <InputField
             placeholder="Enter branch name"
@@ -216,7 +266,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
             id="branch_name"
             name="branch_name"
             value={branch_name}
-            onChange={(e) => setbranch_name(e.target.value)}
+            onChange={handleChange}
+            error={errors.branch_name}
           />
           <InputField
             placeholder="Enter account name"
@@ -224,7 +275,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
             id="account_name"
             name="account_name"
             value={account_name}
-            onChange={(e) => setaccount_name(e.target.value)}
+            onChange={handleChange}
+            error={errors.account_name}
           />
           <InputField
             placeholder="Enter account number"
@@ -233,7 +285,8 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
             id="account_number"
             name="account_number"
             value={account_number}
-            onChange={(e) => setaccount_number(e.target.value)}
+            onChange={handleChange}
+            error={errors.account_number}
           />
           {isShowSubmit && (
             <div>

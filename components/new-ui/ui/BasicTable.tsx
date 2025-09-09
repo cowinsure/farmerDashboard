@@ -34,7 +34,7 @@ export function BasicTable<T extends { id: string | number }>({
   columns,
   onView,
   emptyMessage = "No data found.",
-  maxHeight = "auto",
+  maxHeight = "600px",
   isLoading,
 }: BasicTableProps<T>) {
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
@@ -102,7 +102,7 @@ export function BasicTable<T extends { id: string | number }>({
                 </tr>
               </tbody>
             ) : (
-              <tbody>
+              <tbody className="">
                 {data.length ? (
                   data.map((row) => (
                     <tr

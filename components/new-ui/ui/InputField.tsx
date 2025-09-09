@@ -14,6 +14,7 @@ interface InputFieldProps {
   disabled?: boolean;
   placeholder?: string;
   maxLength?: number;
+  error?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -27,6 +28,7 @@ const InputField: React.FC<InputFieldProps> = ({
   disabled = false,
   placeholder = "",
   maxLength,
+  error,
 }) => {
   return (
     <div className="flex flex-col">
@@ -48,9 +50,11 @@ const InputField: React.FC<InputFieldProps> = ({
           "focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50",
           "hover:bg-green-50 hover:border-green-300",
           type === "date" &&
-            "appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0"
+            "appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0",
+          error ? "border-red-600" : "border-gray-300"
         )}
       />
+      {error && <p className="text-red-600 mt-1 font-medium text-sm">{error}</p>}
     </div>
   );
 };

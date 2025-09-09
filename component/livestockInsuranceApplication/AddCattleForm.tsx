@@ -1,5 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 
 import { useInsuranceApplication } from "@/context/InsuranceApplicationContext";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -35,18 +40,14 @@ interface Asset {
   purchase_from: string;
   purchase_amount: string;
 }
-const AddCattleForm: React.FC = () => {
-  // const [capturedCows, setCapturedCows] = useState<string[]>(["cow1", "cow2", "cow3"]);
-  const [assetList, setAssetList] = useState<Asset[]>([]); // State to store the asset list
-  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null); // State to store the selected asset
-  const { updateInsuranceApplication } = useInsuranceApplication();
-  const [sumInsured, setSumInsured] = useState<string>(""); // State for sum insured amount
-  // const handleCaptureImage = () => {
-  //     const newCow = `Cow ${capturedCows.length + 1}`;
-  //     setCapturedCows([...capturedCows, newCow]);
-  // };
 
-  // Fetch asset list from the API
+const AddCattleForm = forwardRef((props, ref) => {
+  const [assetList, setAssetList] = useState<Asset[]>([]);
+  const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+  const { updateInsuranceApplication } = useInsuranceApplication();
+  const [sumInsured, setSumInsured] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
   useEffect(() => {
     const fetchAssetList = async () => {
       const accessToken = localStorage.getItem("accessToken");
@@ -70,8 +71,7 @@ const AddCattleForm: React.FC = () => {
         const result = await response.json();
 
         if (response.ok) {
-          console.log("Asset list fetched successfully:", result.data.results);
-          setAssetList(result.data.results); // Update the asset list state
+          setAssetList(result.data.results);
         } else {
           console.error("Failed to fetch asset list:", result);
         }
@@ -83,23 +83,31 @@ const AddCattleForm: React.FC = () => {
     fetchAssetList();
   }, []);
 
-  // Handle dropdown selection
+  // Expose validateFields method to parent
+  useImperativeHandle(ref, () => ({
+    validateFields: () => {
+      if (!selectedAsset) {
+        setError("Please select a cattle.");
+        return false;
+      }
+      setError("");
+      return true;
+    },
+  }));
+
   const handleAssetSelection = (assetId: number) => {
     const selected = assetList.find((asset) => asset.id === assetId) || null;
     setSelectedAsset(selected);
     updateInsuranceApplication({ asset: assetId });
-    updateInsuranceApplication({
-      sum_insured: parseFloat(selected?.purchase_amount ?? "0") * 0.4,
-    });
     const sum_insured = parseFloat(selected?.purchase_amount ?? "0") * 0.4;
+    updateInsuranceApplication({ sum_insured });
     setSumInsured(sum_insured.toString());
-    // Update the context with the selected asset ID
+    setError(""); // Clear error on selection
   };
 
-  // Handle sum insured input change
   const handleSumInsuredChange = (value: string) => {
     setSumInsured(value);
-    updateInsuranceApplication({ sum_insured: parseFloat(value) }); // Update the context with the sum insured value
+    updateInsuranceApplication({ sum_insured: parseFloat(value) });
   };
 
   return (
@@ -112,7 +120,9 @@ const AddCattleForm: React.FC = () => {
             name="asset"
             value={selectedAsset?.id || ""}
             onChange={(e) => handleAssetSelection(Number(e.target.value))}
-            className="appearance-none w-full border border-gray-300 bg-white rounded-md p-2 pr-10 text-gray-600 text-sm cursor-pointer"
+            className={`appearance-none w-full border rounded-md p-2 pr-10 text-gray-600 text-sm cursor-pointer ${
+              error ? "border-red-600" : "border-gray-300"
+            }`}
           >
             <option value="" disabled>
               Select Cattle
@@ -123,17 +133,19 @@ const AddCattleForm: React.FC = () => {
               </option>
             ))}
           </select>
-          {/* Custom dropdown icon */}
           <div className="pointer-events-none absolute inset-y-0 top-0 right-2 flex items-center text-gray-400">
             <IoMdArrowDropdown />
           </div>
         </div>
+        {error && (
+          <p className="text-red-600 font-semibold mt-1">
+            Please select cattle
+          </p>
+        )}
       </div>
 
-      {/* Display selected cattle details */}
       {selectedAsset && (
         <div className="flex flex-col md:flex-row border border-gray-300 rounded-lg p-4 mb-4 shadow-md">
-          {/* Left side: Owner image */}
           <div className="w-full md:w-1/3 mb-4 md:mb-0">
             <img
               src={selectedAsset.image_with_owner || "/placeholder-image.png"}
@@ -142,7 +154,6 @@ const AddCattleForm: React.FC = () => {
             />
           </div>
 
-          {/* Right side: Cattle details */}
           <div className="w-full md:w-2/3 md:pl-4">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">
               {selectedAsset.asset_type} - {selectedAsset.breed}
@@ -163,7 +174,6 @@ const AddCattleForm: React.FC = () => {
               <strong>Height:</strong> {selectedAsset.height} feet
             </p>
 
-            {/* Input for sum insured */}
             <div className="mt-4">
               <label
                 htmlFor="sumInsured"
@@ -186,6 +196,7 @@ const AddCattleForm: React.FC = () => {
       )}
     </div>
   );
-};
+});
+AddCattleForm.displayName = "AddCattleForm";
 
 export default AddCattleForm;
