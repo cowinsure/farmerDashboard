@@ -159,7 +159,7 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/tts", {
+      const response = await fetch("https://agenticai.insurecow.com/api/v1/tts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -420,7 +420,7 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
       const formData = new FormData();
       formData.append('file', audioBlob, filename);
 
-      const response = await fetch('http://localhost:8000/api/v1/transcribe', {
+      const response = await fetch('https://agenticai.insurecow.com/api/v1/transcribe', {
         method: 'POST',
         body: formData,
       });
@@ -493,7 +493,7 @@ export function AIChatWidget({ onFormStateChange }: AIChatWidgetProps) {
       };
 
       // Make API call
-      const response = await fetch("http://localhost:8000/api/v1/chat", {
+      const response = await fetch("https://agenticai.insurecow.com/api/v1/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
