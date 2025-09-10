@@ -24,6 +24,29 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     email: "",
   });
 
+  const relationshipOptions = [
+    { value: "", label: "Select Relationship" },
+    { value: "father", label: "Father" },
+    { value: "mother", label: "Mother" },
+    { value: "brother", label: "Brother" },
+    { value: "sister", label: "Sister" },
+    { value: "husband", label: "Husband" },
+    { value: "wife", label: "Wife" },
+    { value: "son", label: "Son" },
+    { value: "daughter", label: "Daughter" },
+    { value: "grandfather", label: "Grandfather" },
+    { value: "grandmother", label: "Grandmother" },
+    { value: "uncle", label: "Uncle" },
+    { value: "aunt", label: "Aunt" },
+    { value: "nephew", label: "Nephew" },
+    { value: "niece", label: "Niece" },
+    { value: "cousin", label: "Cousin" },
+    { value: "friend", label: "Friend" },
+    { value: "partner", label: "Partner" },
+    { value: "sibling", label: "Sibling" },
+    { value: "other", label: "Other" },
+  ];
+
   const router = useRouter();
   const [sessionExpired, setSessionExpired] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -113,8 +136,10 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     else if (!/\S+@\S+\.\S+/.test(formData.email.trim()))
       newErrors.email = "Invalid email address";
 
-    if (!formData.relationship.trim())
-      newErrors.relationship = "Relationship is required";
+  if (!formData.relationship) {
+    console.log("relationship is empty"); // debug
+    newErrors.relationship = "Relationship is required";
+  }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -164,6 +189,8 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     // Add form submission logic here
   };
 
+  console.log(formData)
+
   return (
     <div className="p-2 md:p-6 rounded-md">
       <SectionHeading
@@ -188,7 +215,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             label="Phone"
             id="phone"
             name="phone"
-            type="tel"
+            type="number"
             value={formData.phone}
             onChange={handleChange}
             error={errors.phone}
@@ -198,7 +225,7 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
             label="NID"
             id="nid"
             name="nid"
-            type="text"
+            type="number"
             value={formData.nid}
             onChange={handleChange}
             error={errors.nid}
@@ -231,7 +258,11 @@ const NomineeInfo: React.FC<NomineeInfoProps> = ({ isShowSubmit = true }) => {
     hover:bg-green-50 hover:border-green-300
     ${errors.relationship ? "border-red-600" : "border-gray-300"}`}
             >
-              {/* options */}
+              {relationshipOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
             {errors.relationship && (
               <p className="text-red-600 text-sm mt-1">{errors.relationship}</p>
