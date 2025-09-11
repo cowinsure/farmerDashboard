@@ -371,6 +371,7 @@ const FarmerPage: React.FC = () => {
       <BasicTable
         data={assetList}
         onView={handleViewDetails}
+        maxHeight="600px"
         columns={[
           {
             key: "left_side_image",

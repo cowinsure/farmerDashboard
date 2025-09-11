@@ -102,7 +102,7 @@ export default function StepForm() {
         }
       },
       (error) => {
-        console.log(error, "error getting location");
+        toast.error(`Error getting location: ${error.message}`);
         setIsLoading(false);
         setLocationError(
           "Unable to retrieve your location. Please allow location access and try again."

@@ -34,7 +34,7 @@ export function BasicTable<T extends { id: string | number }>({
   columns,
   onView,
   emptyMessage = "No data found.",
-  maxHeight = "600px",
+  maxHeight = "",
   isLoading,
 }: BasicTableProps<T>) {
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
@@ -60,7 +60,7 @@ export function BasicTable<T extends { id: string | number }>({
     <>
       {/* Desktop Table View */}
       <div className="hidden md:block rounded-lg shadow-md overflow-x-auto animate__animated animate__fadeIn">
-        <div className="overflow-y-auto" style={{ height: maxHeight }}>
+        <div className={`overflow-y-auto max-h-[${maxHeight}]`}>
           <table className="w-full min-w-[900px] h-full table-fixed relative">
             <thead className=" text-green-400">
               <tr>
