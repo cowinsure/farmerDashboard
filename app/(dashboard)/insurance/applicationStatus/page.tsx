@@ -143,7 +143,7 @@ export default function ApplciationStatus() {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const res = await fetch(
-          `https://insuranceportal-backend.insurecow.com/api/ims/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
+          `${process.env.NEXT_PUBLIC_IMS_BASE_URL}/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
           {
             headers: {
               "Content-Type": "application/json",
