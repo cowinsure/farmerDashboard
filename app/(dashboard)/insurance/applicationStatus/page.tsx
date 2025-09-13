@@ -17,14 +17,24 @@ import { TbArrowBadgeRightFilled } from "react-icons/tb";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
 import {
   IoCalendarClearOutline,
-  IoCheckmark,
   IoShieldCheckmark,
+  IoInformationCircleOutline,
+  IoWarning,
 } from "react-icons/io5";
-import { FaRegFileAlt } from "react-icons/fa";
+import {
+  FaClock,
+  FaBangladeshiTakaSign,
+  FaHourglassStart,
+} from "react-icons/fa6";
 import { GoHash } from "react-icons/go";
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
-import { FaBangladeshiTakaSign } from "react-icons/fa6";
 import { MdHistory } from "react-icons/md";
+import { FaBan, FaRegFileAlt } from "react-icons/fa";
+import { GiCheckMark } from "react-icons/gi";
+import moment from "moment";
+import { MdOutlinePending } from "react-icons/md";
+import { IoWarningOutline } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa6";
 
 interface InsuranceData {
   id: number;
@@ -47,7 +57,7 @@ export type InsuranceStatusName =
   | "canceled"
   | "payment_pending"
   | "pending_payment_verification"
-  | string; // fallback for any unknown status
+  | string;
 
 export interface InsuranceStatusHistory {
   id: number;
@@ -71,8 +81,6 @@ export default function ApplciationStatus() {
   const [isLoading, setIsLoading] = useState(false);
   const [historyData, setHistoryData] = useState<InsuranceStatusHistory[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   console.log(insuranceData);
 
@@ -103,7 +111,6 @@ export default function ApplciationStatus() {
 
         if (response.ok) {
           setIsLoading(false);
-          // console.log("Insurance data fetched successfully:", result.data.results);
           const validStatuses = [
             "active",
             "pending",
@@ -165,8 +172,6 @@ export default function ApplciationStatus() {
     fetchHistory();
   }, [selectedCow, isCowDetails]);
 
-  console.log(historyData);
-
   const handleViewDetails = (cow: InsuranceData) => {
     setSelectedCow(cow);
     setIsCowDetails(true);
@@ -175,6 +180,50 @@ export default function ApplciationStatus() {
   const handleClaim = (cow: InsuranceData) => {
     setSelectedCow(cow);
     setIsClaimForm(true);
+  };
+
+  const latestStatus = historyData[0];
+
+  // Mapping status to icons
+  const statusIcons: Record<string, React.ReactNode> = {
+    active: (
+      <div className="bg-green-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaCheck className="w-4 h-4 text-green-700" />
+      </div>
+    ),
+    under_review: (
+      <div className="bg-blue-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaHourglassStart className=" w-4 h-4 text-blue-700" />
+      </div>
+    ),
+    payment_pending: (
+      <div className="bg-yellow-200 p-0.5 w-7 h-7 rounded-full flex items-center justify-center">
+        <IoWarning size={20} className=" text-yellow-900" />
+      </div>
+    ),
+    pending_payment_verification: (
+      <div className="bg-orange-200 p-0.5 w-7 h-7 rounded-full flex items-center justify-center">
+        <MdOutlinePending size={20} className="text-orange-700" />
+      </div>
+    ),
+    canceled: (
+      <div className="bg-red-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaBan className="w-4 h-4 text-red-700" />
+      </div>
+    ),
+    pending: (
+      <div className="bg-amber-700 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <IoWarningOutline className="w-4 h-4 text-blue-500" />
+      </div>
+    ),
+  };
+
+  const statusStyles = {
+    under_review: "bg-blue-100 text-blue-700",
+    active: "bg-green-100 text-green-700",
+    canceled: "bg-red-100 text-red-700",
+    payment_pending: "bg-yellow-100 text-yellow-700",
+    pending_payment_verification: "bg-orange-100 text-orange-700",
   };
 
   return (
@@ -428,10 +477,6 @@ export default function ApplciationStatus() {
                     <p className="text-gray-500 text-sm">Premium</p>
                     <p className="font-semibold text-base mt-1">Monthly</p>
                   </div>
-                  {/* <div>
-                    <p className="text-gray-500 text-sm">Deductible</p>
-                    <p className="font-semibold text-base mt-1">$500</p>
-                  </div> */}
                   <div>
                     <p className="text-gray-500 text-sm">Coverage</p>
                     <p className="font-semibold text-base mt-1">Upto 90%</p>
@@ -440,14 +485,14 @@ export default function ApplciationStatus() {
               </div>
 
               {/* Insurance History Timeline */}
-              <div className="mt-6 border rounded-md p-4 bg-white hidden md:block">
+              <div className="mt-6 border rounded-md p-4 bg-white block">
                 <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-10">
                   <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                     <MdHistory size={25} className="text-gray-600" />
                   </span>
                   Insurance History
                 </h3>
-                <div className="relative border-l-2 border-gray-200 ml-4">
+                <div className="relative border-l-2 border-dashed border-gray-300 ml-4">
                   {historyLoading ? (
                     <p className="text-gray-500 text-sm ml-4">
                       Loading history...
@@ -457,37 +502,64 @@ export default function ApplciationStatus() {
                       No history available.
                     </p>
                   ) : (
-                    historyData.map((step, idx) => (
-                      <div key={idx} className="mb-8 ml-8 flex">
-                        {/* Marker */}
-                        <span
-                          className={`absolute -left-3 flex items-center justify-center w-6 h-6 rounded-full border-2 bg-green-500 border-green-500 text-white`}
-                        >
-                          <IoCheckmark className="w-4 h-4" />
-                        </span>
+                    historyData.map((step, idx) => {
+                      return (
+                        <div key={idx} className="mb-8 ml-8 flex">
+                          {/* Marker */}
+                          <span
+                            className={`absolute -left-5.5 flex items-center justify-center rounded-full p-2 bg-white/20 backdrop-blur-xs`}
+                          >
+                            {statusIcons[step.status_name] || (
+                              <GiCheckMark className="w-4 h-4" />
+                            )}
+                          </span>
 
-                        {/* Content */}
-                        <div>
-                          <p className="text-gray-800 font-semibold capitalize">
-                            {step.status_name.replace(/_/g, " ")}
-                          </p>
-                          <p className="text-gray-500 text-sm">
-                            {new Date(
-                              `1970-01-01T${step.created_at}Z`
-                            ).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            })}
-                          </p>
-                          {step.remarks && (
-                            <p className="text-xs text-gray-400 mt-1">
-                              Remarks: {step.remarks}
-                            </p>
-                          )}
+                          {/* Content */}
+                          <div className="border border-gray-200 w-full py-3 px-3 rounded-xl">
+                            <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0 mb-5">
+                              <p className="text-gray-800 font-semibold capitalize">
+                                {latestStatus.id === step.id ? (
+                                  <small>Current Status - </small>
+                                ) : (
+                                  ""
+                                )}
+
+                                <span
+                                  className={`whitespace-nowrap ${
+                                    statusStyles[
+                                      step.status_name as keyof typeof statusStyles
+                                    ] || "bg-gray-100 text-gray-700"
+                                  } sm:text-[16px] px-1 sm:px-4 py-1 rounded-md`}
+                                >
+                                  {step.status_name.replace(/_/g, " ")}
+                                </span>
+                              </p>
+                              <p className="text-gray-400 font-semibold text-xs sm:text-sm flex items-center gap-2">
+                                <FaClock size={18} />
+                                {moment(
+                                  step.created_at,
+                                  "HH:mm:ss.SSSSSS"
+                                ).format("hh:mm A")}
+                              </p>
+                            </div>
+                            {step.remarks && (
+                              <p
+                                title="Remarks"
+                                className="text-xs text-gray-500 font-semibold mt-1 border border-gray-200 p-3 rounded-md bg-gray-50/70 flex items-center gap-1"
+                              >
+                                <IoInformationCircleOutline
+                                  size={20}
+                                  className="text-gray-400"
+                                />
+                                <span className="text-sm text-gray-700">
+                                  {step.remarks}
+                                </span>
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </div>
@@ -500,12 +572,6 @@ export default function ApplciationStatus() {
         isOpen={isClaimForm}
         onClose={() => setIsClaimForm(false)}
         selectedCow={selectedCow}
-        // selectedCow={selectedCow || {
-        //   id: '',
-        //   asset: '',
-        //   claim_status: '',
-        //   sum_insured: ''
-        // }}
       />
     </div>
   );
