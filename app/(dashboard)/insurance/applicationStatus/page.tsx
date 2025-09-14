@@ -143,7 +143,7 @@ export default function ApplciationStatus() {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_IMS_BASE_URL}/lms/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
+          `${process.env.NEXT_PUBLIC_MODULE_BASE_URL}/ims/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -181,8 +181,6 @@ export default function ApplciationStatus() {
     setSelectedCow(cow);
     setIsClaimForm(true);
   };
-
-  const latestStatus = historyData[0];
 
   // Mapping status to icons
   const statusIcons: Record<string, React.ReactNode> = {
@@ -518,12 +516,6 @@ export default function ApplciationStatus() {
                           <div className="border border-gray-200 w-full py-3 px-3 rounded-xl">
                             <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0 mb-5">
                               <p className="text-gray-800 font-semibold capitalize">
-                                {latestStatus.id === step.id ? (
-                                  <small>Current Status - </small>
-                                ) : (
-                                  ""
-                                )}
-
                                 <span
                                   className={`whitespace-nowrap ${
                                     statusStyles[
