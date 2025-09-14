@@ -149,7 +149,7 @@ export default function Sidebar() {
   const handleMouseLeave = (itemName: string) => {
     if (itemName === "Insurance") {
       setIsHovered(false);
-      setIsOpen(false);
+      // setIsOpen(false);
     }
   };
 
@@ -276,7 +276,7 @@ const Submenu = (menus: SubmenuProps) => {
   const subPath = usePathname();
   return (
     <div
-      className="text-green-900 border backdrop-blur-xl w-54 rounded-r-xl absolute top-11.5 left-0 p-4 flex flex-col justify-center "
+      className="text-green-900 border backdrop-blur-xl w-54 rounded-r-xl absolute top-11 left-0 p-4 flex flex-col justify-center "
       data-aos="fade-right"
     >
       <ul>
