@@ -54,7 +54,7 @@ const InputField: React.FC<InputFieldProps> = ({
           error ? "border-red-600" : "border-gray-300"
         )}
       />
-      {error && <p className="text-red-600 mt-1 font-medium text-sm">{error}</p>}
+      {error && <p className="text-red-400 mt-1 font-medium text-sm">{error}</p>}
     </div>
   );
 };

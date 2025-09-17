@@ -1,24 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
 import SectionHeading from "@/components/new-ui/utils/SectionHeading";
 import { ImageUploadBlock } from "@/components/new-ui/ui/ImageUploadBlock";
 
-const StepFour: React.FC = () => {
-  const { data, updateStep, validateStep } = useCowRegistration();
+// export interface StepFourProps {
+//   onNext: () => void;
+// }
 
+// 👇 Exposed methods for parent
+export type StepFourRef = {
+  validateFields: () => boolean;
+};
+
+const StepFour = forwardRef<StepFourRef>((props, ref) => {
+  StepFour.displayName = "StepFour";
+
+  const { data, updateStep } = useCowRegistration();
+
+  // State to hold images
   const [images, setImages] = useState({
     special_mark: null as File | null,
     left_side_image: null as File | null,
     right_side_image: null as File | null,
     image_with_owner: null as File | null,
     vet_certificate: null as File | null,
-    challan_paper: null as File | null, // optional
-    chairman_certificate: null as File | null, // optional
+    challan_paper: null as File | null,
+    chairman_certificate: null as File | null,
   });
 
+  // Validation errors
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // List of required fields
   const requiredFields = React.useMemo<(keyof typeof images)[]>(
     () => [
       "special_mark",
@@ -30,12 +49,14 @@ const StepFour: React.FC = () => {
     []
   );
 
+  // Update image and clear error if fixed
   const updateImage = (key: keyof typeof images, file: File | null) => {
     setImages((prev) => ({ ...prev, [key]: file }));
     updateStep({
       [key]: file,
     });
 
+    // Clear error for this field if image now exists
     if (file && errors[key]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -45,6 +66,7 @@ const StepFour: React.FC = () => {
     }
   };
 
+  // Initialize images from context data on mount or data change
   useEffect(() => {
     if (data) {
       setImages({
@@ -59,37 +81,24 @@ const StepFour: React.FC = () => {
     }
   }, [data]);
 
-  const isValid = requiredFields.every((field) => images[field] !== null);
+  // Expose validateFields method to parent via ref
+  useImperativeHandle(ref, () => ({
+    validateFields: () => {
+      const newErrors: { [key: string]: string } = {};
 
-  useEffect(() => {
-    // ✅ Pass required fields (not boolean) into validateStep
-    validateStep(requiredFields);
+      // Check required fields
+      requiredFields.forEach((field) => {
+        if (!images[field]) {
+          newErrors[field] = "This field is required";
+        }
+      });
 
-    const newErrors: { [key: string]: string } = {};
-    requiredFields.forEach((field) => {
-      if (!images[field]) {
-        newErrors[field] = "This field is required";
-      }
-    });
-    setErrors(newErrors);
-  }, [images, requiredFields, validateStep]);
+      setErrors(newErrors);
 
-  // 🔹 Restored unused functions
-  const handlePhotoCapture = (
-    file: File,
-    property: string,
-    setImage: React.Dispatch<React.SetStateAction<File | null>>
-  ) => {
-    setImage(file);
-    updateStep({
-      [property]: file,
-    });
-    console.log("Photo captured:", file);
-  };
-
-  const getPreviewUrl = (file: File | null): string | null => {
-    return file ? URL.createObjectURL(file) : null;
-  };
+      // Return true if no errors
+      return Object.keys(newErrors).length === 0;
+    },
+  }));
 
   return (
     <div className="lg:w-[90%] xl:w-[80%] mx-auto mt-8 p-4">
@@ -159,6 +168,20 @@ const StepFour: React.FC = () => {
 
         <div>
           <ImageUploadBlock
+            imageFile={images.vet_certificate}
+            onCapture={(file) => updateImage("vet_certificate", file)}
+            title="Vet Certificate *"
+            fieldKey="vet_certificate"
+          />
+          {errors.vet_certificate && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.vet_certificate}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <ImageUploadBlock
             imageFile={images.challan_paper}
             onCapture={(file) => updateImage("challan_paper", file)}
             title="Challan Image (Optional)"
@@ -174,23 +197,20 @@ const StepFour: React.FC = () => {
             fieldKey="chairman_certificate"
           />
         </div>
-
-        <div>
-          <ImageUploadBlock
-            imageFile={images.vet_certificate}
-            onCapture={(file) => updateImage("vet_certificate", file)}
-            title="Vet Certificate *"
-            fieldKey="vet_certificate"
-          />
-          {errors.vet_certificate && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.vet_certificate}
-            </p>
-          )}
-        </div>
       </div>
+
+      {/* <button
+        className="text-white bg-green-600 hover:bg-green-700 rounded-lg mt-6 px-6 py-2 font-semibold text-lg"
+        onClick={() => {
+          if (validateFields()) {
+            props.onNext();
+          }
+        }}
+      >
+        Next
+      </button> */}
     </div>
   );
-};
+});
 
 export default StepFour;
