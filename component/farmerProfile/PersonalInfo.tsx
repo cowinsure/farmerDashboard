@@ -145,7 +145,7 @@ const PersonalInfo: React.FC = () => {
       newErrors.last_name = "Last name is required";
     if (!formData.nid.trim()) newErrors.nid = "NID number is required";
     if (formData.nid.length !== 10) newErrors.nid = "NID must be 10 digits";
-    if (!formData.date_of_birth)
+    if (!formData.date_of_birth || validateDateOfBirth(formData.date_of_birth))
       newErrors.date_of_birth = "Date of birth is required";
     if (!formData.gender) newErrors.gender = "Gender is required";
 
@@ -166,6 +166,27 @@ const PersonalInfo: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validateDateOfBirth = (dob: string): string | undefined => {
+    // if (!dob) return "Date of birth is required";
+
+    const selectedDate = new Date(dob);
+    const today = new Date();
+
+    if (selectedDate > today) {
+      return "Date of birth cannot be in the future";
+    }
+
+    const ageDiffMs = today.getTime() - selectedDate.getTime();
+    const ageDate = new Date(ageDiffMs); // Epoch time to age
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+    if (age < 18) {
+      return "You must be at least 18 years old";
+    }
+
+    return undefined; // no error
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -183,6 +204,14 @@ const PersonalInfo: React.FC = () => {
       }
       return newErrors;
     });
+
+    if (name === "date_of_birth") {
+      const error = validateDateOfBirth(value);
+      setErrors((prev) => ({
+        ...prev,
+        date_of_birth: error ?? "",
+      }));
+    }
   };
 
   const handlePhotoCapture = (
@@ -196,6 +225,7 @@ const PersonalInfo: React.FC = () => {
     // });
     console.log("Photo captured:", file);
   };
+
   const resetFormData = () => {
     setFormData({
       userType: localStorage.getItem("userId") || "",
@@ -301,7 +331,7 @@ const PersonalInfo: React.FC = () => {
         <div
           data-aos="fade-in"
           data-aos-delay="400"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-12"
         >
           {/* Profile Image */}
           <div className="flex flex-col w-full">
@@ -429,6 +459,7 @@ const PersonalInfo: React.FC = () => {
               value={formData.date_of_birth}
               onChange={handleInputChange}
               error={errors.date_of_birth}
+              // max={new Date().toISOString().split("T")[0]}
             />
             <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
               <MdOutlineCalendarToday className="text-lg" />
@@ -641,26 +672,33 @@ const PersonalInfo: React.FC = () => {
         </div>
       </ModalGeneral>
 
-      <AIChatWidget onFormStateChange={(state) => {
-        console.log("Form state changed:", state);
-        // Update formData with the new state from AI chat widget
-        setFormData(prevData => ({
-          ...prevData,
-          ...state
-        }));
-      } } formSchema={  // Define the form schema
-        {
-          first_name: "First name of the farmer , first name convert to english and first name can have more then one word",
-          last_name: "Last name of the farmer,Last name convert to english and Last name can have more then one word",
-          nid: "National ID number of the farmer",
-          date_of_birth: "Date of birth in DD-MM-YYYY format",
-          gender: "Gender of the farmer (Male/Female/Other)",
-          tin: "Tax Identification Number of the farmer",
-          thana: "Thana (Police Station) of the farmer's address",
-          zilla: "Zilla (District) of the farmer's address",
-          union: "Union (Local administrative unit) of the farmer's address",
-          village: "Village name of the farmer's address"
-        }}/>
+      <AIChatWidget
+        onFormStateChange={(state) => {
+          console.log("Form state changed:", state);
+          // Update formData with the new state from AI chat widget
+          setFormData((prevData) => ({
+            ...prevData,
+            ...state,
+          }));
+        }}
+        formSchema={
+          // Define the form schema
+          {
+            first_name:
+              "First name of the farmer , first name convert to english and first name can have more then one word",
+            last_name:
+              "Last name of the farmer,Last name convert to english and Last name can have more then one word",
+            nid: "National ID number of the farmer",
+            date_of_birth: "Date of birth in DD-MM-YYYY format",
+            gender: "Gender of the farmer (Male/Female/Other)",
+            tin: "Tax Identification Number of the farmer",
+            thana: "Thana (Police Station) of the farmer's address",
+            zilla: "Zilla (District) of the farmer's address",
+            union: "Union (Local administrative unit) of the farmer's address",
+            village: "Village name of the farmer's address",
+          }
+        }
+      />
 
       {/* <AIInterface onClose={()=>{}} /> */}
     </div>
