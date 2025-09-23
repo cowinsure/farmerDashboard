@@ -154,11 +154,11 @@ export default function ApplciationStatus() {
         const result = await res.json();
         if (result.status === "success") {
           // Sort by created_at descending (latest on top)
-          const sorted = result.data.sort(
-            (a, b) =>
+            const sorted: InsuranceStatusHistory[] = (result.data as InsuranceStatusHistory[]).sort(
+            (a: InsuranceStatusHistory, b: InsuranceStatusHistory) =>
               new Date(b.created_at).getTime() -
               new Date(a.created_at).getTime()
-          );
+            );
           setHistoryData(sorted);
         } else {
           console.error("Failed to fetch history:", result.message);
