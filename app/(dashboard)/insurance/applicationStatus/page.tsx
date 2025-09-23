@@ -15,11 +15,26 @@ import CattleVerification from "@/app/components/CattleVerification";
 import { PaymentDialog } from "@/component/modal/payment-dialog";
 import { TbArrowBadgeRightFilled } from "react-icons/tb";
 import { BasicTable } from "@/components/new-ui/ui/BasicTable";
-import { IoCalendarClearOutline, IoShieldCheckmark } from "react-icons/io5";
-import { FaRegFileAlt } from "react-icons/fa";
+import {
+  IoCalendarClearOutline,
+  IoShieldCheckmark,
+  IoInformationCircleOutline,
+  IoWarning,
+} from "react-icons/io5";
+import {
+  FaClock,
+  FaBangladeshiTakaSign,
+  FaHourglassStart,
+} from "react-icons/fa6";
 import { GoHash } from "react-icons/go";
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
-import { FaBangladeshiTakaSign } from "react-icons/fa6";
+import { MdHistory } from "react-icons/md";
+import { FaBan, FaRegFileAlt } from "react-icons/fa";
+import { GiCheckMark } from "react-icons/gi";
+import moment from "moment";
+import { MdOutlinePending } from "react-icons/md";
+import { IoWarningOutline } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa6";
 
 interface InsuranceData {
   id: number;
@@ -36,13 +51,36 @@ interface InsuranceData {
   premium_amount: string;
 }
 
+export type InsuranceStatusName =
+  | "under_review"
+  | "active"
+  | "canceled"
+  | "payment_pending"
+  | "pending_payment_verification"
+  | string;
+
+export interface InsuranceStatusHistory {
+  id: number;
+  remarks: string | null;
+  is_active: boolean | null;
+  status_id: number;
+  created_at: string; // e.g., "10:02:32.807106"
+  created_by: number;
+  modified_at: string | null;
+  modified_by: number | null;
+  status_name: InsuranceStatusName; // narrow it using string union
+  insurance_number: string;
+  asset_insurance_id: number;
+}
+
 export default function ApplciationStatus() {
   const [insuranceData, setInsuranceData] = useState<InsuranceData[]>([]);
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [historyData, setHistoryData] = useState<InsuranceStatusHistory[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   console.log(insuranceData);
 
@@ -73,8 +111,8 @@ export default function ApplciationStatus() {
 
         if (response.ok) {
           setIsLoading(false);
-          // console.log("Insurance data fetched successfully:", result.data.results);
           const validStatuses = [
+            "active",
             "pending",
             "pending_payment_verification",
             "payment_pending",
@@ -96,6 +134,44 @@ export default function ApplciationStatus() {
     fetchInsuranceData();
   }, []);
 
+  // Fetch application history
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!selectedCow || !isCowDetails) return;
+
+      setHistoryLoading(true);
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_MODULE_BASE_URL}/ims/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const result = await res.json();
+        if (result.status === "success") {
+          // Sort by created_at descending (latest on top)
+          const sorted = result.data.sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          );
+          setHistoryData(sorted);
+        } else {
+          console.error("Failed to fetch history:", result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching history:", error);
+      }
+      setHistoryLoading(false);
+    };
+
+    fetchHistory();
+  }, [selectedCow, isCowDetails]);
+
   const handleViewDetails = (cow: InsuranceData) => {
     setSelectedCow(cow);
     setIsCowDetails(true);
@@ -104,6 +180,48 @@ export default function ApplciationStatus() {
   const handleClaim = (cow: InsuranceData) => {
     setSelectedCow(cow);
     setIsClaimForm(true);
+  };
+
+  // Mapping status to icons
+  const statusIcons: Record<string, React.ReactNode> = {
+    active: (
+      <div className="bg-green-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaCheck className="w-4 h-4 text-green-700" />
+      </div>
+    ),
+    under_review: (
+      <div className="bg-blue-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaHourglassStart className=" w-4 h-4 text-blue-700" />
+      </div>
+    ),
+    payment_pending: (
+      <div className="bg-yellow-200 p-0.5 w-7 h-7 rounded-full flex items-center justify-center">
+        <IoWarning size={20} className=" text-yellow-900" />
+      </div>
+    ),
+    pending_payment_verification: (
+      <div className="bg-orange-200 p-0.5 w-7 h-7 rounded-full flex items-center justify-center">
+        <MdOutlinePending size={20} className="text-orange-700" />
+      </div>
+    ),
+    canceled: (
+      <div className="bg-red-200 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <FaBan className="w-4 h-4 text-red-700" />
+      </div>
+    ),
+    pending: (
+      <div className="bg-amber-700 p-1 w-7 h-7 rounded-full flex items-center justify-center">
+        <IoWarningOutline className="w-4 h-4 text-blue-500" />
+      </div>
+    ),
+  };
+
+  const statusStyles = {
+    under_review: "bg-blue-100 text-blue-700",
+    active: "bg-green-100 text-green-700",
+    canceled: "bg-red-100 text-red-700",
+    payment_pending: "bg-yellow-100 text-yellow-700",
+    pending_payment_verification: "bg-orange-100 text-orange-700",
   };
 
   return (
@@ -163,7 +281,7 @@ export default function ApplciationStatus() {
           {
             key: "insurance_status",
             header: "Status",
-            className: "w-64",
+            className: "w-36",
           },
           {
             key: "created_by",
@@ -222,7 +340,7 @@ export default function ApplciationStatus() {
 
       {/* Cow Details Dialog */}
       <Dialog open={isCowDetails} onOpenChange={setIsCowDetails}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-6xl lg:min-w-5xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle className="text-green-700 text-2xl font-bold text-center flex items-center justify-center gap-2">
               <span>
@@ -232,7 +350,7 @@ export default function ApplciationStatus() {
             </DialogTitle>
           </DialogHeader>
           {selectedCow && (
-            <div className="space-y-6 text-sm text-gray-800">
+            <div className="space-y-6 text-sm text-gray-800 max-h-[90vh] overflow-auto pb-24">
               {/* Top Summary Card */}
               <div className="bg-gray-50 p-5 rounded-md shadow border flex flex-col gap-4">
                 <div className="flex justify-between items-start">
@@ -357,14 +475,84 @@ export default function ApplciationStatus() {
                     <p className="text-gray-500 text-sm">Premium</p>
                     <p className="font-semibold text-base mt-1">Monthly</p>
                   </div>
-                  {/* <div>
-                    <p className="text-gray-500 text-sm">Deductible</p>
-                    <p className="font-semibold text-base mt-1">$500</p>
-                  </div> */}
                   <div>
                     <p className="text-gray-500 text-sm">Coverage</p>
                     <p className="font-semibold text-base mt-1">Upto 90%</p>
                   </div>
+                </div>
+              </div>
+
+              {/* Insurance History Timeline */}
+              <div className="mt-6 border rounded-md p-4 bg-white block">
+                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-10">
+                  <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <MdHistory size={25} className="text-gray-600" />
+                  </span>
+                  Insurance History
+                </h3>
+                <div className="relative border-l-2 border-dashed border-gray-300 ml-4">
+                  {historyLoading ? (
+                    <p className="text-gray-500 text-sm ml-4">
+                      Loading history...
+                    </p>
+                  ) : historyData.length === 0 ? (
+                    <p className="text-gray-500 text-sm ml-4">
+                      No history available.
+                    </p>
+                  ) : (
+                    historyData.map((step, idx) => {
+                      return (
+                        <div key={idx} className="mb-8 ml-8 flex">
+                          {/* Marker */}
+                          <span
+                            className={`absolute -left-5.5 flex items-center justify-center rounded-full p-2 bg-white/20 backdrop-blur-xs`}
+                          >
+                            {statusIcons[step.status_name] || (
+                              <GiCheckMark className="w-4 h-4" />
+                            )}
+                          </span>
+
+                          {/* Content */}
+                          <div className="border border-gray-200 w-full py-3 px-3 rounded-xl">
+                            <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-0 mb-5">
+                              <p className="text-gray-800 font-semibold capitalize">
+                                <span
+                                  className={`whitespace-nowrap ${
+                                    statusStyles[
+                                      step.status_name as keyof typeof statusStyles
+                                    ] || "bg-gray-100 text-gray-700"
+                                  } sm:text-[16px] px-1 sm:px-4 py-1 rounded-md`}
+                                >
+                                  {step.status_name.replace(/_/g, " ")}
+                                </span>
+                              </p>
+                              <p className="text-gray-400 font-semibold text-xs sm:text-sm flex items-center gap-2">
+                                <FaClock size={18} />
+                                {moment(
+                                  step.created_at,
+                                  "HH:mm:ss.SSSSSS"
+                                ).format("hh:mm A")}
+                              </p>
+                            </div>
+                            {step.remarks && (
+                              <p
+                                title="Remarks"
+                                className="text-xs text-gray-500 font-semibold mt-1 border border-gray-200 p-3 rounded-md bg-gray-50/70 flex items-center gap-1"
+                              >
+                                <IoInformationCircleOutline
+                                  size={20}
+                                  className="text-gray-400"
+                                />
+                                <span className="text-sm text-gray-700">
+                                  {step.remarks}
+                                </span>
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>
@@ -376,12 +564,6 @@ export default function ApplciationStatus() {
         isOpen={isClaimForm}
         onClose={() => setIsClaimForm(false)}
         selectedCow={selectedCow}
-        // selectedCow={selectedCow || {
-        //   id: '',
-        //   asset: '',
-        //   claim_status: '',
-        //   sum_insured: ''
-        // }}
       />
     </div>
   );

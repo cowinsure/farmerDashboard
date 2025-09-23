@@ -175,3 +175,12 @@
 .frontWave {
   background-color: #7dbf95;
 }
+
+
+/* Hide arrows in Chrome, Safari, Edge */
+input[type="number"] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+}
+

@@ -448,10 +448,14 @@ export default function PhotoCaptureModal({
                 onClick={() =>
                   document.getElementById("file-upload-modal")?.click()
                 }
+                className="border px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200"
               >
                 Select Image
               </button>
-              <button className="flex items-center" onClick={openCamera}>
+              <button
+                className="flex items-center border px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200"
+                onClick={openCamera}
+              >
                 <Camera className="h-4 w-4 mr-2" /> Use Camera
               </button>
               <input
@@ -493,8 +497,8 @@ export default function PhotoCaptureModal({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium cursor-pointer hover:border-green-400 custom-hover">
-          <MdCloudUpload className="text-4xl text-gray-600" />
+        <button className="border-2 border-dashed border-gray-300 text-start p-2 rounded-md w-full flex flex-col items-center justify-center gap-1 text-gray-400 font-medium cursor-pointer hover:border-green-400 custom-hover group">
+          <MdCloudUpload className="text-4xl text-gray-600 group-hover:text-green-600 custom-hover" />
           {triggerText}
         </button>
       </DialogTrigger>

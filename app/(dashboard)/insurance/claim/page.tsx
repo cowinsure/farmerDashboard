@@ -53,9 +53,7 @@ export default function CattleManagementPage() {
   const [isCowDetails, setIsCowDetails] = useState(false);
   const [isClaimForm, setIsClaimForm] = useState(false);
   const [selectedCow, setSelectedCow] = useState<InsuranceData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-
-
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch insurance data from the API
   useEffect(() => {
