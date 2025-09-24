@@ -162,8 +162,8 @@ const Login: React.FC = () => {
       toast.success("Login successful!");
       router.push("/profile");
     } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Something went wrong. Please try again.");
+      // console.error(error);
+      toast.error("Network error! Please try again.");
     }
   };
 
