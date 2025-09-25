@@ -223,10 +223,28 @@ const Login: React.FC = () => {
                   type="tel"
                   id="phone"
                   name="phone"
+                  value={phone}
                   onChange={(e) => {
                     const val = e.target.value.replace(/[^0-9]/g, "");
                     setPhone(val);
+
                     if (val.trim() !== "") {
+                      setPhoneError("");
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    const allowedKeys = [
+                      "Backspace",
+                      "ArrowLeft",
+                      "ArrowRight",
+                      "Tab",
+                      "Delete",
+                    ];
+
+                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                      e.preventDefault(); // prevent typing
+                      setPhoneError("Only numbers are allowed");
+                    } else {
                       setPhoneError("");
                     }
                   }}
@@ -275,7 +293,7 @@ const Login: React.FC = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute top-11.5 right-3 text-green-700 cursor-pointer"
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </span>
               </div>
               {passwordError && (
@@ -285,7 +303,7 @@ const Login: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 bg-green-800 hover:bg-green-700"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 bg-green-800 hover:bg-green-700 cursor-pointer"
               data-aos="fade-in"
               data-aos-delay="300"
             >

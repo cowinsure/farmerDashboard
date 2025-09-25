@@ -1,5 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import UploadVideo from "../helper/UploadVedio";
 import Image from "next/image";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
@@ -7,9 +12,6 @@ import { useCowRegistration } from "@/context/CowRegistrationContext";
 import ModalGeneral from "../modal/DialogGeneral";
 
 import logo from "../../public/Logo-03.png";
-import { useRouter } from "next/navigation";
-import LottieAnimation from "../Animation/LottieAnimation";
-import animation from "../Animation/LottieAnimation";
 import CowIdentificationLoader from "../modal/cow-identification-loader";
 import { toast } from "sonner";
 
@@ -27,15 +29,34 @@ interface ResponseData {
 const jwt =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
 
-export default function StepOne() {
-  const router = useRouter();
+export type StepOneRef = {
+  validateFields: () => boolean;
+};
+
+export const StepOne = forwardRef<StepOneRef>((props, ref) => {
+  StepOne.displayName = "StepOne";
+  // const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalErrorOpen, setErrorModalOpen] = useState(false);
-  const { data, updateStep, validateStep, reset } = useCowRegistration();
+  const { data, updateStep } = useCowRegistration();
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [accessToken, setAccessToken] = useState(jwt);
+
+  // Validation logic
+  const validateFields = () => {
+    if (!selectedFile) {
+      toast.error("Please upload a muzzle video before proceeding.");
+      return false;
+    }
+    return true;
+  };
+
+  // Expose validate method to parent
+  useImperativeHandle(ref, () => ({
+    validateFields,
+  }));
 
   const handleVideoUpload = async (file: File) => {
     setModalOpen(false);
@@ -73,14 +94,17 @@ export default function StepOne() {
     try {
       setIsUploading(true);
       // const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/register", {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          // "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`,
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            // "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       // 3.110.218.87:8000
 
       // console.log(await response.json());
@@ -268,4 +292,5 @@ export default function StepOne() {
       </div>
     </div>
   );
-}
+});
+export default StepOne;
