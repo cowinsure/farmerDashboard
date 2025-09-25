@@ -16,9 +16,6 @@ import { useAuth } from "@/context/AuthContext";
 import { AIChatWidget } from "../ui/ai-chat-widget";
 
 const PersonalInfo: React.FC = () => {
-  // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
-  //     setState(e.target.value);
-  // };
   const router = useRouter();
   const { phoneNumber } = useAuth();
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -96,6 +93,7 @@ const PersonalInfo: React.FC = () => {
             union: data.union || "",
           }));
 
+          // Validate date_of_birth if it exists
           if (data.date_of_birth) {
             const dobError = validateDateOfBirth(data.date_of_birth);
             setErrors((prev) => ({
