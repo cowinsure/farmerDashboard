@@ -141,7 +141,7 @@ const ForgetPassPhonePage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 cursor-pointer ${
                 loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-800 hover:bg-green-700"
