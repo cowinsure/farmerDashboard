@@ -14,6 +14,8 @@ import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { AIChatWidget } from "../ui/ai-chat-widget";
+import { AIInterface } from "../ui/ai-interface";
+import FallbackImage from "@/components/new-ui/utils/FallBackImage";
 
 const PersonalInfo: React.FC = () => {
   const router = useRouter();
@@ -344,10 +346,22 @@ const PersonalInfo: React.FC = () => {
           <div className="flex flex-col w-full">
             <label
               htmlFor="userType"
-              className="mb-1 text-sm font-medium text-gray-700"
+              className="mb-1 text-sm font-bold text-gray-600"
             >
               Profile Image
             </label>
+            {profileImageUrl && (
+              <div className="mt-2 text-center flex items-center justify-center">
+                <FallbackImage
+                  src={profileImageUrl}
+                  alt="Profile Image"
+                  width={128}
+                  height={128}
+                  className="w-[30%] object-cover rounded-full"
+                  placeholderSrc="/userplaceholder.jpg"
+                />
+              </div>
+            )}
             <PhotoCaptureModal
               onPhotoCapture={(file) =>
                 handlePhotoCapture(file, "profile_image", setprofileImage)
@@ -364,17 +378,6 @@ const PersonalInfo: React.FC = () => {
               <div className="mt-2 text-center">
                 <Image
                   src={URL.createObjectURL(profileImage)}
-                  alt="Profile Image"
-                  width={128}
-                  height={128}
-                  className="w-32 h-32 object-cover border rounded-full"
-                />
-              </div>
-            )}
-            {profileImageUrl && (
-              <div className="mt-2 text-center flex items-center justify-center">
-                <Image
-                  src={profileImageUrl}
                   alt="Profile Image"
                   width={128}
                   height={128}
@@ -478,26 +481,29 @@ const PersonalInfo: React.FC = () => {
             <label className="mb-1 text-sm font-bold text-gray-600">
               NID Front
             </label>
-            <PhotoCaptureModal
-              onPhotoCapture={(file) =>
-                handlePhotoCapture(file, "nid_front", setnidFront)
-              }
-              triggerText="Click to upload front image"
-              title="Capture NID Front"
-            />
+            {nidFront && (
+              <PhotoCaptureModal
+                onPhotoCapture={(file) =>
+                  handlePhotoCapture(file, "nid_front", setnidFront)
+                }
+                triggerText="Click to upload front image"
+                title="Capture NID Front"
+              />
+            )}
             {errors.nid_front && (
               <p className="text-red-600 text-sm mt-1">{errors.nid_front}</p>
             )}
             {(nidFront || nidFrontUrl) && (
               <div className="mt-2 text-center flex items-center justify-center">
-                <Image
+                <FallbackImage
                   src={
                     nidFront ? URL.createObjectURL(nidFront) : nidFrontUrl || ""
                   }
                   alt="NID Front"
                   width={128}
                   height={128}
-                  className="w-32 h-32 object-cover border rounded"
+                  className="w-[50%] object-cover rounded"
+                  placeholderSrc="/front.png"
                 />
               </div>
             )}
@@ -508,26 +514,29 @@ const PersonalInfo: React.FC = () => {
             <label className="mb-1 text-sm font-bold text-gray-600">
               NID Back
             </label>
-            <PhotoCaptureModal
-              onPhotoCapture={(file) =>
-                handlePhotoCapture(file, "nid_back", setnidBack)
-              }
-              triggerText="Click to upload back image"
-              title="Capture NID Back"
-            />
+            {nidBack && (
+              <PhotoCaptureModal
+                onPhotoCapture={(file) =>
+                  handlePhotoCapture(file, "nid_back", setnidBack)
+                }
+                triggerText="Click to upload back image"
+                title="Capture NID Back"
+              />
+            )}
             {errors.nid_back && (
               <p className="text-red-600 text-sm mt-1">{errors.nid_back}</p>
             )}
             {(nidBack || nidBackUrl) && (
               <div className="mt-2 text-center flex items-center justify-center">
-                <Image
+                <FallbackImage
                   src={
                     nidBack ? URL.createObjectURL(nidBack) : nidBackUrl || ""
                   }
                   alt="NID Back"
                   width={128}
                   height={128}
-                  className="w-32 h-32 object-cover border rounded"
+                  className="w-[50%] object-cover rounded"
+                  placeholderSrc="/back.png"
                 />
               </div>
             )}
