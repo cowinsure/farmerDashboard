@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
 
   images: {
     remotePatterns: [
+       {
+        protocol: "https",
+        hostname: "dev-backend.insurecow.com",
+        pathname: "/media/**",
+      },
       {
         protocol: "https",
         hostname: "insuranceportal-backend.insurecow.com",

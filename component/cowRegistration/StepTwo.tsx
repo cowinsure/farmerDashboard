@@ -4,7 +4,12 @@ import InputField from "@/components/new-ui/ui/InputField";
 import SectionHeading from "@/components/new-ui/utils/SectionHeading";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
 
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineCalendarToday } from "react-icons/md";
 
@@ -60,8 +65,12 @@ interface AssetType {
   name: string;
 }
 
-export default function StepTwo() {
-  const { data, updateStep, validateStep, reset } = useCowRegistration();
+export type StepTwoRef = {
+  validateFields: () => boolean;
+};
+
+const StepTwo = forwardRef<StepTwoRef>((props, ref) => {
+  const { data, updateStep } = useCowRegistration();
 
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const [colors, setColors] = useState<Color[]>([]);
@@ -95,6 +104,7 @@ export default function StepTwo() {
     purchase_from: "",
     purchase_amount: "",
   });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Fetch asset types from the API
   useEffect(() => {
@@ -291,13 +301,25 @@ export default function StepTwo() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
+    // Update form data
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
+    // Update context
     updateStep({
       [name]: value,
+    });
+
+    // Clear the error for this field
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (newErrors[name]) {
+        delete newErrors[name];
+      }
+      return newErrors;
     });
   };
 
@@ -310,6 +332,45 @@ export default function StepTwo() {
       }));
     }
   }, [data]);
+
+  const validateFields = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.asset_type) newErrors.asset_type = "Asset Type is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
+    if (!formData.breed) newErrors.breed = "Breed is required";
+    if (!formData.color) newErrors.color = "Color is required";
+    if (!formData.age_in_months) newErrors.age_in_months = "Age is required";
+    if (!formData.weight_kg) newErrors.weight_kg = "Weight is required";
+    if (!formData.height) newErrors.height = "Height is required";
+    if (!formData.purchase_amount)
+      newErrors.purchase_amount = "Purchase amount is required";
+    if (!formData.purchase_from)
+      newErrors.purchase_from = "Purchase from is required";
+    if (!formData.purchase_date)
+      newErrors.purchase_date = "Purchase date is required";
+
+    // Conditional fields
+    if (formData.hasDisease === "true" && !formData.health_issues) {
+      newErrors.health_issues = "Please specify the disease name";
+    }
+
+    if (formData.gender === "female" && formData.isPregnant === true) {
+      if (!formData.pregnancy_status) {
+        newErrors.pregnancy_status = "Pregnancy status is required";
+      }
+      if (!formData.last_date_of_calving) {
+        newErrors.last_date_of_calving = "Last calving date is required";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  useImperativeHandle(ref, () => ({
+    validateFields,
+  }));
 
   return (
     <div className="w-full lg:w-[80%] mx-auto mt-8 ">
@@ -356,7 +417,9 @@ export default function StepTwo() {
                 value={formData.asset_type}
                 onChange={handleInputChange}
                 required
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.asset_type ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="">Select Asset Type</option>
                 {assetTypes.map((type) => (
@@ -365,6 +428,11 @@ export default function StepTwo() {
                   </option>
                 ))}
               </select>
+              {errors.asset_type && (
+                <p className="text-red-400 text-sm mt-1text-red-600 mt-1 font-medium">
+                  {errors.asset_type}
+                </p>
+              )}
 
               {/* Custom dropdown icon */}
               <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
@@ -380,6 +448,7 @@ export default function StepTwo() {
               value={formData.age_in_months}
               placeholder="Enter age"
               type="number"
+              error={errors.age_in_months}
             />
 
             {/* Gender */}
@@ -397,7 +466,9 @@ export default function StepTwo() {
                 value={formData.gender}
                 onChange={handleInputChange}
                 required
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.gender ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled className="text-sm text-gray-400">
                   Select gender
@@ -409,6 +480,12 @@ export default function StepTwo() {
                   Female
                 </option>
               </select>
+
+              {errors.gender && (
+                <p className="text-red-400 text-sm mt-1text-red-600 mt-1 font-medium">
+                  {errors.gender}
+                </p>
+              )}
 
               {/* Custom dropdown icon */}
               <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
@@ -431,7 +508,9 @@ export default function StepTwo() {
                 value={formData.breed}
                 onChange={handleInputChange}
                 required
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.breed ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled>
                   Select Cattle Type
@@ -442,6 +521,11 @@ export default function StepTwo() {
                   </option>
                 ))}
               </select>
+              {errors.breed && (
+                <p className="text-red-400 text-sm mt-1text-red-600 mt-1 font-medium">
+                  {errors.breed}
+                </p>
+              )}
 
               {/* Custom dropdown icon */}
               <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
@@ -464,7 +548,9 @@ export default function StepTwo() {
                 value={formData.color}
                 onChange={handleInputChange}
                 required
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.color ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled>
                   Select Cattle Color
@@ -475,6 +561,11 @@ export default function StepTwo() {
                   </option>
                 ))}
               </select>
+              {errors.color && (
+                <p className="text-red-400 text-sm mt-1text-red-600 mt-1 font-medium">
+                  {errors.color}
+                </p>
+              )}
 
               {/* Custom dropdown icon */}
               <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
@@ -490,6 +581,7 @@ export default function StepTwo() {
               value={formData.weight_kg}
               placeholder="Enter weight"
               type="text"
+              error={errors.weight_kg}
             />
 
             <InputField
@@ -500,6 +592,7 @@ export default function StepTwo() {
               value={formData.height}
               placeholder="Enter Height"
               type="text"
+              error={errors.height}
             />
           </div>
         </div>
@@ -511,13 +604,14 @@ export default function StepTwo() {
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-8 md:p-6">
             <InputField
-              id="age"
+              id="purchase_amount"
               label="Purchase Amount"
               type="text"
               name="purchase_amount"
               value={formData.purchase_amount}
               onChange={handleInputChange}
               placeholder="Purchase Amount"
+              error={errors.purchase_amount}
             />
             <InputField
               label="Purchase From"
@@ -527,6 +621,7 @@ export default function StepTwo() {
               value={formData.purchase_from}
               onChange={handleInputChange}
               placeholder="Purchase From"
+              error={errors.purchase_from}
             />
             <div className="relative w-full">
               <InputField
@@ -537,6 +632,7 @@ export default function StepTwo() {
                 value={formData.purchase_date}
                 onChange={handleInputChange}
                 placeholder="Purchase Date"
+                error={errors.purchase_date}
               />
               <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
                 <MdOutlineCalendarToday className="text-lg" />
@@ -564,7 +660,11 @@ export default function StepTwo() {
                 name="vaccination_status"
                 value={formData.vaccination_status}
                 onChange={handleInputChange}
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.vaccination_status
+                    ? "border-red-600"
+                    : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled>
                   Select Vaccination Status
@@ -580,6 +680,11 @@ export default function StepTwo() {
               <div className="pointer-events-none absolute right-3 top-8.5 text-gray-400">
                 <IoMdArrowDropdown className="text-xl" />
               </div>
+              {/* {errors.vaccination_status && (
+                <p className="text-red-400 mt-1 font-medium text-sm">
+                  {errors.vaccination_status}
+                </p>
+              )} */}
             </div>
 
             <div className="relative w-full">
@@ -610,7 +715,9 @@ export default function StepTwo() {
                 name="deworming_status"
                 value={formData.deworming_status}
                 onChange={handleInputChange}
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.deworming_status ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled>
                   Select Deworming Status
@@ -656,7 +763,9 @@ export default function StepTwo() {
                 name="hasDisease"
                 value={String(formData.hasDisease)}
                 onChange={handleInputChange}
-                className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                className={`appearance-none w-full border ${
+                  errors.hasDisease ? "border-red-600" : "border-gray-300"
+                } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
               >
                 <option value="" disabled>
                   Select
@@ -682,6 +791,7 @@ export default function StepTwo() {
                   value={formData.health_issues}
                   onChange={handleInputChange}
                   placeholder="Disease Name"
+                  error={errors.health_issues}
                 />
               </div>
             )}
@@ -701,7 +811,9 @@ export default function StepTwo() {
                     name="isPregnant"
                     value={String(formData.isPregnant)}
                     onChange={handleInputChange}
-                    className="appearance-none w-full border border-gray-300 bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300"
+                    className={`appearance-none w-full border ${
+                      errors.isPregnant ? "border-red-600" : "border-gray-300"
+                    } bg-gray-50 rounded-md p-2 pr-10 font-semibold text-gray-500 cursor-pointer focus:outline-none focus:ring-1 focus:ring-green-500 focus:bg-green-50 hover:bg-green-50 hover:border-green-300 `}
                   >
                     <option value="" disabled>
                       Select
@@ -726,6 +838,7 @@ export default function StepTwo() {
                         value={formData.pregnancy_status}
                         onChange={handleInputChange}
                         placeholder="Pregnancy Stage"
+                        error={errors.pregnancy_status}
                       />
                     </div>
 
@@ -738,6 +851,7 @@ export default function StepTwo() {
                         value={formData.last_date_of_calving}
                         onChange={handleInputChange}
                         placeholder="Date of Last Calving"
+                        error={errors.last_date_of_calving}
                       />
                       <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
                         <MdOutlineCalendarToday className="text-lg" />
@@ -752,4 +866,7 @@ export default function StepTwo() {
       </div>
     </div>
   );
-}
+});
+StepTwo.displayName = "StepTwo";
+
+export default StepTwo;

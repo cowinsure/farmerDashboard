@@ -1,10 +1,10 @@
 "use client";
 
-import StepFour from "@/component/cowRegistration/StepFour";
-import StepOne from "@/component/cowRegistration/StepOne";
-import StepTwo from "@/component/cowRegistration/StepTwo";
+import StepFour, { StepFourRef } from "@/component/cowRegistration/StepFour";
+import StepOne, { StepOneRef } from "@/component/cowRegistration/StepOne";
+import StepTwo, { StepTwoRef } from "@/component/cowRegistration/StepTwo";
 import { useCowRegistration } from "@/context/CowRegistrationContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalGeneral from "../../../../component/modal/DialogGeneral";
 import Image from "next/image";
 import logo from "../../../../public/Logo-03.png";
@@ -31,6 +31,9 @@ export default function StepForm() {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [isGuidanceModal, setIsGuidanceModal] = useState(false);
+  const stepOneRef = useRef<StepOneRef>(null);
+  const stepFourRef = useRef<StepFourRef>(null);
+  const stepTwoRef = useRef<StepTwoRef>(null);
 
   useEffect(() => {
     const showModal = () => setIsGuidanceModal(true);
@@ -43,6 +46,11 @@ export default function StepForm() {
     // Check geolocation permission and get location
     if (!navigator.geolocation) {
       setLocationError("Geolocation is not supported by your browser.");
+      return;
+    }
+    if (stepFourRef.current && !stepFourRef.current.validateFields()) {
+      // Validation failed, do NOT submit, maybe show a toast or just return
+      toast.error("Please fix errors before submitting.");
       return;
     }
 
@@ -102,7 +110,7 @@ export default function StepForm() {
         }
       },
       (error) => {
-        console.log(error, "error getting location");
+        toast.error(`Error getting location: ${error.message}`);
         setIsLoading(false);
         setLocationError(
           "Unable to retrieve your location. Please allow location access and try again."
@@ -112,8 +120,19 @@ export default function StepForm() {
   };
 
   const handleNext = () => {
-    setCompletedSteps((prev) => new Set(prev).add(currentStep));
-    setCurrentStep((s) => s + 1);
+    const isStepOneValid = stepOneRef.current?.validateFields();
+
+    if (isStepOneValid) {
+      setCompletedSteps((prev) => new Set(prev).add(currentStep));
+      setCurrentStep((s) => s + 1);
+    }
+
+    const isStepTwoValid = stepTwoRef.current?.validateFields();
+
+    if (isStepTwoValid) {
+      setCompletedSteps((prev) => new Set(prev).add(currentStep));
+      setCurrentStep((s) => s + 1);
+    }
   };
   const handlePrev = () => {
     setCompletedSteps((prev) => {
@@ -127,11 +146,11 @@ export default function StepForm() {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <StepOne />;
+        return <StepOne ref={stepOneRef} />;
       case 1:
-        return <StepTwo />;
+        return <StepTwo ref={stepTwoRef} />;
       case 2:
-        return <StepFour />;
+        return <StepFour ref={stepFourRef} />;
       default:
         return null;
     }
@@ -158,7 +177,7 @@ export default function StepForm() {
       <div className=" bg-white rounded-xl flex flex-col justify-center">
         {/* Step bar container */}
         <Stepper
-          steps={["Cattle Info","Owner Info" ,"Attachments"]}
+          steps={["Cattle Info", "Owner Info", "Attachments"]}
           currentStep={currentStep}
           completedSteps={completedSteps}
         />
@@ -216,7 +235,7 @@ export default function StepForm() {
             {currentStep === steps.length - 1 ? "Submit" : "Next"}
             <IoIosArrowForward className="font-bold" />
           </button>
-        )}  
+        )}
       </div>
       {/* Loading Spinner */}
       {isLoading && (

@@ -22,7 +22,7 @@ export const ImageUploadBlock: React.FC<ImageUploadBlockProps> = ({
     <div
       className={`relative border-2 ${
         imageFile ? "border-green-600 bg-green-50" : "border bg-white"
-      } rounded-md p-2 flex flex-col justify-between hover:border-green-300`}
+      } rounded-md p-2 flex flex-col justify-between hover:border-green-300 group`}
     >
       {imageFile && (
         <button
@@ -32,6 +32,7 @@ export const ImageUploadBlock: React.FC<ImageUploadBlockProps> = ({
           ✕
         </button>
       )}
+
       <div className="flex-grow flex items-center justify-center">
         {imageFile ? (
           <img

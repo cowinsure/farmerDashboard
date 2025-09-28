@@ -14,12 +14,8 @@ import ActionButton from "@/components/new-ui/utils/ActionButton";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { AIChatWidget } from "../ui/ai-chat-widget";
-import { AIInterface } from "../ui/ai-interface";
 
 const PersonalInfo: React.FC = () => {
-  // const handleInputChangen = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
-  //     setState(e.target.value);
-  // };
   const router = useRouter();
   const { phoneNumber } = useAuth();
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -36,22 +32,6 @@ const PersonalInfo: React.FC = () => {
   const [nidBackUrl, setNidBackUrl] = useState<string | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  // const [firstName, setFirstName] = useState<string>('');
-  //   const [formData, setFormData] = useState({
-  //     userType: localStorage.getItem("userId") || "",
-  //     first_name: "",
-  //     last_name: "",
-  //     nid: "",
-  //     date_of_birth: "",
-  //     gender: "Male",
-  //     tin: "",
-  //     thana: "",
-  //     upazila: "",
-  //     zilla: "",
-  //     union: "",
-  //     village: "",
-  //   });
   const [formData, setFormData] = useState({
     userType: "",
     first_name: "",
@@ -66,6 +46,7 @@ const PersonalInfo: React.FC = () => {
     union: "",
     village: "",
   });
+
   // Fetch data from the API on component mount
   useEffect(() => {
     const fetchData = async () => {
@@ -112,6 +93,15 @@ const PersonalInfo: React.FC = () => {
             union: data.union || "",
           }));
 
+          // Validate date_of_birth if it exists
+          if (data.date_of_birth) {
+            const dobError = validateDateOfBirth(data.date_of_birth);
+            setErrors((prev) => ({
+              ...prev,
+              date_of_birth: dobError ?? "",
+            }));
+          }
+
           // Save URLs in new states
           if (data.nid_front_image_url) {
             setNidFrontUrl(data.nid_front_image_url);
@@ -134,8 +124,35 @@ const PersonalInfo: React.FC = () => {
     fetchData();
   }, []);
 
-  console.log(formData);
+  // Date of birth validation
+  const validateDateOfBirth = (dob: string): string | undefined => {
+    if (!dob.trim()) {
+      return "Date of birth is required";
+    }
 
+    const birthDate = new Date(dob);
+    const today = new Date();
+
+    if (birthDate > today) {
+      return "Date of birth cannot be in the future";
+    }
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--; // Birthday not yet reached this year
+    }
+
+    if (age < 18) {
+      return "You must be at least 18 years old";
+    }
+
+    return undefined;
+  };
+
+  // Validations for form
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -145,8 +162,13 @@ const PersonalInfo: React.FC = () => {
       newErrors.last_name = "Last name is required";
     if (!formData.nid.trim()) newErrors.nid = "NID number is required";
     if (formData.nid.length !== 10) newErrors.nid = "NID must be 10 digits";
-    if (!formData.date_of_birth)
-      newErrors.date_of_birth = "Date of birth is required";
+    // if (!formData.date_of_birth || validateDateOfBirth(formData.date_of_birth))
+    //   newErrors.date_of_birth = errMsg;
+
+    const dobError = validateDateOfBirth(formData.date_of_birth);
+    if (dobError) {
+      newErrors.date_of_birth = dobError;
+    }
     if (!formData.gender) newErrors.gender = "Gender is required";
 
     if (!formData.thana.trim()) newErrors.thana = "Thana is required";
@@ -166,6 +188,7 @@ const PersonalInfo: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Input change handler
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -183,8 +206,17 @@ const PersonalInfo: React.FC = () => {
       }
       return newErrors;
     });
+
+    if (name === "date_of_birth") {
+      const error = validateDateOfBirth(value);
+      setErrors((prev) => ({
+        ...prev,
+        date_of_birth: error ?? "",
+      }));
+    }
   };
 
+  // Photo capture handler
   const handlePhotoCapture = (
     file: File,
     property: string,
@@ -196,6 +228,8 @@ const PersonalInfo: React.FC = () => {
     // });
     console.log("Photo captured:", file);
   };
+
+  // Reset form data
   const resetFormData = () => {
     setFormData({
       userType: localStorage.getItem("userId") || "",
@@ -216,6 +250,7 @@ const PersonalInfo: React.FC = () => {
     // setNidBack(null);
   };
 
+  // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -290,6 +325,8 @@ const PersonalInfo: React.FC = () => {
       setIsLoading(false); // Hide loading spinner
     }
   };
+
+  // console.log(formData.date_of_birth)
   return (
     <div className="p-2 md:p-6 rounded-md">
       <SectionHeading
@@ -301,7 +338,7 @@ const PersonalInfo: React.FC = () => {
         <div
           data-aos="fade-in"
           data-aos-delay="400"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-8"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-12"
         >
           {/* Profile Image */}
           <div className="flex flex-col w-full">
@@ -429,6 +466,7 @@ const PersonalInfo: React.FC = () => {
               value={formData.date_of_birth}
               onChange={handleInputChange}
               error={errors.date_of_birth}
+              // max={new Date().toISOString().split("T")[0]}
             />
             <div className="pointer-events-none absolute right-3 bottom-2.5 text-gray-400">
               <MdOutlineCalendarToday className="text-lg" />
@@ -641,26 +679,33 @@ const PersonalInfo: React.FC = () => {
         </div>
       </ModalGeneral>
 
-      <AIChatWidget onFormStateChange={(state) => {
-        console.log("Form state changed:", state);
-        // Update formData with the new state from AI chat widget
-        setFormData(prevData => ({
-          ...prevData,
-          ...state
-        }));
-      } } formSchema={  // Define the form schema
-        {
-          first_name: "First name of the farmer , first name convert to english and first name can have more then one word",
-          last_name: "Last name of the farmer,Last name convert to english and Last name can have more then one word",
-          nid: "National ID number of the farmer",
-          date_of_birth: "Date of birth in DD-MM-YYYY format",
-          gender: "Gender of the farmer (Male/Female/Other)",
-          tin: "Tax Identification Number of the farmer",
-          thana: "Thana (Police Station) of the farmer's address",
-          zilla: "Zilla (District) of the farmer's address",
-          union: "Union (Local administrative unit) of the farmer's address",
-          village: "Village name of the farmer's address"
-        }}/>
+      <AIChatWidget
+        onFormStateChange={(state) => {
+          console.log("Form state changed:", state);
+          // Update formData with the new state from AI chat widget
+          setFormData((prevData) => ({
+            ...prevData,
+            ...state,
+          }));
+        }}
+        formSchema={
+          // Define the form schema
+          {
+            first_name:
+              "First name of the farmer , first name convert to english and first name can have more then one word",
+            last_name:
+              "Last name of the farmer,Last name convert to english and Last name can have more then one word",
+            nid: "National ID number of the farmer",
+            date_of_birth: "Date of birth in DD-MM-YYYY format",
+            gender: "Gender of the farmer (Male/Female/Other)",
+            tin: "Tax Identification Number of the farmer",
+            thana: "Thana (Police Station) of the farmer's address",
+            zilla: "Zilla (District) of the farmer's address",
+            union: "Union (Local administrative unit) of the farmer's address",
+            village: "Village name of the farmer's address",
+          }
+        }
+      />
 
       {/* <AIInterface onClose={()=>{}} /> */}
     </div>

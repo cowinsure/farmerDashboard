@@ -280,7 +280,7 @@ const FinancialInfoForm: React.FC<FinancialInfoFormProps> = ({
           />
           <InputField
             placeholder="Enter account number"
-            type="number"
+            type="text"
             label="Account Number"
             id="account_number"
             name="account_number"
