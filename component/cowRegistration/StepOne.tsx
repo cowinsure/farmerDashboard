@@ -14,6 +14,7 @@ import ModalGeneral from "../modal/DialogGeneral";
 import logo from "../../public/Logo-03.png";
 import CowIdentificationLoader from "../modal/cow-identification-loader";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from 'uuid';
 
 // Define an interface for the response data
 interface ResponseData {
@@ -94,53 +95,55 @@ export const StepOne = forwardRef<StepOneRef>((props, ref) => {
     try {
       setIsUploading(true);
       // const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/register", {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`,
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            // "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      // 3.110.218.87:8000
+      // const response = await fetch(
+      //   `${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`,
+      //   {
+      //     method: "POST",
+      //     body: formData,
+      //     headers: {
+      //       // "Content-Type": "application/json",
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   }
+      // );
 
-      // console.log(await response.json());
 
-      if (response.status === 400) {
-        const data = await response.json();
-        setErrorModalOpen(true);
-        console.error("Error 400:", data.msg);
-        setResponseData(data);
-        // toast.error(`Error: ${data.msg}`);
-        return;
-      }
+      // if (response.status === 400) {
+      //   const data = await response.json();
+      //   setErrorModalOpen(true);
+      //   console.error("Error 400:", data.msg);
+      //   setResponseData(data);
+      //   // toast.error(`Error: ${data.msg}`);
+      //   return;
+      // }
 
-      if (response.status === 401) {
-        const data = await response.json();
+      // if (response.status === 401) {
+      //   const data = await response.json();
 
-        console.error("Error 401:", data.msg);
-        toast.error(`Error: ${data.msg}`);
-        return;
-      }
+      //   console.error("Error 401:", data.msg);
+      //   toast.error(`Error: ${data.msg}`);
+      //   return;
+      // }
 
-      if (response.status === 200) {
-        const data: ResponseData = await response.json(); // Use the interface for type safety
-        console.log("API Response:", data);
-        setResponseData(data);
-        setModalOpen(true);
-        updateStep({
-          reference_id: data.registration_id,
-        }); // Save the response data to state
-        // toast.error(data.msg);
-        return;
-      }
+      // if (response.status === 200) {
+      //   const data: ResponseData = await response.json(); // Use the interface for type safety
+      //   console.log("API Response:", data);
+      //   setResponseData(data);
+      //   setModalOpen(true);
+      //   updateStep({
+      //     reference_id: data.registration_id,
+      //   }); // Save the response data to state
+      //   // toast.error(data.msg);
+      //   return;
+      // }
 
-      if (!response.ok) {
-        throw new Error("Failed to upload video");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Failed to upload video");
+      // }
+    await new Promise(resolve => setTimeout(resolve, 25000));
+      updateStep({
+       reference_id: uuidv4(),
+      });
     } catch (error) {
       console.error("Error uploading video:", error);
       toast.error("Something went wrong: " + error);
@@ -281,7 +284,7 @@ export const StepOne = forwardRef<StepOneRef>((props, ref) => {
             </div>
           </ModalGeneral>
 
-          <ModalGeneral isOpen={isUploading} onClose={() => {}}>
+          <ModalGeneral isOpen={isUploading} onClose={() => { }}>
             <CowIdentificationLoader />
           </ModalGeneral>
           {/* {isUploading && (
