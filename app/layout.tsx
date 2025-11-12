@@ -11,7 +11,10 @@ import { AuthProvider } from "../context/AuthContext";
 import { CowRegistrationProvider } from "@/context/CowRegistrationContext";
 import { FarmerRegistrationProvider } from "@/context/FarmerRegistrationContext";
 import { InsuranceApplicationProvider } from "@/context/InsuranceApplicationContext";
+import { LocalizationProvider } from "@/context/LocalizationContext";
+
 import { Toaster } from "sonner";
+import LocalizationToggle from "@/component/helper/LocalizationToggle";
 
 // const averia = Averia_Sans_Libre({
 //   subsets: ["latin"],
@@ -38,25 +41,30 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={` ${urbanist.className}  antialiased`}>
-        <AuthProvider>
-          <InsuranceApplicationProvider>
-            <FarmerRegistrationProvider>
-              <CowRegistrationProvider>
-                <Toaster
-                  position="bottom-right"
-                  richColors
-                  expand={true} 
-                  offset={32}
-                  visibleToasts={3}
-                />
-                {/* <RootLayoutCustom> */}
-                {children}
-              </CowRegistrationProvider>
-            </FarmerRegistrationProvider>
-          </InsuranceApplicationProvider>
+        <LocalizationProvider>
+          <AuthProvider>
+            <InsuranceApplicationProvider>
+              <FarmerRegistrationProvider>
+                <CowRegistrationProvider>
+                  <Toaster
+                    position="bottom-right"
+                    richColors
+                    expand={true}
+                    offset={32}
+                    visibleToasts={3}
+                  />
+                  {/* <RootLayoutCustom> */}
+                     <LocalizationToggle />
+                  {children}
+               
+                </CowRegistrationProvider>
+              </FarmerRegistrationProvider>
+            </InsuranceApplicationProvider>
 
-          {/* </RootLayoutCustom> */}
-        </AuthProvider>
+
+            {/* </RootLayoutCustom> */}
+          </AuthProvider>
+        </LocalizationProvider>
       </body>
     </html>
   );
