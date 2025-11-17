@@ -64,7 +64,7 @@ export default function DashboardPage() {
           data-aos-duration="3000"
         >
           {t("Welcome to")} <span className="text-[var(--base-color)]">{t("InsureCow")}</span>
-          this is pushed from dashboard home
+          
         </h1>
         <p
           className="text-gray-500/80 md:text-lg font-medium md:w-[70%] lg:w-[40%] mx-auto text-center"
