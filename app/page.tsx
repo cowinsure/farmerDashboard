@@ -13,6 +13,7 @@ export default function Home() {
   
   console.log("Home page rendered");
   console.log("Home page rendered");
+  console.log("Home page rendered3");
 
   useEffect(() => {
     AOS.init();
