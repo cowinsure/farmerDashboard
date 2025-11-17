@@ -11,6 +11,7 @@ export default function Home() {
   const auth = useAuth();
   const router = useRouter();
   console.log("testing docker");
+  console.log("testing docker2");
   
 
   useEffect(() => {
