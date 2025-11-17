@@ -12,6 +12,7 @@ export default function Home() {
   const router = useRouter();
   
   console.log("Home page rendered");
+  console.log("Home page rendered");
 
   useEffect(() => {
     AOS.init();
