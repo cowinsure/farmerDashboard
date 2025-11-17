@@ -1,70 +1,39 @@
-name: CI/CD Pipeline - Development Environment
+name: Deploy to Dev Server
 
-# Trigger only on pushes to Development branch
 on:
   push:
     branches:
       - Development
 
 jobs:
-  build-and-deploy-dev:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Set up Node.js (required for Next.js build)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      # 3️⃣ Install dependencies
-      - name: Install dependencies
-        run: npm ci
-
-      # 4️⃣ Run lint (optional, won't stop workflow)
-      - name: Run lint
-        run: npm run lint || echo "Lint errors found, continuing"
-
-      # 5️⃣ Run tests (optional, won't stop workflow)
-      - name: Run tests
-        run: npm test || echo "Tests failed, continuing"
-
-      # 6️⃣ Build Next.js app
-      - name: Build Next.js
-        run: npm run build
-
-      # 7️⃣ Docker login to your private repo
-      - name: Docker login
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # insurecow
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # 8️⃣ Build Docker image
       - name: Build Docker image
-        run: docker build -t dev-frontend-insurecowportal:dev .
+        run: |
+          docker build -t insurecow/insurecow_warehouse_repo:frontend-insurecowportal-dev .
 
-      # 9️⃣ Tag the image for your private Docker Hub repo
-      - name: Tag Docker image
-        run: docker tag dev-frontend-insurecowportal:dev insurecow/insurecow_warehouse_repo:frontend-insurecowportal-dev
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # 🔟 Push the image to Docker Hub
-      - name: Push Docker image
-        run: docker push insurecow/insurecow_warehouse_repo:frontend-insurecowportal-dev
+      - name: Push image to Docker Hub
+        run: |
+          docker push insurecow/insurecow_warehouse_repo:frontend-insurecowportal-dev
 
-      # 1️⃣1️⃣ Deploy to dev server via SSH
-      - name: Deploy on Dev Server
+      - name: Deploy on dev server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.DEV_SERVER_HOST }}
-          username: ${{ secrets.DEV_SERVER_USER }}
-          key: ${{ secrets.DEV_SERVER_SSH_KEY }}
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
             cd /var/www/dev_insuranceportal_frontend/farmerDashboard
-            docker-compose pull
-            docker-compose up -d
-            echo "Development deployment complete! App running on port 3003."
+            docker compose pull
+            docker compose up -d
+            docker compose ps
