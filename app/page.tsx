@@ -10,9 +10,8 @@ import "aos/dist/aos.css";
 export default function Home() {
   const auth = useAuth();
   const router = useRouter();
-  console.log("testing docker");
-  console.log("testing docker2");
   
+  console.log("Home page rendered");
 
   useEffect(() => {
     AOS.init();
