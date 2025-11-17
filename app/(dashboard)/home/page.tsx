@@ -12,7 +12,7 @@ import {  useLocalization } from "@/context/LocalizationContext";
 
 
 export default function DashboardPage() {
-    const { t, setLocale, locale } = useLocalization();
+    const { t } = useLocalization();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGeneralModalOpen, setIsGeneralModalOpen] = useState(false);
