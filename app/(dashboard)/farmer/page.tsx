@@ -64,6 +64,7 @@ interface MuzzleResponse {
   msg: string;
   segmentation_image: string;
 }
+const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHAiOiJjb3ctbXV6emxlLWlkIiwicm9sZSI6ImFkbWluIiwibm90ZSI6InBlcm1hbmVudCB0b2tlbiwgZG9lcyBub3QgZXhwaXJlIn0.dE1bN30j9ty8YrVetvTRPLxbHtUopcbj8GusOblI73w";
 
 const FarmerPage: React.FC = () => {
   const { userId } = useAuth();
@@ -74,9 +75,8 @@ const FarmerPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPolling, setIsPolling] = useState(true);
 
-  const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
 
   const [formData, setFormData] = useState({
     reason: "",
@@ -88,6 +88,9 @@ const FarmerPage: React.FC = () => {
   });
   const [erromuzzleResponse, setErroMuzzleResponse] =
     useState<MuzzleResponse | null>(null);
+  const [muzzleResponse, setMuzzleResponse] = useState<MuzzleResponse | null>(
+    null
+  );
 
   // const [isClaimForm, setIsClaimForm] = useState(false)
   const [selectedCow, setSelectedCow] = useState<{
@@ -167,7 +170,7 @@ const FarmerPage: React.FC = () => {
     console.log("Video file captured:", file);
 
     const formData = new FormData();
-    formData.append("video", file); // Append the video file to the form data
+    formData.append("file", file); // Append the video file to the form data with 'file' key
     setFormData((prev) => ({
       ...prev,
       claim_muzzle: file,
@@ -175,20 +178,28 @@ const FarmerPage: React.FC = () => {
 
     try {
       setIsUploading(true);
+      const accessToken = jwt;
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/claim`,
+        "https://3lizx8e7bp2g6x-8000.proxy.runpod.net/claim",
         {
           method: "POST",
           body: formData,
           headers: {
-            // "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      // 3.110.218.87:8000
 
-      // console.log(await response.json());
+      if (response.status === 202) {
+        const data = await response.json();
+        const jobId = data.job_id;
+        console.log("Job submitted:", jobId);
+        // Start polling for status
+        setIsPolling(true);
+        console.log(`Starting polling for job ID: ${jobId}`);
+        pollJobStatus(jobId);
+        return;
+      }
 
       if (response.status === 400) {
         const data = await response.json();
@@ -198,34 +209,10 @@ const FarmerPage: React.FC = () => {
         return;
       }
 
-      if (response.status === 404) {
-        const data = await response.json();
-        setErroMuzzleResponse(data);
-        // console.error("Error 400:", data.msg);
-        // toast.error(`Error: ${data.msg}`);
-        return;
-      }
-
       if (response.status === 401) {
         const data = await response.json();
         console.error("Error 401:", data.msg);
         toast.error(`Error: ${data.msg}`);
-        return;
-      }
-
-      if (response.status === 200) {
-        const data: MuzzleResponse = await response.json(); // Use the interface for type safety
-        console.log("API Response:", data);
-        // setMuzzleResponse(data);
-        // setResponseData(data);
-        // setModalOpen(true)
-        setFormData((prev) => ({
-          ...prev,
-          reference_id: data.matched_id,
-        }));
-        setIsModalOpen(true);
-        // Save the response data to state
-        // toast.error(data.msg);
         return;
       }
 
@@ -238,6 +225,96 @@ const FarmerPage: React.FC = () => {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const pollJobStatus = async (jobId: string) => {
+    const pollInterval = 2000; // Poll every 2 seconds
+    const maxPolls = 30; // Max 30 polls (60 seconds)
+    let pollCount = 0;
+
+    const poll = async () => {
+      console.log(isPolling);
+      
+      if (!isPolling) return; // Stop polling if flag is false
+
+      try {
+        const accessToken = jwt;
+        const response = await fetch(
+          `https://3lizx8e7bp2g6x-8000.proxy.runpod.net/status/${jobId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`Poll #${pollCount + 1} - Status: ${data.status}, Job ID: ${jobId}`);
+          console.log("Poll response:", data);
+
+          // Assuming the response has status and result
+          if (data.status === "complete") {
+            // Handle successful identification
+            console.log(data);
+            
+            setMuzzleResponse({
+              geo_location: data.geo_location || "",
+              matched_id: data.cow_id || "",
+              msg: data.message || "Cow identified successfully",
+              segmentation_image: data.segmentation_image || "",
+            });
+            setFormData((prev) => ({
+              ...prev,
+              reference_id: data.cow_id || "",
+            }));
+            // setIsUploading(false);
+            setIsPolling(false); // Stop polling
+            console.log(`Polling failed for job ID: ${jobId}`);
+            return;
+          } else if (data.status === "failed") {
+            // Handle failure
+            setErroMuzzleResponse({
+              geo_location: "",
+              matched_id: "",
+              msg: data.msg || "Identification failed",
+              segmentation_image: data.segmentation_image || "",
+            });
+            setIsUploading(false);
+            setIsPolling(false); // Stop polling
+            console.log(`Polling completed successfully for job ID: ${jobId}`);
+            console.log(`Final result - Cow ID: ${data.cow_id}, Message: ${data.message}`);
+            return;
+          }
+          // If still processing, continue polling
+        } else {
+          console.error("Poll failed:", response.status);
+        }
+
+        pollCount++;
+        if (pollCount < maxPolls && isPolling) {
+          setTimeout(poll, pollInterval);
+        } else {
+          if (isPolling) {
+            console.log(`Polling timed out for job ID: ${jobId} after ${maxPolls} attempts`);
+            toast.error("Identification timed out");
+            setIsUploading(false);
+            setIsPolling(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error polling job status:", error);
+        if (isPolling) {
+          console.error(`Error polling job status for job ID: ${jobId}`, error);
+          toast.error("Error checking identification status");
+          setIsUploading(false);
+          setIsPolling(false);
+        }
+      }
+    };
+
+    poll();
   };
 
   const handleViewDetails = (cow: Asset) => {
@@ -541,6 +618,65 @@ const FarmerPage: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={muzzleResponse !== null}
+        onClose={() => {
+          setMuzzleResponse(null);
+        }}
+      >
+        {muzzleResponse && (
+          <div className="mt-6">
+            <div className="flex flex-col items-center justify-between gap-4">
+              <p className="text-center text-green-500 text-lg font-semibold">
+                {muzzleResponse.msg}
+              </p>
+
+              {muzzleResponse.matched_id && (
+                <div className="text-center">
+                  <p className="text-sm text-gray-600">Matched Cow ID:</p>
+                  <p className="font-bold text-green-700">{muzzleResponse.matched_id}</p>
+                </div>
+              )}
+
+              {muzzleResponse?.segmentation_image && (
+                <div className="flex flex-col items-center gap-2">
+                  <span className="text-sm font-medium">Processed Image</span>
+                  <div className="w-40 h-40 border rounded-lg overflow-hidden border-green-200">
+                    {muzzleResponse?.segmentation_image?.startsWith(
+                      "data:image"
+                    ) && (
+                      <img
+                        src={muzzleResponse.segmentation_image}
+                        alt="Segmentation Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => {
+                    setMuzzleResponse(null);
+                    setIsModalOpen(true); // Open cow details modal
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  View Cow Details
+                </button>
+                <button
+                  onClick={() => setMuzzleResponse(null)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         )}

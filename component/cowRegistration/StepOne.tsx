@@ -20,15 +20,11 @@ import { v4 as uuidv4 } from 'uuid';
 interface ResponseData {
   animal_name: string;
   registration_id: string;
-  geo_location: string;
-  date: string;
-  no_of_frames: number;
-  image_url: string;
   msg: string;
 }
 
 const jwt =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NzU2NTY5NiwianRpIjoiNzViZThkMjYtNGMwZC00YTc4LWEzM2ItMjAyODU4OGVkZmU4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3NDc1NjU2OTYsImNzcmYiOiI2Y2VjNWM1Mi0xMDJkLTRmYjUtOTE3NS1lNzZkZTBkMDM3YTYifQ.n5moEixJyO4eaXpYI8yG6Qnjf3jjBrWA7W19gW_4h8c";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHAiOiJjb3ctbXV6emxlLWlkIiwicm9sZSI6ImFkbWluIiwibm90ZSI6InBlcm1hbmVudCB0b2tlbiwgZG9lcyBub3QgZXhwaXJlIn0.dE1bN30j9ty8YrVetvTRPLxbHtUopcbj8GusOblI73w";
 
 export type StepOneRef = {
   validateFields: () => boolean;
@@ -43,7 +39,6 @@ export const StepOne = forwardRef<StepOneRef>((props, ref) => {
   const [responseData, setResponseData] = useState<ResponseData | null>(null); // Use the interface for state
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [accessToken, setAccessToken] = useState(jwt);
 
   // Validation logic
   const validateFields = () => {
@@ -59,95 +54,99 @@ export const StepOne = forwardRef<StepOneRef>((props, ref) => {
     validateFields,
   }));
 
+  const API_BASE = "https://3lizx8e7bp2g6x-8000.proxy.runpod.net";
+
   const handleVideoUpload = async (file: File) => {
     setModalOpen(false);
+    setErrorModalOpen(false);
 
     console.log("Video file captured:", file);
 
+    const cow_id = uuidv4();
     const formData = new FormData();
-    formData.append("video", file); // Append the video file to the form data
-
-    //  try {
-    //     const response = await fetch("https://ai.insurecow.com/test", {
-    //       method: "GET",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         // Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     });
-
-    //     const result = await response.json();
-
-    //     if (response.ok) {
-    //       setAccessToken(result.data.results)
-    //       localStorage.setItem('ai_access_token',result.data.results)
-    //       console.log("Asset types fetched successfully:", result.data.results);
-    //       // setAssetTypes(result.data.results); // Update the assetTypes state with API data
-    //     } else {
-    //       console.error("Failed to fetch asset types:", result);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching asset types:", error);
-    //   }
-
-    console.log(accessToken);
+    formData.append("cow_id", cow_id);
+    formData.append("file", file);
 
     try {
       setIsUploading(true);
-      // const response = await fetch("https://rd1wmswr9eqhqh-8000.proxy.runpod.net/register", {
-      // const response = await fetch(
-      //   `${process.env.NEXT_PUBLIC_API_BASE_URL_AI}/register`,
-      //   {
-      //     method: "POST",
-      //     body: formData,
-      //     headers: {
-      //       // "Content-Type": "application/json",
-      //       Authorization: `Bearer ${accessToken}`,
-      //     },
-      //   }
-      // );
 
-
-      // if (response.status === 400) {
-      //   const data = await response.json();
-      //   setErrorModalOpen(true);
-      //   console.error("Error 400:", data.msg);
-      //   setResponseData(data);
-      //   // toast.error(`Error: ${data.msg}`);
-      //   return;
-      // }
-
-      // if (response.status === 401) {
-      //   const data = await response.json();
-
-      //   console.error("Error 401:", data.msg);
-      //   toast.error(`Error: ${data.msg}`);
-      //   return;
-      // }
-
-      // if (response.status === 200) {
-      //   const data: ResponseData = await response.json(); // Use the interface for type safety
-      //   console.log("API Response:", data);
-      //   setResponseData(data);
-      //   setModalOpen(true);
-      //   updateStep({
-      //     reference_id: data.registration_id,
-      //   }); // Save the response data to state
-      //   // toast.error(data.msg);
-      //   return;
-      // }
-
-      // if (!response.ok) {
-      //   throw new Error("Failed to upload video");
-      // }
-    await new Promise(resolve => setTimeout(resolve, 25000));
-      updateStep({
-       reference_id: uuidv4(),
+      // Register the video
+      const registerResponse = await fetch(`${API_BASE}/register`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: formData,
       });
+
+      if (!registerResponse.ok) {
+        if (registerResponse.status === 401) {
+          toast.error("Unauthorized access");
+          setIsUploading(false);
+          return;
+        }
+        throw new Error(`Registration failed: ${registerResponse.status}`);
+      }
+
+      const registerData = await registerResponse.json();
+      const job_id = registerData.job_id;
+
+      // Polling function
+      const pollStatus = async () => {
+        try {
+          const statusResponse = await fetch(`${API_BASE}/status/${job_id}`, {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          });
+
+          if (!statusResponse.ok) {
+            if (statusResponse.status === 404) {
+              throw new Error("Job not found");
+            }
+            throw new Error(`Status check failed: ${statusResponse.status}`);
+          }
+
+          const statusData = await statusResponse.json();
+
+          if (statusData.status === "complete") {
+            // Success
+            setResponseData({
+              animal_name: "Cow",
+              registration_id: statusData.cow_id || cow_id,
+              msg: statusData.message || "Registration successful",
+            });
+            setModalOpen(true);
+            updateStep({
+              reference_id: statusData.cow_id || cow_id,
+            });
+            setIsUploading(false);
+          } else if (statusData.status === "error") {
+            // Error
+            setResponseData({
+              animal_name: "Cow",
+              registration_id: cow_id,
+              msg: statusData.error || "Registration failed",
+            });
+            setErrorModalOpen(true);
+            setIsUploading(false);
+          } else if (statusData.status === "processing") {
+            // Continue polling
+            setTimeout(pollStatus, 5000);
+          }
+        } catch (error) {
+          console.error("Polling error:", error);
+          toast.error("Something went wrong during processing");
+          setIsUploading(false);
+        }
+      };
+
+      // Start polling
+      pollStatus();
+
     } catch (error) {
       console.error("Error uploading video:", error);
-      toast.error("Something went wrong: " + error);
-    } finally {
+      toast.error("Something went wrong: " + (error as Error).message);
       setIsUploading(false);
     }
   };
