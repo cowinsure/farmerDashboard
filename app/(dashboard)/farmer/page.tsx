@@ -223,7 +223,7 @@ const FarmerPage: React.FC = () => {
       console.error("Error uploading video:", error);
       toast.error("Something went wrong: " + error);
     } finally {
-      setIsUploading(false);
+      // setIsUploading(false);
     }
   };
 
@@ -255,10 +255,10 @@ const FarmerPage: React.FC = () => {
           console.log("Poll response:", data);
 
           // Assuming the response has status and result
-          if (data.status === "complete") {
+          if (data.status === "complete" && data.message !== "Cow not found.") {
             // Handle successful identification
             console.log(data);
-            
+
             setMuzzleResponse({
               geo_location: data.geo_location || "",
               matched_id: data.cow_id || "",
@@ -269,9 +269,22 @@ const FarmerPage: React.FC = () => {
               ...prev,
               reference_id: data.cow_id || "",
             }));
-            // setIsUploading(false);
+            setIsUploading(false);
+            setIsPolling(false); // Stop polling
+            console.log(`Polling completed successfully for job ID: ${jobId}`);
+            return;
+          } else if (data.status === "complete" && data.message === "Cow not found.") {
+            // Handle failure - cow not found
+            setErroMuzzleResponse({
+              geo_location: data.geo_location || "",
+              matched_id: "",
+              msg: data.message || "Cow not found",
+              segmentation_image: data.segmentation_image || "",
+            });
+            setIsUploading(false);
             setIsPolling(false); // Stop polling
             console.log(`Polling failed for job ID: ${jobId}`);
+            console.log(`Final result - Cow ID: ${data.cow_id}, Message: ${data.message}`);
             return;
           } else if (data.status === "failed") {
             // Handle failure
@@ -283,7 +296,7 @@ const FarmerPage: React.FC = () => {
             });
             setIsUploading(false);
             setIsPolling(false); // Stop polling
-            console.log(`Polling completed successfully for job ID: ${jobId}`);
+            console.log(`Polling failed for job ID: ${jobId}`);
             console.log(`Final result - Cow ID: ${data.cow_id}, Message: ${data.message}`);
             return;
           }
@@ -596,9 +609,9 @@ const FarmerPage: React.FC = () => {
       >
         {erromuzzleResponse && (
           <div className="mt-6">
-            <div className="flex flex-col items-center justify-between gap-2">
+            <div className="flex flex-col items-center justify-between gap-4">
+              <h2 className="text-xl font-semibold text-red-600">Search Failed</h2>
               <p className="text-center text-red-500">
-                {" "}
                 {erromuzzleResponse.msg}
               </p>
 
@@ -618,6 +631,13 @@ const FarmerPage: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              <button
+                onClick={() => setErroMuzzleResponse(null)}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                OK
+              </button>
             </div>
           </div>
         )}
