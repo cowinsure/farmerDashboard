@@ -22,6 +22,7 @@ import { TfiRuler } from "react-icons/tfi";
 import { LiaWeightSolid } from "react-icons/lia";
 import { LuSyringe } from "react-icons/lu";
 import FallbackImage from "../utils/FallBackImage";
+import { QRCodeSVG } from "qrcode.react";
 interface CattleData {
   id: number;
   owner: string;
@@ -121,12 +122,33 @@ export default function CattleDetailsModal({
                       )}
                     </div>
 
-                    <div className="w-full space-y-3">
-                      <CowCardData
-                        // icon={<MdCategory size={20} />}
-                        label="Cow ID"
-                        value={cattle.reference_id}
-                      />
+                    <div className="w-full space-y-3 min-w-[250px]">
+                      <div className="flex items-center gap-2">
+                        <div className="flex justify-between items-center w-full px-1">
+                          <label className="text-sm font-medium text-gray-500">Cow ID</label>
+                          <span className="font-semibold text-gray-700">
+                            <span className="px-3 py-1 border border-gray-200 rounded-full break-all max-w-[250px]">
+                              {cattle.reference_id ? cattle.reference_id : "N/A"}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      {/* QR Code for Cow ID */}
+                      {cattle.reference_id && (
+                        <div className="flex flex-col items-center mt-3 mb-2">
+                          <span className="text-sm font-medium text-gray-600 mb-2">QR Code</span>
+                          <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                            <QRCodeSVG
+                              value={cattle.reference_id}
+                              size={128}
+                              bgColor="#ffffff"
+                              fgColor="#000000"
+                              level="Q"
+                              includeMargin={false}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <CowCardData
                         // icon={<MdCategory size={20} />}
                         label="Asset Type"
@@ -394,7 +416,7 @@ const CowCardData = ({ icon, label, value }: DetailsProps) => {
       <div className="flex justify-between items-center w-full px-1">
         <label className="text-sm font-medium text-gray-500">{label ? label : "-"}</label>
         <span className="font-semibold text-gray-700">
-          <span className="px-3 py-1 border border-gray-200 rounded-full">
+          <span className="px-3 py-1 border border-gray-200 rounded-full break-all max-w-[200px]">
             {value ? value : "N/A"}
           </span>
         </span>

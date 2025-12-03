@@ -481,7 +481,7 @@ const PersonalInfo: React.FC = () => {
             <label className="mb-1 text-sm font-bold text-gray-600">
               NID Front
             </label>
-            {nidFront && (
+            {/* {nidFront && ( */}
               <PhotoCaptureModal
                 onPhotoCapture={(file) =>
                   handlePhotoCapture(file, "nid_front", setnidFront)
@@ -489,7 +489,7 @@ const PersonalInfo: React.FC = () => {
                 triggerText="Click to upload front image"
                 title="Capture NID Front"
               />
-            )}
+            {/* )} */}
             {errors.nid_front && (
               <p className="text-red-600 text-sm mt-1">{errors.nid_front}</p>
             )}
@@ -514,7 +514,7 @@ const PersonalInfo: React.FC = () => {
             <label className="mb-1 text-sm font-bold text-gray-600">
               NID Back
             </label>
-            {nidBack && (
+            {/* {nidBack && ( */}
               <PhotoCaptureModal
                 onPhotoCapture={(file) =>
                   handlePhotoCapture(file, "nid_back", setnidBack)
@@ -522,7 +522,7 @@ const PersonalInfo: React.FC = () => {
                 triggerText="Click to upload back image"
                 title="Capture NID Back"
               />
-            )}
+            {/* )} */}
             {errors.nid_back && (
               <p className="text-red-600 text-sm mt-1">{errors.nid_back}</p>
             )}
