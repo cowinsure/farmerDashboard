@@ -143,7 +143,7 @@ export default function ApplciationStatus() {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_MODULE_BASE_URL}/ims/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
+          `${process.env.NEXT_PUBLIC_API_NEW_BASE_URL}ims/insurance-status-history-service/?start_record=1&page_size=100&asset_insurance_id=${selectedCow.id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -173,6 +173,8 @@ export default function ApplciationStatus() {
   }, [selectedCow, isCowDetails]);
 
   const handleViewDetails = (cow: InsuranceData) => {
+    console.log(cow);
+    
     setSelectedCow(cow);
     setIsCowDetails(true);
   };

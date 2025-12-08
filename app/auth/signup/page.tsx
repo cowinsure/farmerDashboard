@@ -15,13 +15,30 @@ const SignupPage: React.FC = () => {
     // Save phone to localStorage whenever it changes
     localStorage.setItem("mobile_number", phone);
   }, [phone]);
+
   // const [accountType, setAccountType] = useState('individual');
   const [loading, setLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState<string | boolean>(false);
+  const [inputChecker, setInputChecker] = useState<string | null>(null);
 
   const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true);
-    console.log(phone);
+    setPhoneError("");
+
+    let valid = true;
+
+    // Validate phone
+    if (!phone) {
+      setPhoneError("Phone number cannot be empty.");
+      valid = false;
+    } else if (!/^[0-9]{11}$/.test(phone)) {
+      setPhoneError("Please enter a valid 11-digit phone number.");
+      valid = false;
+    }
+
+    if (!valid) return; // ⛔ Don't proceed if validation fails
+
+    setLoading(true); // ✅ Move this after validation
 
     const role_id = 1;
 
@@ -58,12 +75,14 @@ const SignupPage: React.FC = () => {
           router.push("/auth/otp");
         }, 1000);
       } else if (response.status === 404) {
+        setPhoneError(true);
         toast.error("Signup failed: The requested resource was not found.");
       } else {
-        toast.error(
-          `Signup failed: ${responseData?.data?.message || "Unknown error"}`
-        );
-        console.error("Signup failed");
+        const responseMessage = responseData?.data?.message;
+        const extractedMessage = "User already exists.";
+
+        toast.error(`Signup failed: ${responseMessage && extractedMessage}`);
+        console.error(`Signup failed ${responseData?.data?.message}`);
       }
     } catch (error) {
       console.error("Error during signup:", error);
@@ -181,38 +200,75 @@ const SignupPage: React.FC = () => {
 
           {/* Form */}
           <form onSubmit={handleSignup} className="space-y-6 w-full">
-            <div className="relative" data-aos="fade-in" data-aos-delay="100">
-              <label
-                htmlFor="phone"
-                className="block text-lg font-bold text-green-500"
-              >
-                Phone
-              </label>
-              <span className="absolute inset-y-0 top-8 left-0 pl-3 flex items-center pointer-events-none text-green-800">
-                <FaMobile />
-              </span>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                pattern="[0-9]{11}"
-                required
-                value={phone}
-                onChange={(e) =>
-                  setPhone(e.target.value.replace(/[^0-9]/g, ""))
-                }
-                className="mt-1 w-full px-9 py-2 border-2 border-[#0E5829] rounded-md bg-white font-semibold text-base shadow-md"
-                placeholder="Enter phone number"
-              />
+            <div>
+              <div className="relative" data-aos="fade-in" data-aos-delay="100">
+                <label
+                  htmlFor="phone"
+                  className="block text-lg font-bold text-green-500"
+                >
+                  Phone
+                </label>
+                <span className="absolute inset-y-0 top-8 left-0 pl-3 flex items-center pointer-events-none text-green-800">
+                  <FaMobile />
+                </span>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={phone}
+                  maxLength={11}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, "");
+
+                    if (val.length > 11) {
+                      setPhoneError("Can not put more than 11 numbers");
+                      return; // ❌ Don't update state if more than 11 digits
+                    }
+
+                    setPhone(val);
+
+                    // Clear error if value is valid
+                    if (val.length <= 11) {
+                      setInputChecker("");
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    // Regex to detect alphabet keys (a-z or A-Z)
+                    if (/^[a-zA-Z]$/.test(e.key)) {
+                      e.preventDefault();
+                      setPhoneError("Only numbers are allowed");
+                    } else if (phone.length >= 11 && /^[0-9]$/.test(e.key)) {
+                      // Prevent typing more than 11 digits
+                      e.preventDefault();
+                      setInputChecker("Can not put more than 11 numbers");
+                    } else {
+                      setPhoneError("");
+                      setInputChecker("");
+                    }
+                  }}
+                  className={`mt-1 w-full px-9 py-2 border-2 ${
+                    phoneError
+                      ? "border-red-600 bg-red-50"
+                      : "border-[#0E5829] bg-white"
+                  } rounded-md font-semibold text-base shadow-md`}
+                  placeholder="Enter phone number (11 digits)"
+                />
+              </div>
+              {phoneError && (
+                <p className="text-red-600 text-sm mt-1">{phoneError}</p>
+              )}
+              {inputChecker && (
+                <p className="text-red-600 text-sm mt-1">{inputChecker}</p>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={loading}
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-green-800 hover:bg-green-700"
+              disabled={loading || !!phoneError}
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold cursor-pointer transition-colors duration-300 ease-in-out ${
+                loading || phoneError
+                  ? "bg-gray-300 cursor-not-allowed text-gray-700"
+                  : "bg-green-800 hover:bg-green-700 text-green-300"
               }`}
             >
               {loading ? "Submitting..." : "Next"}

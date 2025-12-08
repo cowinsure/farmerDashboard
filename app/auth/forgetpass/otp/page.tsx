@@ -5,12 +5,13 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import logo from "../../../../public/Logo-03.png";
 import { FaKey } from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ForgetPassOtpPage: React.FC = () => {
   const router = useRouter();
 
   const [otp, setOtp] = useState<string>("");
-  const [timer, setTimer] = useState<number>(20);
+  const [timer, setTimer] = useState<number>(120);
   const [isResendDisabled, setIsResendDisabled] = useState<boolean>(true);
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const ForgetPassOtpPage: React.FC = () => {
     if (timer > 0) {
       countdown = setInterval(() => {
         setTimer((prev) => prev - 1);
-      }, 3000);
+      }, 1000);
     } else {
       setIsResendDisabled(false);
     }
@@ -133,7 +134,7 @@ const ForgetPassOtpPage: React.FC = () => {
         setIsSubmitting(false);
       }
     } else {
-      toast.warning("Please enter a valid 5-digit OTP.");
+      toast.warning("Please enter a valid 6-digit OTP.");
     }
   };
 
@@ -185,7 +186,7 @@ const ForgetPassOtpPage: React.FC = () => {
           </p>
 
           <div className="relative mb-4">
-            <span className="absolute inset-y-0 top-1/2 -translate-y-1/2 left-3 text-green-800">
+            <span className="absolute top-4 left-3 text-green-800">
               <FaKey />
             </span>
             <input
@@ -201,37 +202,52 @@ const ForgetPassOtpPage: React.FC = () => {
 
           <button
             onClick={handleSubmit}
-            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
-              isSubmitting
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-800 hover:bg-green-700"
+            className={`transition-colors ease-in-out duration-300 ${
+              otp.length < 6
+                ? "w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 bg-gray-400 cursor-not-allowed"
+                : `w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-100  ${
+                    isSubmitting
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-green-800 hover:bg-green-700"
+                  }`
             }`}
-            disabled={isSubmitting}
-            data-aos="fade-up"
+            disabled={otp.length < 5 || isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>
 
-          <div className="mt-6">
-            {isResendDisabled ? (
-              <p className="text-gray-500 text-sm">
-                Resend OTP in {Math.floor(timer / 60)}:
-                {String(timer % 60).padStart(2, "0")}
-              </p>
-            ) : (
-              <button
-                onClick={handleResendOtp}
-                className={`w-full mt-3 py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-green-300 ${
-                  isResending
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-800 hover:bg-green-700"
-                }`}
-                disabled={isResending}
-              >
-                {isResending ? "Resending..." : "Resend OTP"}
-              </button>
-            )}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isResendDisabled ? "countdown" : "resend-button"}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="mt-6"
+            >
+              {isResendDisabled ? (
+                <p className="text-gray-500 text-sm">
+                  Resend OTP in {Math.floor(timer / 60)}:
+                  {String(timer % 60).padStart(2, "0")}
+                </p>
+              ) : (
+                <div className="border-t pt-10">
+                  <p className="text-gray-400">Did not receive the code?</p>
+                  <button
+                    onClick={handleResendOtp}
+                    className={`mt-3 py-2 px-4 border rounded-md font-semibold text-green-500 cursor-pointer ${
+                      isResending
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "border-green-600 hover:bg-green-100"
+                    }`}
+                    disabled={isResending}
+                  >
+                    {isResending ? "Resending..." : "Resend OTP"}
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 

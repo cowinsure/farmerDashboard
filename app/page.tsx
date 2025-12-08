@@ -10,6 +10,10 @@ import "aos/dist/aos.css";
 export default function Home() {
   const auth = useAuth();
   const router = useRouter();
+  
+  console.log("Home page rendered");
+  console.log("Home page rendered");
+  console.log("Home page rendered3");
 
   useEffect(() => {
     AOS.init();
