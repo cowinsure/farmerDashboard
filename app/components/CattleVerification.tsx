@@ -179,7 +179,9 @@ export default function CattleVerification({
       if (!isPolling) return; // Stop polling if flag is false
 
       try {
-        const accessToken = localStorage.getItem("accessToken");
+const jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHAiOiJjb3ctbXV6emxlLWlkIiwicm9sZSI6ImFkbWluIiwibm90ZSI6InBlcm1hbmVudCB0b2tlbiwgZG9lcyBub3QgZXhwaXJlIn0.dE1bN30j9ty8YrVetvTRPLxbHtUopcbj8GusOblI73w";
+
+        const accessToken = jwt;
         const response = await fetch(
           `https://3lizx8e7bp2g6x-8000.proxy.runpod.net/status/${jobId}`,
           {
